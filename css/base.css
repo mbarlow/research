@@ -86,7 +86,7 @@
 
 html {
   font-size: var(--font-size-base);
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 body {
@@ -95,6 +95,7 @@ body {
   color: var(--text);
   line-height: var(--line-height);
   min-height: 100vh;
+  overflow-anchor: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background var(--transition), color var(--transition);

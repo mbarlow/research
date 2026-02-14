@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Reads all posts/*.md, extracts frontmatter, writes content.json + feed.xml
 
-import { readdir, readFile, writeFile } from 'fs/promises';
+import { readdir, readFile, stat, writeFile } from 'fs/promises';
 import { join } from 'path';
 
 const POSTS_DIR = join(process.cwd(), 'posts');
@@ -25,12 +25,43 @@ function parseFrontmatter(text) {
   return { meta, body: match[2] };
 }
 
+function parseOrder(value) {
+  if (value === undefined || value === null || value === '') return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+
+function sortPosts(a, b) {
+  const aTs = Date.parse(a.timestamp || '');
+  const bTs = Date.parse(b.timestamp || '');
+  const byTimestamp = (Number.isFinite(bTs) ? bTs : 0) - (Number.isFinite(aTs) ? aTs : 0);
+  if (byTimestamp !== 0) return byTimestamp;
+
+  const byDate = String(b.date).localeCompare(String(a.date));
+  if (byDate !== 0) return byDate;
+
+  const aOrder = Number.isFinite(a.order) ? a.order : Number.POSITIVE_INFINITY;
+  const bOrder = Number.isFinite(b.order) ? b.order : Number.POSITIVE_INFINITY;
+  if (aOrder !== bOrder) return aOrder - bOrder;
+
+  return a.title.localeCompare(b.title);
+}
+
+function getFileTimestamp(fileStats) {
+  const birthMs = Number(fileStats.birthtimeMs);
+  const modifiedMs = Number(fileStats.mtimeMs);
+  const tsMs = Number.isFinite(birthMs) && birthMs > 0 ? birthMs : modifiedMs;
+  return new Date(tsMs).toISOString();
+}
+
 async function build() {
-  const files = (await readdir(POSTS_DIR)).filter(f => f.endsWith('.md')).sort().reverse();
+  const files = (await readdir(POSTS_DIR)).filter(f => f.endsWith('.md'));
   const posts = [];
 
   for (const file of files) {
-    const content = await readFile(join(POSTS_DIR, file), 'utf-8');
+    const fullPath = join(POSTS_DIR, file);
+    const content = await readFile(fullPath, 'utf-8');
+    const fileStats = await stat(fullPath);
     const { meta, body } = parseFrontmatter(content);
     const slug = file.replace(/\.md$/, '');
 
@@ -39,11 +70,15 @@ async function build() {
       file,
       title: meta.title || slug,
       date: meta.date || slug.slice(0, 10),
+      timestamp: getFileTimestamp(fileStats),
+      order: parseOrder(meta.order),
       description: meta.description || '',
       tags: Array.isArray(meta.tags) ? meta.tags : [],
       body: body.slice(0, 500), // excerpt for search
     });
   }
+
+  posts.sort(sortPosts);
 
   // Write content.json
   await writeFile(join(process.cwd(), 'content.json'), JSON.stringify(posts, null, 2));
@@ -56,7 +91,7 @@ async function build() {
     <title>${escapeXml(p.title)}</title>
     <link href="${SITE_URL}/#/post/${p.slug}" rel="alternate"/>
     <id>${SITE_URL}/#/post/${p.slug}</id>
-    <updated>${p.date}T00:00:00Z</updated>
+    <updated>${p.timestamp || `${p.date}T00:00:00Z`}</updated>
     <summary>${escapeXml(p.description)}</summary>
   </entry>`).join('');
 

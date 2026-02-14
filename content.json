@@ -1,15 +1,97 @@
 [
   {
+    "slug": "2026-02-14-threejs-rendering-techniques-that-hold-up",
+    "file": "2026-02-14-threejs-rendering-techniques-that-hold-up.md",
+    "title": "Three.js Rendering Techniques - Patterns for Stable Real-World Performance",
+    "date": "2026-02-14",
+    "timestamp": "2026-02-14T19:44:12.125Z",
+    "order": 5,
+    "description": "Improve Three.js frame stability with instancing, culling, LOD strategy, and practical render-loop architecture.",
+    "tags": [
+      "threejs",
+      "webgl",
+      "realtime-rendering",
+      "performance"
+    ],
+    "body": "\n## Why This Guide\n\nThree.js is easy to start and easy to outgrow. The hard part is not getting a cube on screen, it is keeping frame time stable as scene complexity and UX requirements grow.\n\n> [!note]\n> These patterns prioritize consistency under load over flashy demos.\n\n## Post Plan (Feature Map)\n\n| Section Goal | Blog Feature Used | Why |\n|---|---|---|\n| Explain runtime architecture | Mermaid diagram | Make update/render responsibilities explicit |\n| Demonstrate visually | Three.js embed | S"
+  },
+  {
+    "slug": "2026-02-14-comfyui-workflows-that-scale",
+    "file": "2026-02-14-comfyui-workflows-that-scale.md",
+    "title": "ComfyUI Workflows - From Experiments to Repeatable Pipelines",
+    "date": "2026-02-14",
+    "timestamp": "2026-02-14T19:43:50.338Z",
+    "order": 4,
+    "description": "Design versioned ComfyUI graphs that scale from one-off experiments to repeatable production image workflows.",
+    "tags": [
+      "comfyui",
+      "diffusion",
+      "image-generation",
+      "workflow-engineering"
+    ],
+    "body": "\n## Why ComfyUI Matters\n\nComfyUI is powerful because it externalizes the image generation graph. You can inspect every stage, swap components quickly, and encode workflow intent directly in nodes instead of hidden defaults.\n\n> [!note]\n> The goal here is repeatability. A beautiful one-off image is less valuable than a workflow that stays stable under iteration.\n\n## Post Plan (Feature Map)\n\n| Section Goal | Blog Feature Used | Why |\n|---|---|---|\n| Explain graph architecture | Mermaid workflow gra"
+  },
+  {
+    "slug": "2026-02-14-local-llms-on-consumer-hardware",
+    "file": "2026-02-14-local-llms-on-consumer-hardware.md",
+    "title": "Local LLMs on Consumer Hardware - A Practical Playbook",
+    "date": "2026-02-14",
+    "timestamp": "2026-02-14T19:43:28.230Z",
+    "order": 3,
+    "description": "Run local LLMs on consumer hardware with a repeatable stack for model sizing, quantization, benchmarking, and deployment.",
+    "tags": [
+      "llm",
+      "local-inference",
+      "quantization",
+      "deployment"
+    ],
+    "body": "\n## Why Run Models Locally\n\nLocal LLMs provide privacy, lower marginal cost, and predictable latency for repeated workflows. The trade-off is that you become the platform engineer: model selection, memory budgeting, and quality evaluation are now your job.\n\n> [!note]\n> This is a deployment-focused post, not a benchmark leaderboard.\n\n## Post Plan (Feature Map)\n\n| Section Goal | Blog Feature Used | Why |\n|---|---|---|\n| Hardware sizing | Table + callouts | Turn vague constraints into concrete choi"
+  },
+  {
+    "slug": "2026-02-14-gaussian-splatting-real-time-notes",
+    "file": "2026-02-14-gaussian-splatting-real-time-notes.md",
+    "title": "Gaussian Splatting for Real-Time Radiance Fields - Practical Notes",
+    "date": "2026-02-14",
+    "timestamp": "2026-02-14T19:43:04.714Z",
+    "order": 2,
+    "description": "Understand Gaussian splatting end to end: representation, projection, sorting, blending, and real-time performance trade-offs.",
+    "tags": [
+      "graphics",
+      "gaussian-splatting",
+      "radiance-fields",
+      "realtime-rendering"
+    ],
+    "body": "\n## Why Gaussian Splatting Is Interesting\n\nGaussian splatting is one of the most practical bridges between neural scene capture and real-time rendering. You still optimize a scene representation, but runtime behaves more like a renderer than a heavy neural volume integrator.\n\n> [!note]\n> This write-up focuses on implementation intuition: what to store, what to project, and what to optimize first.\n\n## Post Plan (Feature Map)\n\n| Section Goal | Blog Feature Used | Why |\n|---|---|---|\n| Build intuit"
+  },
+  {
+    "slug": "2026-02-14-karpathys-microgpt-from-scratch",
+    "file": "2026-02-14-karpathys-microgpt-from-scratch.md",
+    "title": "microGPT from Scratch - Building a Transformer from First Principles",
+    "date": "2026-02-14",
+    "timestamp": "2026-02-14T19:42:34.979Z",
+    "order": 1,
+    "description": "Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.",
+    "tags": [
+      "llm",
+      "transformers",
+      "microgpt",
+      "pytorch"
+    ],
+    "body": "\n## Why This Post\n\nKarpathy's microGPT write-up is a strong example of learning by implementation. Instead of treating a large language model as a black box, you build a small GPT end to end and inspect every moving part.\n\nPrimary reference: [karpathy.ai/microgpt.html](https://karpathy.ai/microgpt.html)\n\n> [!note]\n> This post is structured as a build notebook. The goal is understanding, not benchmark chasing.\n\n## Post Plan (Feature Map)\n\n| Section Goal | Blog Feature Used | Why |\n|---|---|---|\n|"
+  },
+  {
     "slug": "2026-02-14-hello-world",
     "file": "2026-02-14-hello-world.md",
     "title": "Hello World — A Tour of Every Feature",
     "date": "2026-02-14",
-    "description": "A comprehensive showcase of the research blog's rendering capabilities, from syntax highlighting to 3D embeds.",
+    "timestamp": "2026-02-14T18:57:33.542Z",
+    "order": 0,
+    "description": "End-to-end showcase of every blog feature: code highlighting, Mermaid, callouts, chat blocks, steps, and Three.js embeds.",
     "tags": [
       "meta",
       "demo",
-      "threejs",
-      "mermaid"
+      "markdown",
+      "rendering"
     ],
     "body": "\n## Welcome\n\nThis is the inaugural post on the research blog — a private space for deep dives into technical topics. This post exists to showcase and verify every rendering feature the blog supports.\n\nThe blog is a **vanilla JS SPA** with no build tools, no frameworks, and no dependencies beyond a few CDN-loaded libraries. Everything renders client-side from markdown files.\n\n## Syntax Highlighting\n\nCode blocks get automatic language detection and Prism.js highlighting.\n\n### JavaScript\n\n```javasc"
   }

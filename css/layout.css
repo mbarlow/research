@@ -2,6 +2,7 @@
 .layout {
   display: grid;
   grid-template-columns: 1fr;
+  align-items: start;
   max-width: 1200px;
   margin: 0 auto;
   padding-top: var(--nav-height);
@@ -12,6 +13,7 @@
 .content {
   max-width: var(--max-width);
   width: 100%;
+  align-self: start;
   margin: 0 auto;
   padding: 2rem 1.5rem 4rem;
 }
@@ -37,6 +39,7 @@
 
   .toc-sidebar {
     grid-column: 2;
+    align-self: start;
     display: block;
     position: sticky;
     top: calc(var(--nav-height) + 2rem);

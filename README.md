@@ -20,12 +20,16 @@ Create a markdown file in `posts/` with YAML frontmatter:
 ---
 title: Post Title
 date: 2026-02-14
+order: 10
 description: Brief description
 tags: [tag1, tag2]
 ---
 
 Your content here...
 ```
+
+`order` is optional; lower values appear first when multiple posts share the same `date`.
+Posts are sorted by post file timestamp (newest first), and the UI displays date + time in listing and post headers.
 
 ### Custom Markdown Extensions
 

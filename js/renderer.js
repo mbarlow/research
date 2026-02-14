@@ -25,6 +25,32 @@ function escapeHtml(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+function renderCalloutIcon(type) {
+  const icons = {
+    note: `<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+      <circle cx="8" cy="8" r="6.25"></circle>
+      <line x1="8" y1="7" x2="8" y2="11"></line>
+      <circle class="callout-icon-fill" cx="8" cy="4.8" r="0.9"></circle>
+    </svg>`,
+    warning: `<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+      <path d="M8 2.5L14 13H2L8 2.5Z"></path>
+      <line x1="8" y1="6" x2="8" y2="9.6"></line>
+      <circle class="callout-icon-fill" cx="8" cy="11.5" r="0.85"></circle>
+    </svg>`,
+    tip: `<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+      <path d="M8 2.7A4.05 4.05 0 0 0 5.5 9.9c.4.33.68.73.8 1.2h3.4c.12-.47.4-.87.8-1.2A4.05 4.05 0 0 0 8 2.7Z"></path>
+      <line x1="6.1" y1="12.35" x2="9.9" y2="12.35"></line>
+      <line x1="6.6" y1="13.8" x2="9.4" y2="13.8"></line>
+    </svg>`,
+    danger: `<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+      <path d="M5 1.8h6l3.2 3.2v6L11 14.2H5L1.8 11V5L5 1.8Z"></path>
+      <line x1="8" y1="4.7" x2="8" y2="9.2"></line>
+      <circle class="callout-icon-fill" cx="8" cy="11.4" r="0.85"></circle>
+    </svg>`,
+  };
+  return icons[type] || icons.note;
+}
+
 function renderChat(text) {
   const lines = text.split('\n');
   let messages = [];
@@ -126,11 +152,10 @@ const renderer = {
     const calloutMatch = quote.match(/^\s*<p>\[!(note|warning|tip|danger)\]\s*/i);
     if (calloutMatch) {
       const type = calloutMatch[1].toLowerCase();
-      const icons = { note: 'info', warning: 'alert-triangle', tip: 'lightbulb', danger: 'alert-circle' };
       const labels = { note: 'Note', warning: 'Warning', tip: 'Tip', danger: 'Danger' };
       const content = quote.replace(calloutMatch[0], '<p>');
       return `<div class="callout callout-${type}">
-        <div class="callout-title"><span class="callout-icon">${icons[type]}</span> ${labels[type]}</div>
+        <div class="callout-title"><span class="callout-icon">${renderCalloutIcon(type)}</span> ${labels[type]}</div>
         <div class="callout-content">${content}</div>
       </div>`;
     }
@@ -165,9 +190,15 @@ export async function enhance(container) {
         const el = mermaidBlocks[i];
         const code = el.textContent;
         const id = `mermaid-${Date.now()}-${i}`;
-        const { svg } = await mermaid.render(id, code);
-        el.innerHTML = svg;
-        el.classList.add('mermaid-rendered');
+        try {
+          const { svg } = await mermaid.render(id, code);
+          el.innerHTML = svg;
+          el.classList.add('mermaid-rendered');
+        } catch (e) {
+          el.innerHTML = `<pre><code>${escapeHtml(code)}</code></pre>`;
+          el.classList.remove('mermaid-rendered');
+          console.warn('Mermaid block failed to render:', e);
+        }
       }
     } catch (e) {
       console.warn('Mermaid rendering failed:', e);

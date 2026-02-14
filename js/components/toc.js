@@ -11,10 +11,22 @@ export function renderToc(headings) {
 
   const html = headings.map(h => {
     const indent = h.level - 2;
-    return `<a href="#${h.id}" class="toc-link toc-level-${h.level}" style="padding-left: ${indent * 12 + 8}px">${h.text}</a>`;
+    return `<button type="button" class="toc-link toc-level-${h.level}" data-target-id="${h.id}" style="padding-left: ${indent * 12 + 8}px">${h.text}</button>`;
   }).join('');
 
   sidebar.innerHTML = `<div class="toc-content"><div class="toc-label">On this page</div>${html}</div>`;
+
+  // In SPA hash routing, avoid heading hashes and scroll manually instead.
+  sidebar.querySelectorAll('.toc-link').forEach(link => {
+    link.addEventListener('click', () => {
+      const id = link.getAttribute('data-target-id');
+      const target = id ? document.getElementById(id) : null;
+      if (!target) return;
+      const navHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height').trim(), 10) || 56;
+      const top = window.scrollY + target.getBoundingClientRect().top - navHeight - 12;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    });
+  });
 
   // Scroll-aware highlighting
   if (activeObserver) activeObserver.disconnect();
@@ -26,7 +38,7 @@ export function renderToc(headings) {
     for (const entry of entries) {
       if (entry.isIntersecting) {
         links.forEach(l => l.classList.remove('active'));
-        const link = sidebar.querySelector(`a[href="#${entry.target.id}"]`);
+        const link = sidebar.querySelector(`.toc-link[data-target-id="${entry.target.id}"]`);
         if (link) link.classList.add('active');
       }
     }

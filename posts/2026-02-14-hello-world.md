@@ -1,8 +1,9 @@
 ---
 title: Hello World — A Tour of Every Feature
 date: 2026-02-14
-description: A comprehensive showcase of the research blog's rendering capabilities, from syntax highlighting to 3D embeds.
-tags: [meta, demo, threejs, mermaid]
+order: 0
+description: End-to-end showcase of every blog feature: code highlighting, Mermaid, callouts, chat blocks, steps, and Three.js embeds.
+tags: [meta, demo, markdown, rendering]
 ---
 
 ## Welcome

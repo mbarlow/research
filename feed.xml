@@ -4,12 +4,47 @@
   <link href="https://mbarlow.github.io/research" rel="alternate"/>
   <link href="https://mbarlow.github.io/research/feed.xml" rel="self"/>
   <id>https://mbarlow.github.io/research/</id>
-  <updated>2026-02-14T19:28:28.111Z</updated>
+  <updated>2026-02-14T20:07:58.293Z</updated>
+  <entry>
+    <title>Three.js Rendering Techniques - Patterns for Stable Real-World Performance</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-threejs-rendering-techniques-that-hold-up" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-threejs-rendering-techniques-that-hold-up</id>
+    <updated>2026-02-14T19:44:12.125Z</updated>
+    <summary>Improve Three.js frame stability with instancing, culling, LOD strategy, and practical render-loop architecture.</summary>
+  </entry>
+  <entry>
+    <title>ComfyUI Workflows - From Experiments to Repeatable Pipelines</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-comfyui-workflows-that-scale" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-comfyui-workflows-that-scale</id>
+    <updated>2026-02-14T19:43:50.338Z</updated>
+    <summary>Design versioned ComfyUI graphs that scale from one-off experiments to repeatable production image workflows.</summary>
+  </entry>
+  <entry>
+    <title>Local LLMs on Consumer Hardware - A Practical Playbook</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-local-llms-on-consumer-hardware" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-local-llms-on-consumer-hardware</id>
+    <updated>2026-02-14T19:43:28.230Z</updated>
+    <summary>Run local LLMs on consumer hardware with a repeatable stack for model sizing, quantization, benchmarking, and deployment.</summary>
+  </entry>
+  <entry>
+    <title>Gaussian Splatting for Real-Time Radiance Fields - Practical Notes</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-gaussian-splatting-real-time-notes" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-gaussian-splatting-real-time-notes</id>
+    <updated>2026-02-14T19:43:04.714Z</updated>
+    <summary>Understand Gaussian splatting end to end: representation, projection, sorting, blending, and real-time performance trade-offs.</summary>
+  </entry>
+  <entry>
+    <title>microGPT from Scratch - Building a Transformer from First Principles</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-karpathys-microgpt-from-scratch" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-karpathys-microgpt-from-scratch</id>
+    <updated>2026-02-14T19:42:34.979Z</updated>
+    <summary>Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.</summary>
+  </entry>
   <entry>
     <title>Hello World — A Tour of Every Feature</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-02-14-hello-world" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-02-14-hello-world</id>
-    <updated>2026-02-14T00:00:00Z</updated>
-    <summary>A comprehensive showcase of the research blog's rendering capabilities, from syntax highlighting to 3D embeds.</summary>
+    <updated>2026-02-14T18:57:33.542Z</updated>
+    <summary>End-to-end showcase of every blog feature: code highlighting, Mermaid, callouts, chat blocks, steps, and Three.js embeds.</summary>
   </entry>
 </feed>
