@@ -4,12 +4,12 @@
   <link href="https://mbarlow.github.io/research" rel="alternate"/>
   <link href="https://mbarlow.github.io/research/feed.xml" rel="self"/>
   <id>https://mbarlow.github.io/research/</id>
-  <updated>2026-02-14T21:53:11.082Z</updated>
+  <updated>2026-02-14T22:47:06.468Z</updated>
   <entry>
     <title>Companion - Gaussian Splatting from Smartphone Photos (Local RTX 3060 Workflow)</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-02-14-gaussian-splatting-smartphone-companion" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-02-14-gaussian-splatting-smartphone-companion</id>
-    <updated>2026-02-14T21:27:20.039Z</updated>
+    <updated>2026-02-14T22:47:06.433Z</updated>
     <summary>Companion guide: capture photos on a phone, reconstruct/train locally, and load your splat in the blog viewer on RTX 3060 12GB.</summary>
   </entry>
   <entry>

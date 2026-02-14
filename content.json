@@ -4,7 +4,7 @@
     "file": "2026-02-14-gaussian-splatting-smartphone-companion.md",
     "title": "Companion - Gaussian Splatting from Smartphone Photos (Local RTX 3060 Workflow)",
     "date": "2026-02-14",
-    "timestamp": "2026-02-14T21:27:20.039Z",
+    "timestamp": "2026-02-14T22:47:06.433Z",
     "order": 2.5,
     "description": "Companion guide: capture photos on a phone, reconstruct/train locally, and load your splat in the blog viewer on RTX 3060 12GB.",
     "tags": [

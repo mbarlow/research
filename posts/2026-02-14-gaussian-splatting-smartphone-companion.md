@@ -107,7 +107,7 @@ Then change the embed path in this post from `train.splat` to `scene.ply` when y
 
 ## Interactive Splat Viewer
 
-<div data-scene="gaussian-splat-viewer.js" data-splat="media/gaussian-splats/output/train.splat" data-splat-fallback="media/gaussian-splats/output/example-nike.splat" style="width:100%;height:460px;"></div>
+<div data-scene="gaussian-splat-viewer.js" data-splat="media/gaussian-splats/output/example-nike.splat" data-splat-fallback="media/gaussian-splats/output/train.splat" style="width:100%;height:460px;"></div>
 
 <p class="scene-hint">Default demo path: <code>media/gaussian-splats/output/train.splat</code> (fallback: <code>example-nike.splat</code>). Swap to <code>scene.ply</code> after your own training run.</p>
 

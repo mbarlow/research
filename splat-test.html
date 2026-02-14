@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Splat Viewer Test</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #1a1a2e; color: #eee; font-family: monospace; }
+    #log { position: fixed; top: 0; right: 0; width: 360px; max-height: 100vh; overflow-y: auto;
+           background: rgba(0,0,0,0.8); padding: 10px; font-size: 11px; z-index: 999;
+           border-left: 1px solid #333; }
+    #log div { margin-bottom: 3px; padding-bottom: 3px; border-bottom: 1px solid #222; }
+    .ok { color: #4f4; } .err { color: #f44; } .info { color: #8cf; } .warn { color: #fd0; }
+    #viewer-container { width: 100%; height: 100vh; }
+    h3 { padding: 6px 10px; background: #111; margin-bottom: 6px; }
+  </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.182.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.182.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="log"><h3>Splat Viewer Test</h3></div>
+  <div id="viewer-container"></div>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    const logEl = document.getElementById('log');
+    function log(msg, cls = 'info') {
+      const d = document.createElement('div');
+      d.className = cls;
+      d.textContent = `[${new Date().toISOString().slice(11,23)}] ${msg}`;
+      logEl.appendChild(d);
+      console.log(msg);
+    }
+
+    const SPLAT_LIB_URL = 'https://cdn.jsdelivr.net/npm/@mkkellogg/gaussian-splats-3d@0.4.7/+esm';
+    const SPLAT_PATH = 'media/gaussian-splats/output/example-nike.splat';
+
+    async function run() {
+      log(`crossOriginIsolated: ${window.crossOriginIsolated}`, window.crossOriginIsolated ? 'ok' : 'warn');
+
+      log('Importing GaussianSplats3D...');
+      const GS3D = await import(SPLAT_LIB_URL);
+      const Viewer = GS3D.Viewer || GS3D.default?.Viewer;
+      if (!Viewer) { log('No Viewer export', 'err'); return; }
+      log('Library loaded', 'ok');
+
+      const container = document.getElementById('viewer-container');
+
+      log('Creating Viewer (gpuSort=false, builtInControls=false)...');
+      const viewer = new Viewer({
+        rootElement: container,
+        cameraUp: [0, 1, 0],
+        initialCameraPosition: [0, 2, 5],
+        initialCameraLookAt: [0, 1, 0],
+        sharedMemoryForWorkers: false,
+        gpuAcceleratedSort: false,
+        useBuiltInControls: false,
+        antialiased: true,
+      });
+      log('Viewer created', 'ok');
+
+      log(`Loading: ${SPLAT_PATH}`);
+      await viewer.addSplatScene(SPLAT_PATH, { progressiveLoad: true, showLoadingUI: false });
+      log(`Loaded ${viewer.splatMesh?.getSplatCount()} splats`, 'ok');
+
+      // Compute splat centroid
+      const mesh = viewer.splatMesh;
+      const count = mesh.getSplatCount();
+      const vec = new THREE.Vector3(); vec.w = 0;
+      let sx=0, sy=0, sz=0, n=0;
+      let minY = Infinity;
+      const step = Math.max(1, Math.floor(count / 2000));
+      for (let i = 0; i < count; i += step) {
+        mesh.getSplatCenter(i, vec);
+        sx+=vec.x; sy+=vec.y; sz+=vec.z;
+        if (vec.y < minY) minY = vec.y;
+        n++;
+      }
+      const cx = sx/n, cy = sy/n, cz = sz/n;
+      log(`Centroid: [${cx.toFixed(2)}, ${cy.toFixed(2)}, ${cz.toFixed(2)}]`, 'ok');
+
+      // Position camera
+      const centroid = new THREE.Vector3(cx, cy, cz);
+      const dist = 4;
+      viewer.camera.position.set(cx + dist*0.6, cy + dist*0.4, cz + dist*0.7);
+      viewer.camera.lookAt(centroid);
+
+      // Grid at splat floor
+      const grid = new THREE.GridHelper(12, 12, 0x444466, 0x222244);
+      grid.position.y = minY - 0.2;
+      viewer.threeScene.add(grid);
+
+      // Three.js OrbitControls
+      const viewerCanvas = container.querySelector('canvas');
+      const controls = new OrbitControls(viewer.camera, viewerCanvas);
+      controls.target.copy(centroid);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.12;
+      controls.update();
+      log('OrbitControls attached', 'ok');
+
+      // Patch update loop for controls
+      const origUpdate = viewer.update?.bind(viewer);
+      if (viewer.update) {
+        viewer.update = function() {
+          controls.update();
+          if (origUpdate) return origUpdate();
+        };
+      }
+
+      viewer.start();
+      log('Viewer started', 'ok');
+
+      window.__viewer = viewer;
+      window.__controls = controls;
+    }
+
+    run().catch(e => { log(`Error: ${e.message}`, 'err'); console.error(e); });
+  </script>
+</body>
+</html>
