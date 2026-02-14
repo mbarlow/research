@@ -57,10 +57,12 @@ function renderChat(text) {
   let current = null;
 
   for (const line of lines) {
-    const roleMatch = line.match(/^(user|assistant|system):\s*(.*)/i);
+    const roleMatch = line.match(/^(user|assistant|system|llm):\s*(.*)/i);
     if (roleMatch) {
       if (current) messages.push(current);
-      current = { role: roleMatch[1].toLowerCase(), text: roleMatch[2] };
+      let role = roleMatch[1].toLowerCase();
+      if (role === 'assistant') role = 'llm';
+      current = { role, text: roleMatch[2] };
     } else if (current) {
       current.text += '\n' + line;
     }
@@ -68,7 +70,11 @@ function renderChat(text) {
   if (current) messages.push(current);
 
   const html = messages.map(m => {
-    const roleLabel = m.role.charAt(0).toUpperCase() + m.role.slice(1);
+    const roleLabel = {
+      user: 'User',
+      llm: 'LLM',
+      system: 'System',
+    }[m.role] || 'LLM';
     return `<div class="chat-message chat-${m.role}">
       <div class="chat-role">${roleLabel}</div>
       <div class="chat-text">${marked.parse(m.text.trim())}</div>

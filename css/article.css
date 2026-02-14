@@ -242,10 +242,11 @@ figcaption {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
+  background: var(--bg-surface);
 }
 
 .chat-message {
-  padding: 1rem 1.25rem;
+  padding: 0.9rem 1rem;
   border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -254,25 +255,33 @@ figcaption {
 }
 
 .chat-user {
-  background: var(--chat-user);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--chat-user) 88%, transparent), transparent);
 }
 
+.chat-llm,
 .chat-assistant {
-  background: var(--chat-assistant);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--chat-llm) 90%, transparent), transparent);
 }
 
 .chat-system {
-  background: var(--bg-elevated);
-  font-style: italic;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--chat-system) 88%, transparent), transparent);
 }
 
 .chat-role {
-  font-size: var(--font-size-xs);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  font-size: 0.68rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--text-muted);
-  margin-bottom: 0.4rem;
+  color: var(--text-secondary);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .chat-text p:first-child { margin-top: 0; }

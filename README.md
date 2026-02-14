@@ -44,7 +44,7 @@ Types: `note`, `warning`, `tip`, `danger`
 ````markdown
 ```chat
 user: How does attention work?
-assistant: Self-attention computes Q, K, V matrices...
+llm: Self-attention computes Q, K, V matrices...
 ```
 ````
 

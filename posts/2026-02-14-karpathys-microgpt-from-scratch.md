@@ -91,13 +91,13 @@ sequenceDiagram
     participant Data
     participant Model
     participant Loss
-    participant Opt
+    participant Optimizer
 
     loop each step
         Data->>Model: input and target
         Model-->>Loss: logits
-        Loss-->>Opt: backprop loss
-        Opt->>Model: optimizer step and zero grad
+        Loss-->>Optimizer: backprop loss
+        Optimizer->>Model: step and zero grad
     end
 ```
 
