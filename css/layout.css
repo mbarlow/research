@@ -30,11 +30,13 @@
   }
 
   .content {
+    grid-column: 1;
     margin: 0;
     padding: 2rem 2rem 4rem;
   }
 
   .toc-sidebar {
+    grid-column: 2;
     display: block;
     position: sticky;
     top: calc(var(--nav-height) + 2rem);
