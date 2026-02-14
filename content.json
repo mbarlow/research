@@ -1,0 +1,16 @@
+[
+  {
+    "slug": "2026-02-14-hello-world",
+    "file": "2026-02-14-hello-world.md",
+    "title": "Hello World — A Tour of Every Feature",
+    "date": "2026-02-14",
+    "description": "A comprehensive showcase of the research blog's rendering capabilities, from syntax highlighting to 3D embeds.",
+    "tags": [
+      "meta",
+      "demo",
+      "threejs",
+      "mermaid"
+    ],
+    "body": "\n## Welcome\n\nThis is the inaugural post on the research blog — a private space for deep dives into technical topics. This post exists to showcase and verify every rendering feature the blog supports.\n\nThe blog is a **vanilla JS SPA** with no build tools, no frameworks, and no dependencies beyond a few CDN-loaded libraries. Everything renders client-side from markdown files.\n\n## Syntax Highlighting\n\nCode blocks get automatic language detection and Prism.js highlighting.\n\n### JavaScript\n\n```javasc"
+  }
+]

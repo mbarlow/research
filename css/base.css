@@ -1,0 +1,147 @@
+/* Reset */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Theme Variables */
+:root {
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-size-base: 16px;
+  --font-size-sm: 0.875rem;
+  --font-size-xs: 0.75rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --line-height: 1.7;
+  --radius: 8px;
+  --radius-sm: 4px;
+  --radius-lg: 12px;
+  --transition: 0.2s ease;
+  --max-width: 720px;
+  --nav-height: 56px;
+  --toc-width: 240px;
+}
+
+[data-theme="dark"] {
+  --bg: #0a0a0f;
+  --bg-surface: #12121a;
+  --bg-elevated: #1a1a26;
+  --bg-hover: #222233;
+  --border: #2a2a3a;
+  --border-subtle: #1e1e2e;
+  --text: #e4e4ef;
+  --text-secondary: #9494a8;
+  --text-muted: #6a6a80;
+  --accent: #7c8af8;
+  --accent-hover: #9aa4ff;
+  --accent-subtle: rgba(124, 138, 248, 0.12);
+  --code-bg: #161622;
+  --code-border: #2a2a3a;
+  --callout-note: #4a8af4;
+  --callout-warning: #e8a838;
+  --callout-tip: #3ac88f;
+  --callout-danger: #e85454;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --overlay-bg: rgba(0, 0, 0, 0.7);
+  --chat-user: #1e2a3e;
+  --chat-assistant: #1e2e1e;
+  --scrollbar-track: #12121a;
+  --scrollbar-thumb: #2a2a3a;
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --bg: #fafafa;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f5f5f7;
+  --bg-hover: #eeeef2;
+  --border: #ddd;
+  --border-subtle: #eee;
+  --text: #1a1a2e;
+  --text-secondary: #555568;
+  --text-muted: #8888a0;
+  --accent: #5a64d6;
+  --accent-hover: #4a54c6;
+  --accent-subtle: rgba(90, 100, 214, 0.08);
+  --code-bg: #f4f4f8;
+  --code-border: #e0e0e8;
+  --callout-note: #3a78e4;
+  --callout-warning: #d89828;
+  --callout-tip: #2ab878;
+  --callout-danger: #d84444;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --overlay-bg: rgba(0, 0, 0, 0.4);
+  --chat-user: #e8eef8;
+  --chat-assistant: #e8f4e8;
+  --scrollbar-track: #f5f5f7;
+  --scrollbar-thumb: #ccc;
+  color-scheme: light;
+}
+
+html {
+  font-size: var(--font-size-base);
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: var(--line-height);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background var(--transition), color var(--transition);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+a:hover {
+  color: var(--accent-hover);
+}
+
+code {
+  font-family: var(--font-mono);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Selection */
+::selection {
+  background: var(--accent-subtle);
+  color: var(--text);
+}
+
+/* Focus */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

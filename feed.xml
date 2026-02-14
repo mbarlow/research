@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Research</title>
+  <link href="https://mbarlow.github.io/research" rel="alternate"/>
+  <link href="https://mbarlow.github.io/research/feed.xml" rel="self"/>
+  <id>https://mbarlow.github.io/research/</id>
+  <updated>2026-02-14T18:57:51.602Z</updated>
+  <entry>
+    <title>Hello World — A Tour of Every Feature</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-hello-world" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-hello-world</id>
+    <updated>2026-02-14T00:00:00Z</updated>
+    <summary>A comprehensive showcase of the research blog's rendering capabilities, from syntax highlighting to 3D embeds.</summary>
+  </entry>
+</feed>
