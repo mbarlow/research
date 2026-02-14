@@ -1,5 +1,22 @@
 [
   {
+    "slug": "2026-02-14-gaussian-splatting-smartphone-companion",
+    "file": "2026-02-14-gaussian-splatting-smartphone-companion.md",
+    "title": "Companion - Gaussian Splatting from Smartphone Photos (Local RTX 3060 Workflow)",
+    "date": "2026-02-14",
+    "timestamp": "2026-02-14T21:27:20.039Z",
+    "order": 2.5,
+    "description": "Companion guide: capture photos on a phone, reconstruct/train locally, and load your splat in the blog viewer on RTX 3060 12GB.",
+    "tags": [
+      "graphics",
+      "gaussian-splatting",
+      "workflow",
+      "colmap",
+      "rtx3060"
+    ],
+    "body": "\n## Why This Companion Exists\n\nThis is the practical companion to the Gaussian splatting notes post. It answers one question: **how do I go from phone photos to a usable splat locally?**\n\n> [!note]\n> Target machine: **RTX 3060 12GB VRAM + 32GB system RAM**.\n\n## Requirements\n\n| Component | Minimum | Recommended |\n|---|---|---|\n| GPU | 8GB VRAM | RTX 3060 12GB |\n| System RAM | 16GB | 32GB |\n| Storage | 15GB free | 25GB free |\n| OS | Linux/WSL2 | Ubuntu 22.04+ |\n\n## Capture Checklist (No LiDAR)\n\n- "
+  },
+  {
     "slug": "2026-02-14-threejs-rendering-techniques-that-hold-up",
     "file": "2026-02-14-threejs-rendering-techniques-that-hold-up.md",
     "title": "Three.js Rendering Techniques - Patterns for Stable Real-World Performance",

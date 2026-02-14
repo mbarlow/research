@@ -243,11 +243,14 @@ figcaption {
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--bg-surface);
+  box-shadow: var(--shadow-sm);
 }
 
 .chat-message {
-  padding: 0.9rem 1rem;
+  padding: 1rem 1.2rem;
   border-bottom: 1px solid var(--border-subtle);
+  border-left: 2px solid transparent;
+  background: var(--bg-surface);
 }
 
 .chat-message:last-child {
@@ -255,38 +258,88 @@ figcaption {
 }
 
 .chat-user {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--chat-user) 88%, transparent), transparent);
+  background: linear-gradient(90deg, var(--chat-user-bg) 0%, transparent 70%);
+  border-left-color: var(--chat-user-accent);
 }
 
 .chat-llm,
 .chat-assistant {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--chat-llm) 90%, transparent), transparent);
+  background: linear-gradient(90deg, var(--chat-llm-bg) 0%, transparent 70%);
+  border-left-color: var(--chat-llm-accent);
 }
 
 .chat-system {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--chat-system) 88%, transparent), transparent);
+  background: linear-gradient(90deg, var(--chat-system-bg) 0%, transparent 70%);
+  border-left-color: var(--chat-system-accent);
 }
 
 .chat-role {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 2.75rem;
-  font-size: 0.68rem;
+  display: inline-block;
+  font-size: 0.66rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-secondary);
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 0.1rem 0.5rem;
-  margin-bottom: 0.5rem;
+  padding: 0.15rem 0.5rem;
+  margin-bottom: 0.45rem;
+}
+
+.chat-user .chat-role {
+  color: var(--chat-user-accent);
+  background: var(--chat-role-user-bg);
+  border-color: transparent;
+}
+
+.chat-llm .chat-role,
+.chat-assistant .chat-role {
+  color: var(--chat-llm-accent);
+  background: var(--chat-role-llm-bg);
+  border-color: transparent;
+}
+
+.chat-system .chat-role {
+  color: var(--chat-system-accent);
+  background: var(--chat-role-system-bg);
+  border-color: transparent;
 }
 
 .chat-text p:first-child { margin-top: 0; }
 .chat-text p:last-child { margin-bottom: 0; }
 .chat-text pre { margin: 0.75rem 0; }
+
+/* Photo strips */
+.photo-strip {
+  margin: 1rem 0 1.5rem;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(180px, 1fr);
+  gap: 0.65rem;
+  overflow-x: auto;
+  padding-bottom: 0.35rem;
+}
+
+.photo-strip figure {
+  margin: 0;
+}
+
+.photo-strip img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+}
+
+.photo-strip figcaption {
+  margin-top: 0.35rem;
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  text-align: left;
+}
 
 /* Steps blocks */
 .steps-block {
@@ -371,6 +424,7 @@ figcaption {
 
 /* Scene containers */
 .scene-container {
+  position: relative;
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--border);
@@ -382,6 +436,29 @@ figcaption {
   text-align: center;
   color: var(--text-muted);
   background: var(--bg-surface);
+}
+
+.scene-status {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  color: var(--text-secondary);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.scene-status code {
+  font-size: 0.8em;
+}
+
+.scene-hint {
+  margin-top: -1rem;
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
 }
 
 /* Mermaid blocks */

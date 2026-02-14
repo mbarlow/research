@@ -223,7 +223,7 @@ export async function enhance(container) {
       el.classList.add('scene-container');
       const module = await import(`../scenes/${src}`);
       if (module.init) {
-        const cleanup = module.init(canvas, el);
+        const cleanup = await module.init(canvas, el);
         if (cleanup) {
           const observer = new MutationObserver((mutations) => {
             for (const m of mutations) {
