@@ -1,5 +1,21 @@
 [
   {
+    "slug": "2026-02-14-photogrammetry-from-video",
+    "file": "2026-02-14-photogrammetry-from-video.md",
+    "title": "Photogrammetry from Video — Reconstructing 3D Geometry from 2D Images",
+    "date": "2026-02-14",
+    "timestamp": "2026-02-15T00:44:04.383Z",
+    "order": 6,
+    "description": "End-to-end photogrammetry pipeline: video frames to textured 3D meshes using Meshroom, with interactive model viewer and practical debugging tips.",
+    "tags": [
+      "photogrammetry",
+      "3d-reconstruction",
+      "meshroom",
+      "computer-vision"
+    ],
+    "body": "\n## What Is Photogrammetry\n\nPhotogrammetry is the science of reconstructing 3D geometry from 2D images. Given enough overlapping photographs of a scene, algorithms can recover the camera positions that took each photo, triangulate 3D points visible across multiple views, and ultimately produce a dense mesh with texture.\n\nThe core insight: **if the same physical point appears in two or more images taken from different angles, its 3D position can be triangulated.** Do this for millions of points a"
+  },
+  {
     "slug": "2026-02-14-gaussian-splatting-smartphone-companion",
     "file": "2026-02-14-gaussian-splatting-smartphone-companion.md",
     "title": "Companion - Gaussian Splatting from Smartphone Photos (Local RTX 3060 Workflow)",

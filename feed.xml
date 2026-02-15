@@ -4,7 +4,14 @@
   <link href="https://mbarlow.github.io/research" rel="alternate"/>
   <link href="https://mbarlow.github.io/research/feed.xml" rel="self"/>
   <id>https://mbarlow.github.io/research/</id>
-  <updated>2026-02-14T22:47:06.468Z</updated>
+  <updated>2026-02-15T01:02:08.423Z</updated>
+  <entry>
+    <title>Photogrammetry from Video — Reconstructing 3D Geometry from 2D Images</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-photogrammetry-from-video" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-photogrammetry-from-video</id>
+    <updated>2026-02-15T00:44:04.383Z</updated>
+    <summary>End-to-end photogrammetry pipeline: video frames to textured 3D meshes using Meshroom, with interactive model viewer and practical debugging tips.</summary>
+  </entry>
   <entry>
     <title>Companion - Gaussian Splatting from Smartphone Photos (Local RTX 3060 Workflow)</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-02-14-gaussian-splatting-smartphone-companion" rel="alternate"/>
