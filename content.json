@@ -1,5 +1,124 @@
 [
   {
+    "slug": "2026-03-01-marching-cubes-isosurface-extraction",
+    "file": "2026-03-01-marching-cubes-isosurface-extraction.md",
+    "title": "Marching Cubes — Isosurface Extraction from Scalar Fields",
+    "date": "2026-03-01",
+    "timestamp": "2026-03-01T23:52:01.206Z",
+    "order": 14,
+    "description": "Extract meshes from scalar fields using marching cubes, with lookup tables, normal estimation, and an interactive metaball demo.",
+    "tags": [
+      "graphics",
+      "marching-cubes",
+      "isosurface",
+      "mesh-generation",
+      "threejs"
+    ],
+    "body": "\n## Why Marching Cubes\n\nThe previous post on SDFs showed how to describe geometry as math. But if you want to feed that geometry into a standard mesh pipeline -- physics engines, vertex shaders, exporters -- you need actual triangles. Marching cubes is the bridge: it takes a scalar field (any function that returns a value at a point in space) and extracts a triangle mesh along a chosen threshold. It has been the workhorse isosurface algorithm since Lorensen and Cline published it in 1987, and it"
+  },
+  {
+    "slug": "2026-03-01-attention-visualization-transformers",
+    "file": "2026-03-01-attention-visualization-transformers.md",
+    "title": "Attention Visualization in Transformers",
+    "date": "2026-03-01",
+    "timestamp": "2026-03-01T23:51:20.515Z",
+    "order": 18,
+    "description": "Extract and visualize self-attention patterns from transformer models, showing what different heads learn with interactive heatmaps.",
+    "tags": [
+      "llm",
+      "transformers",
+      "attention",
+      "visualization",
+      "pytorch"
+    ],
+    "body": "\n## Why Visualize Attention\n\nIf you followed the microGPT build in an earlier post, you implemented multi-head self-attention as a matrix multiply followed by softmax. The weights that softmax produces are the attention pattern -- a probability distribution over positions for every query token. These patterns are not opaque. You can extract them, plot them, and learn what each head specializes in.\n\nThis matters for three reasons. First, visualization confirms your model is learning structure rat"
+  },
+  {
+    "slug": "2026-03-01-embedding-spaces-in-3d",
+    "file": "2026-03-01-embedding-spaces-in-3d.md",
+    "title": "Embedding Spaces in 3D",
+    "date": "2026-03-01",
+    "timestamp": "2026-03-01T23:51:10.629Z",
+    "order": 19,
+    "description": "Visualize high-dimensional embeddings using PCA, t-SNE, and UMAP, with an interactive 3D scatter plot of word clusters.",
+    "tags": [
+      "llm",
+      "embeddings",
+      "dimensionality-reduction",
+      "umap",
+      "visualization"
+    ],
+    "body": "\n## Why Stare at Embedding Spaces\n\nEvery token your model processes lives as a point in a high-dimensional vector space. That space has structure -- words with similar meaning cluster together, analogies form parallelograms, and entire semantic categories occupy distinct neighborhoods. But 768 dimensions is hard to reason about. Projecting those vectors down to 2D or 3D makes that structure visible and debuggable.\n\nThis matters in practice. When your semantic search returns irrelevant results, v"
+  },
+  {
+    "slug": "2026-03-01-fourier-transforms-visualized",
+    "file": "2026-03-01-fourier-transforms-visualized.md",
+    "title": "Fourier Transforms Visualized",
+    "date": "2026-03-01",
+    "timestamp": "2026-03-01T23:51:06.162Z",
+    "order": 17,
+    "description": "Understand DFT and FFT through interactive epicycle animations, frequency decomposition, and practical signal processing patterns.",
+    "tags": [
+      "math",
+      "fourier-transform",
+      "signal-processing",
+      "visualization",
+      "dft"
+    ],
+    "body": "\n## Why Fourier Transforms Deserve a Visual Intuition\n\nThe Discrete Fourier Transform is one of the most useful algorithms in computing, yet most explanations jump straight to the summation formula and lose people at the complex exponential. The core idea is simple: any periodic signal can be decomposed into a sum of sine and cosine waves at different frequencies. The DFT tells you which frequencies are present and how strong each one is. The inverse DFT reconstructs the original signal from tho"
+  },
+  {
+    "slug": "2026-03-01-particle-systems-gpu-simulation",
+    "file": "2026-03-01-particle-systems-gpu-simulation.md",
+    "title": "Particle Systems on the GPU",
+    "date": "2026-03-01",
+    "timestamp": "2026-03-01T23:50:36.892Z",
+    "order": 15,
+    "description": "Build high-count particle systems with instanced rendering, integration schemes, and GPU-friendly update patterns in Three.js.",
+    "tags": [
+      "graphics",
+      "particles",
+      "gpu-simulation",
+      "instancing",
+      "threejs"
+    ],
+    "body": "\n## Why Particles Still Matter\n\nParticle systems are one of the oldest tricks in real-time graphics, and they remain one of the most useful. Fire, smoke, rain, starfields, debris, magic effects -- the technique generalizes to anything that involves many small, independently moving elements. The hard part has always been count. A few hundred particles are trivial. Ten thousand start to hurt. A hundred thousand require you to think carefully about where data lives and how it moves.\n\nThe GPU is bui"
+  },
+  {
+    "slug": "2026-03-01-pbr-physics-based-shading",
+    "file": "2026-03-01-pbr-physics-based-shading.md",
+    "title": "PBR Materials — Physics-Based Shading in Three.js",
+    "date": "2026-03-01",
+    "timestamp": "2026-03-01T23:50:13.105Z",
+    "order": 16,
+    "description": "Understand Cook-Torrance BRDF, metalness-roughness workflows, and environment lighting with an interactive material parameter grid.",
+    "tags": [
+      "graphics",
+      "pbr",
+      "brdf",
+      "materials",
+      "threejs"
+    ],
+    "body": "\n## Why PBR\n\nTraditional shading models -- Phong, Blinn-Phong -- let you push numbers around until a material \"looks right.\" PBR (Physically-Based Rendering) replaces that guesswork with constraints derived from actual physics: energy conservation, microfacet statistics, and Fresnel reflectance. The result is materials that respond correctly to any lighting environment without per-scene hand-tuning. Every major engine (Unreal, Unity, Godot, Three.js) adopted the metalness-roughness workflow for "
+  },
+  {
+    "slug": "2026-03-01-noise-functions-procedural-terrain",
+    "file": "2026-03-01-noise-functions-procedural-terrain.md",
+    "title": "Noise Functions and Procedural Terrain",
+    "date": "2026-03-01",
+    "timestamp": "2026-03-01T23:49:51.215Z",
+    "order": 13,
+    "description": "Generate procedural terrain using layered noise functions, FBM, and domain warping, with an interactive Three.js heightmap demo.",
+    "tags": [
+      "graphics",
+      "procedural-generation",
+      "noise",
+      "terrain",
+      "threejs"
+    ],
+    "body": "\n## Why Noise\n\nRandom numbers alone produce static. Feed `Math.random()` into a heightmap and you get jagged nonsense with no spatial coherence. Noise functions solve this by generating smooth, continuous pseudo-randomness that varies gradually across space. That smoothness is what makes mountains look like mountains instead of white noise.\n\nKen Perlin introduced the original gradient noise algorithm in 1983 for the film Tron. Simplex noise followed in 2001, fixing some dimensional scaling issue"
+  },
+  {
     "slug": "2026-03-01-neural-tts-consumer-hardware",
     "file": "2026-03-01-neural-tts-consumer-hardware.md",
     "title": "Neural Text-to-Speech on Consumer Hardware",

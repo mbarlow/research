@@ -4,7 +4,56 @@
   <link href="https://mbarlow.github.io/research" rel="alternate"/>
   <link href="https://mbarlow.github.io/research/feed.xml" rel="self"/>
   <id>https://mbarlow.github.io/research/</id>
-  <updated>2026-03-01T23:35:06.129Z</updated>
+  <updated>2026-03-01T23:52:37.993Z</updated>
+  <entry>
+    <title>Marching Cubes — Isosurface Extraction from Scalar Fields</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-marching-cubes-isosurface-extraction" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-marching-cubes-isosurface-extraction</id>
+    <updated>2026-03-01T23:52:01.206Z</updated>
+    <summary>Extract meshes from scalar fields using marching cubes, with lookup tables, normal estimation, and an interactive metaball demo.</summary>
+  </entry>
+  <entry>
+    <title>Attention Visualization in Transformers</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-attention-visualization-transformers" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-attention-visualization-transformers</id>
+    <updated>2026-03-01T23:51:20.515Z</updated>
+    <summary>Extract and visualize self-attention patterns from transformer models, showing what different heads learn with interactive heatmaps.</summary>
+  </entry>
+  <entry>
+    <title>Embedding Spaces in 3D</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-embedding-spaces-in-3d" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-embedding-spaces-in-3d</id>
+    <updated>2026-03-01T23:51:10.629Z</updated>
+    <summary>Visualize high-dimensional embeddings using PCA, t-SNE, and UMAP, with an interactive 3D scatter plot of word clusters.</summary>
+  </entry>
+  <entry>
+    <title>Fourier Transforms Visualized</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-fourier-transforms-visualized" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-fourier-transforms-visualized</id>
+    <updated>2026-03-01T23:51:06.162Z</updated>
+    <summary>Understand DFT and FFT through interactive epicycle animations, frequency decomposition, and practical signal processing patterns.</summary>
+  </entry>
+  <entry>
+    <title>Particle Systems on the GPU</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-particle-systems-gpu-simulation" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-particle-systems-gpu-simulation</id>
+    <updated>2026-03-01T23:50:36.892Z</updated>
+    <summary>Build high-count particle systems with instanced rendering, integration schemes, and GPU-friendly update patterns in Three.js.</summary>
+  </entry>
+  <entry>
+    <title>PBR Materials — Physics-Based Shading in Three.js</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-pbr-physics-based-shading" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-pbr-physics-based-shading</id>
+    <updated>2026-03-01T23:50:13.105Z</updated>
+    <summary>Understand Cook-Torrance BRDF, metalness-roughness workflows, and environment lighting with an interactive material parameter grid.</summary>
+  </entry>
+  <entry>
+    <title>Noise Functions and Procedural Terrain</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-noise-functions-procedural-terrain" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-noise-functions-procedural-terrain</id>
+    <updated>2026-03-01T23:49:51.215Z</updated>
+    <summary>Generate procedural terrain using layered noise functions, FBM, and domain warping, with an interactive Three.js heightmap demo.</summary>
+  </entry>
   <entry>
     <title>Neural Text-to-Speech on Consumer Hardware</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-03-01-neural-tts-consumer-hardware" rel="alternate"/>
@@ -95,12 +144,5 @@
     <id>https://mbarlow.github.io/research/#/post/2026-02-14-karpathys-microgpt-from-scratch</id>
     <updated>2026-02-14T19:42:34.979Z</updated>
     <summary>Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.</summary>
-  </entry>
-  <entry>
-    <title>Hello World — A Tour of Every Feature</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-hello-world" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-02-14-hello-world</id>
-    <updated>2026-02-14T18:57:33.542Z</updated>
-    <summary>End-to-end showcase of every blog feature: code highlighting, Mermaid, callouts, chat blocks, steps, and Three.js embeds.</summary>
   </entry>
 </feed>
