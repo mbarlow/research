@@ -4,7 +4,49 @@
   <link href="https://mbarlow.github.io/research" rel="alternate"/>
   <link href="https://mbarlow.github.io/research/feed.xml" rel="self"/>
   <id>https://mbarlow.github.io/research/</id>
-  <updated>2026-02-15T01:02:08.423Z</updated>
+  <updated>2026-03-01T23:35:06.129Z</updated>
+  <entry>
+    <title>Neural Text-to-Speech on Consumer Hardware</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-neural-tts-consumer-hardware" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-neural-tts-consumer-hardware</id>
+    <updated>2026-03-01T23:34:37.491Z</updated>
+    <summary>Run neural TTS locally with streaming inference, voice cloning, and quality-latency trade-offs using Coqui TTS and Piper.</summary>
+  </entry>
+  <entry>
+    <title>LoRA Fine-Tuning on a Single GPU</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-lora-fine-tuning-single-gpu" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-lora-fine-tuning-single-gpu</id>
+    <updated>2026-03-01T23:33:31.809Z</updated>
+    <summary>Adapt foundation models on consumer hardware using LoRA, covering dataset prep, PEFT training, VRAM management, and adapter merging.</summary>
+  </entry>
+  <entry>
+    <title>Real-Time Point Cloud Processing</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-realtime-point-cloud-processing" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-realtime-point-cloud-processing</id>
+    <updated>2026-03-01T23:33:00.920Z</updated>
+    <summary>Clean, align, and downsample point clouds using Open3D with spatial indexing, outlier removal, ICP registration, and voxel filtering.</summary>
+  </entry>
+  <entry>
+    <title>Structured Output and Tool Use with Local LLMs</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-structured-output-local-llms" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-structured-output-local-llms</id>
+    <updated>2026-03-01T23:32:40.373Z</updated>
+    <summary>Get reliable structured output from local models using JSON mode, grammar-guided decoding, function calling, and validation patterns.</summary>
+  </entry>
+  <entry>
+    <title>WebGPU Compute Shaders — Parallel Processing in the Browser</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-webgpu-compute-shaders" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-webgpu-compute-shaders</id>
+    <updated>2026-03-01T23:32:25.286Z</updated>
+    <summary>Set up WebGPU compute pipelines with WGSL, manage buffers, size workgroups, and run parallel operations entirely in the browser.</summary>
+  </entry>
+  <entry>
+    <title>Procedural Geometry with Signed Distance Functions</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-procedural-geometry-with-sdfs" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-procedural-geometry-with-sdfs</id>
+    <updated>2026-03-01T23:32:25.248Z</updated>
+    <summary>Build real-time procedural scenes using SDF primitives, CSG operations, and ray marching in GLSL, with Three.js integration.</summary>
+  </entry>
   <entry>
     <title>Photogrammetry from Video — Reconstructing 3D Geometry from 2D Images</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-02-14-photogrammetry-from-video" rel="alternate"/>

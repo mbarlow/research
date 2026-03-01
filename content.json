@@ -1,5 +1,107 @@
 [
   {
+    "slug": "2026-03-01-neural-tts-consumer-hardware",
+    "file": "2026-03-01-neural-tts-consumer-hardware.md",
+    "title": "Neural Text-to-Speech on Consumer Hardware",
+    "date": "2026-03-01",
+    "timestamp": "2026-03-01T23:34:37.491Z",
+    "order": 12,
+    "description": "Run neural TTS locally with streaming inference, voice cloning, and quality-latency trade-offs using Coqui TTS and Piper.",
+    "tags": [
+      "tts",
+      "speech-synthesis",
+      "neural-audio",
+      "voice-cloning",
+      "inference"
+    ],
+    "body": "\n## Why Local TTS\n\nCloud TTS APIs are convenient until they are not. Latency spikes, per-character billing, and the inability to clone custom voices without uploading audio to a third party all push the same direction: run it yourself.\n\nModern neural TTS has crossed the quality threshold where a single consumer GPU -- or even a capable CPU -- can produce natural speech in real time. Pick a model, serve it behind a local HTTP endpoint, and integrate it into any pipeline that needs voice output.\n\n"
+  },
+  {
+    "slug": "2026-03-01-lora-fine-tuning-single-gpu",
+    "file": "2026-03-01-lora-fine-tuning-single-gpu.md",
+    "title": "LoRA Fine-Tuning on a Single GPU",
+    "date": "2026-03-01",
+    "timestamp": "2026-03-01T23:33:31.809Z",
+    "order": 8,
+    "description": "Adapt foundation models on consumer hardware using LoRA, covering dataset prep, PEFT training, VRAM management, and adapter merging.",
+    "tags": [
+      "llm",
+      "fine-tuning",
+      "lora",
+      "peft",
+      "pytorch"
+    ],
+    "body": "\n## Why Fine-Tune at All\n\nPrompting gets you 80% of the way. The remaining 20% — consistent output format, domain-specific terminology, reliable tone — often requires the model to internalize patterns that prompt engineering alone cannot reliably enforce. Fine-tuning encodes those patterns into the weights.\n\nFull fine-tuning of a 7B model requires 56GB+ of VRAM just for optimizer states. That rules out most consumer hardware. LoRA sidesteps this by freezing the original weights and training smal"
+  },
+  {
+    "slug": "2026-03-01-realtime-point-cloud-processing",
+    "file": "2026-03-01-realtime-point-cloud-processing.md",
+    "title": "Real-Time Point Cloud Processing",
+    "date": "2026-03-01",
+    "timestamp": "2026-03-01T23:33:00.920Z",
+    "order": 11,
+    "description": "Clean, align, and downsample point clouds using Open3D with spatial indexing, outlier removal, ICP registration, and voxel filtering.",
+    "tags": [
+      "point-clouds",
+      "open3d",
+      "spatial-indexing",
+      "3d-reconstruction",
+      "photogrammetry"
+    ],
+    "body": "\n## Why Point Cloud Processing Matters\n\nEvery 3D capture pipeline -- photogrammetry, LiDAR, gaussian splatting -- produces point clouds as an intermediate or final representation. Raw clouds are noisy, misaligned between scans, and far too dense for downstream consumption. If you cannot clean and register point clouds efficiently, nothing downstream works: meshing fails, splatting trains on garbage, and real-time viewers choke on millions of redundant points.\n\nThe goal is a repeatable pipeline t"
+  },
+  {
+    "slug": "2026-03-01-structured-output-local-llms",
+    "file": "2026-03-01-structured-output-local-llms.md",
+    "title": "Structured Output and Tool Use with Local LLMs",
+    "date": "2026-03-01",
+    "timestamp": "2026-03-01T23:32:40.373Z",
+    "order": 10,
+    "description": "Get reliable structured output from local models using JSON mode, grammar-guided decoding, function calling, and validation patterns.",
+    "tags": [
+      "llm",
+      "structured-output",
+      "tool-use",
+      "ollama",
+      "constrained-decoding"
+    ],
+    "body": "\n## Why Structured Output Matters\n\nFree-form text is easy to generate but hard to consume programmatically. The moment your LLM output feeds into another system -- a database insert, an API call, a downstream agent step -- you need guarantees about shape and type. Without them you are writing brittle regex parsers and praying.\n\nLocal LLMs make this harder than hosted APIs because you own the enforcement layer. The upside: you also control it completely. Grammar-guided decoding, schema validation"
+  },
+  {
+    "slug": "2026-03-01-webgpu-compute-shaders",
+    "file": "2026-03-01-webgpu-compute-shaders.md",
+    "title": "WebGPU Compute Shaders — Parallel Processing in the Browser",
+    "date": "2026-03-01",
+    "timestamp": "2026-03-01T23:32:25.286Z",
+    "order": 7,
+    "description": "Set up WebGPU compute pipelines with WGSL, manage buffers, size workgroups, and run parallel operations entirely in the browser.",
+    "tags": [
+      "webgpu",
+      "compute-shaders",
+      "wgsl",
+      "gpu-programming",
+      "browser"
+    ],
+    "body": "\n## Why Compute Shaders in the Browser Matter\n\nWebGL gave us pixel shaders and vertex shaders, but no general-purpose compute. If you wanted to run a parallel reduction, sort an array, or process an image kernel without rendering a quad, you were hacking around the graphics pipeline. WebGPU fixes this with first-class compute shaders: you dispatch work to the GPU, read results back, and never touch a framebuffer.\n\nThis matters because real applications -- physics simulations, ML inference, audio"
+  },
+  {
+    "slug": "2026-03-01-procedural-geometry-with-sdfs",
+    "file": "2026-03-01-procedural-geometry-with-sdfs.md",
+    "title": "Procedural Geometry with Signed Distance Functions",
+    "date": "2026-03-01",
+    "timestamp": "2026-03-01T23:32:25.248Z",
+    "order": 9,
+    "description": "Build real-time procedural scenes using SDF primitives, CSG operations, and ray marching in GLSL, with Three.js integration.",
+    "tags": [
+      "graphics",
+      "sdf",
+      "ray-marching",
+      "glsl",
+      "procedural-generation"
+    ],
+    "body": "\n## Why SDFs\n\nTraditional mesh-based geometry requires you to define every vertex and face up front. Signed distance functions flip that: you describe shapes as math, and the renderer figures out where surfaces are at runtime. The payoff is smooth CSG operations, infinite detail at any zoom level, and scenes you can parameterize with a handful of floats instead of megabytes of vertex data.\n\n> [!note]\n> SDFs are not a replacement for mesh pipelines. They excel at procedural content, prototyping, "
+  },
+  {
     "slug": "2026-02-14-photogrammetry-from-video",
     "file": "2026-02-14-photogrammetry-from-video.md",
     "title": "Photogrammetry from Video — Reconstructing 3D Geometry from 2D Images",
