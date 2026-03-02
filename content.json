@@ -1,5 +1,131 @@
 [
   {
+    "slug": "2026-03-02-flow-fields-curl-noise",
+    "file": "2026-03-02-flow-fields-curl-noise.md",
+    "title": "Flow Fields — Curl Noise and Particle Advection",
+    "date": "2026-03-02",
+    "timestamp": "2026-03-02T05:48:17.506Z",
+    "order": 26,
+    "description": "Build flow field visualizations using curl noise for divergence-free vector fields, with thousands of advected particles in Three.js.",
+    "tags": [
+      "graphics",
+      "flow-field",
+      "curl-noise",
+      "particles",
+      "procedural-generation",
+      "generative-art",
+      "threejs"
+    ],
+    "body": "\n## Why Flow Fields\n\nA flow field is a vector field that tells particles where to move. At every point in space, a vector specifies the direction and magnitude of flow. Drop particles into the field and let them follow the vectors -- the result is organic, fluid motion that produces some of the most visually striking generative art in the medium.\n\nThe technique appears everywhere: data visualization (wind maps, ocean currents), generative art (Tyler Hobbs' work, Matt DesLauriers' sketches), VFX "
+  },
+  {
+    "slug": "2026-03-02-strange-attractors-chaotic-systems",
+    "file": "2026-03-02-strange-attractors-chaotic-systems.md",
+    "title": "Strange Attractors — Visualizing Chaotic Systems",
+    "date": "2026-03-02",
+    "timestamp": "2026-03-02T05:46:35.416Z",
+    "order": 25,
+    "description": "Simulate and render strange attractors (Lorenz, Rössler, Aizawa) as particle traces in 3D, exploring deterministic chaos and sensitive dependence.",
+    "tags": [
+      "math",
+      "chaos",
+      "attractors",
+      "simulation",
+      "visualization",
+      "generative-art",
+      "threejs"
+    ],
+    "body": "\n## Why Strange Attractors\n\nDeterministic chaos is one of the most counterintuitive ideas in mathematics: systems governed by exact, deterministic equations that nonetheless produce behavior indistinguishable from randomness. Strange attractors are the geometric signatures of these systems -- sets in phase space that trajectories spiral toward but never repeat exactly. They have fractal structure, infinite detail, and a haunting aesthetic that has made them icons of both mathematics and generati"
+  },
+  {
+    "slug": "2026-03-02-cellular-automata-emergent-complexity",
+    "file": "2026-03-02-cellular-automata-emergent-complexity.md",
+    "title": "Cellular Automata — Emergent Complexity from Simple Rules",
+    "date": "2026-03-02",
+    "timestamp": "2026-03-02T05:45:04.968Z",
+    "order": 24,
+    "description": "Explore cellular automata from Conway's Game of Life to 3D visualization, showing how simple local rules produce complex emergent behavior.",
+    "tags": [
+      "simulation",
+      "cellular-automata",
+      "game-of-life",
+      "emergence",
+      "generative-art",
+      "threejs"
+    ],
+    "body": "\n## Why Cellular Automata\n\nA cellular automaton is a grid of cells, each in one of a finite number of states, updated simultaneously according to rules that depend only on nearby neighbors. No global coordination, no central plan. Yet from this minimal setup, complex behavior emerges: self-replicating patterns, gliders that travel across the grid, Turing-complete computation, and structures that look unsettlingly biological.\n\nJohn Conway's Game of Life (1970) is the most famous example, but the "
+  },
+  {
+    "slug": "2026-03-02-voronoi-diagrams-procedural-textures",
+    "file": "2026-03-02-voronoi-diagrams-procedural-textures.md",
+    "title": "Voronoi Diagrams — Cell-Based Procedural Textures",
+    "date": "2026-03-02",
+    "timestamp": "2026-03-02T05:43:32.331Z",
+    "order": 23,
+    "description": "Generate Voronoi patterns on the GPU using distance fields, with applications to procedural textures, organic patterns, and terrain generation.",
+    "tags": [
+      "graphics",
+      "voronoi",
+      "procedural-generation",
+      "glsl",
+      "generative-art"
+    ],
+    "body": "\n## Why Voronoi\n\nA Voronoi diagram partitions space into regions based on proximity to a set of seed points. Each region contains all points closer to its seed than to any other. The result is a cellular pattern that appears constantly in nature: mud cracks, giraffe spots, dragonfly wings, soap bubbles, crystal grain boundaries, and turtle shells.\n\nFor procedural generation, Voronoi is indispensable. It gives you cellular textures without painting them, organic partitioning without manual placem"
+  },
+  {
+    "slug": "2026-03-02-l-systems-procedural-plants",
+    "file": "2026-03-02-l-systems-procedural-plants.md",
+    "title": "L-Systems — Procedural Plants from String Rewriting",
+    "date": "2026-03-02",
+    "timestamp": "2026-03-02T05:42:18.466Z",
+    "order": 22,
+    "description": "Generate procedural trees and plants using Lindenmayer systems, turtle interpretation, and 3D branching rules with interactive Three.js rendering.",
+    "tags": [
+      "graphics",
+      "l-systems",
+      "procedural-generation",
+      "generative-art",
+      "threejs"
+    ],
+    "body": "\n## Why L-Systems\n\nIn 1968, biologist Aristid Lindenmayer invented a formal grammar to model the growth of algae. The system was simple: start with a string of symbols, apply rewriting rules to each symbol in parallel, repeat. The result was a grammar that could describe branching, recursive growth -- exactly the process that produces trees, ferns, flowers, and vascular networks.\n\nThe connection to computer graphics came later, when Przemyslaw Prusinkiewicz realized that if you interpret L-Syste"
+  },
+  {
+    "slug": "2026-03-02-reaction-diffusion-turing-patterns",
+    "file": "2026-03-02-reaction-diffusion-turing-patterns.md",
+    "title": "Reaction-Diffusion — Turing Patterns on the GPU",
+    "date": "2026-03-02",
+    "timestamp": "2026-03-02T05:40:48.300Z",
+    "order": 21,
+    "description": "Simulate the Gray-Scott reaction-diffusion model using GPU ping-pong framebuffers to generate Turing patterns in real time.",
+    "tags": [
+      "graphics",
+      "reaction-diffusion",
+      "simulation",
+      "turing-patterns",
+      "glsl",
+      "generative-art"
+    ],
+    "body": "\n## Why Reaction-Diffusion\n\nIn 1952, Alan Turing published \"The Chemical Basis of Morphogenesis,\" proposing that simple chemical reactions combined with diffusion could explain biological pattern formation -- spots on a leopard, stripes on a zebrafish, ridges on a fingerprint. The math is elegant: two chemicals interact and spread at different rates, and the imbalance between their diffusion speeds creates stable spatial patterns from uniform initial conditions. No template, no blueprint. Patter"
+  },
+  {
+    "slug": "2026-03-02-mandelbulb-3d-fractals",
+    "file": "2026-03-02-mandelbulb-3d-fractals.md",
+    "title": "Mandelbulb — 3D Fractals via Ray Marching",
+    "date": "2026-03-02",
+    "timestamp": "2026-03-02T05:39:10.029Z",
+    "order": 20,
+    "description": "Render the Mandelbulb fractal in real time using ray marching, triplex algebra, and distance estimation, with an interactive GLSL viewer.",
+    "tags": [
+      "graphics",
+      "fractal",
+      "mandelbulb",
+      "ray-marching",
+      "glsl",
+      "generative-art"
+    ],
+    "body": "\n## Why Mandelbulbs\n\nThe Mandelbrot set lives in 2D. For decades people tried to extend it into three dimensions, but complex numbers only have two components and quaternion fractals looked like lumpy potatoes. In 2009, Daniel White and Paul Nylander found a workaround: instead of extending complex algebra, they used spherical coordinates to define an n-th power operation on 3D points. The result -- the Mandelbulb -- is a genuine 3D fractal with infinite surface detail, bulbous protrusions, and "
+  },
+  {
     "slug": "2026-03-01-marching-cubes-isosurface-extraction",
     "file": "2026-03-01-marching-cubes-isosurface-extraction.md",
     "title": "Marching Cubes — Isosurface Extraction from Scalar Fields",
