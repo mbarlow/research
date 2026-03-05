@@ -151,8 +151,8 @@ export function init(canvas, container) {
     uTexelSize: { value: new THREE.Vector2(1.0 / SIM_SIZE, 1.0 / SIM_SIZE) },
     uFeed: { value: 0.037 },
     uKill: { value: 0.06 },
-    uDa: { value: 1.0 },
-    uDb: { value: 0.5 },
+    uDa: { value: 0.2097 },
+    uDb: { value: 0.105 },
     uDt: { value: 1.0 },
   };
 
