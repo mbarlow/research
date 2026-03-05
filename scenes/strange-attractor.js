@@ -1,4 +1,4 @@
-// Strange attractor visualization — Lorenz system rendered as particle traces
+// Strange attractor visualization — Lorenz, Rössler, Aizawa as line trails
 // Exports init(canvas, container) -> cleanup function
 
 import * as THREE from 'three';
@@ -8,42 +8,47 @@ const ATTRACTORS = {
   lorenz: {
     name: 'Lorenz',
     params: { sigma: 10, rho: 28, beta: 8 / 3 },
-    step(x, y, z, p, dt) {
-      const dx = p.sigma * (y - x);
-      const dy = x * (p.rho - z) - y;
-      const dz = x * y - p.beta * z;
-      return [x + dx * dt, y + dy * dt, z + dz * dt];
+    derivative(x, y, z, p) {
+      return [p.sigma * (y - x), x * (p.rho - z) - y, x * y - p.beta * z];
     },
-    scale: 0.06,
+    scale: 0.07,
     offset: [0, 0, -1.5],
   },
   rossler: {
     name: 'Rössler',
     params: { a: 0.2, b: 0.2, c: 5.7 },
-    step(x, y, z, p, dt) {
-      const dx = -y - z;
-      const dy = x + p.a * y;
-      const dz = p.b + z * (x - p.c);
-      return [x + dx * dt, y + dy * dt, z + dz * dt];
+    derivative(x, y, z, p) {
+      return [-y - z, x + p.a * y, p.b + z * (x - p.c)];
     },
-    scale: 0.12,
+    scale: 0.1,
     offset: [0, 0, 0],
   },
   aizawa: {
     name: 'Aizawa',
     params: { a: 0.95, b: 0.7, c: 0.6, d: 3.5, e: 0.25, f: 0.1 },
-    step(x, y, z, p, dt) {
-      const dx = (z - p.b) * x - p.d * y;
-      const dy = p.d * x + (z - p.b) * y;
-      const dz = p.c + p.a * z - (z * z * z) / 3 - (x * x + y * y) * (1 + p.e * z) + p.f * z * x * x * x;
-      return [x + dx * dt, y + dy * dt, z + dz * dt];
+    derivative(x, y, z, p) {
+      return [
+        (z - p.b) * x - p.d * y,
+        p.d * x + (z - p.b) * y,
+        p.c + p.a * z - (z * z * z) / 3 - (x * x + y * y) * (1 + p.e * z) + p.f * z * x * x * x,
+      ];
     },
-    scale: 0.8,
+    scale: 0.7,
     offset: [0, 0, 0],
   },
 };
 
 const ATTRACTOR_KEYS = Object.keys(ATTRACTORS);
+
+// Palette: warm to cool
+const PALETTE = [
+  new THREE.Color(0xff6040), // coral
+  new THREE.Color(0xffaa20), // amber
+  new THREE.Color(0x40ff90), // mint
+  new THREE.Color(0x20aaff), // sky
+  new THREE.Color(0xcc60ff), // violet
+  new THREE.Color(0xff4080), // pink
+];
 
 export function init(canvas, container) {
   const width = container.clientWidth;
@@ -58,8 +63,8 @@ export function init(canvas, container) {
   const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
   camera.position.set(0, 0, 6);
 
-  // Particle system for attractor trail
-  const TRAIL_LENGTH = 8000;
+  // Each particle is a line trail using shift-based position management
+  const TRAIL_LENGTH = 2000;
   const NUM_PARTICLES = 6;
 
   const particles = [];
@@ -67,18 +72,15 @@ export function init(canvas, container) {
   for (let p = 0; p < NUM_PARTICLES; p++) {
     const positions = new Float32Array(TRAIL_LENGTH * 3);
     const colors = new Float32Array(TRAIL_LENGTH * 3);
+    const baseColor = PALETTE[p % PALETTE.length];
 
-    // Assign each particle a distinct hue
-    const hue = p / NUM_PARTICLES;
-    const color = new THREE.Color().setHSL(hue, 0.8, 0.6);
-
+    // Gradient from bright (head) to dim (tail)
     for (let i = 0; i < TRAIL_LENGTH; i++) {
-      // Fade alpha through color brightness along trail
       const t = i / TRAIL_LENGTH;
-      const fade = Math.pow(1 - t, 0.5);
-      colors[i * 3] = color.r * fade;
-      colors[i * 3 + 1] = color.g * fade;
-      colors[i * 3 + 2] = color.b * fade;
+      const fade = Math.pow(1 - t, 0.6);
+      colors[i * 3] = baseColor.r * fade;
+      colors[i * 3 + 1] = baseColor.g * fade;
+      colors[i * 3 + 2] = baseColor.b * fade;
     }
 
     const geo = new THREE.BufferGeometry();
@@ -86,29 +88,27 @@ export function init(canvas, container) {
     geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     geo.setDrawRange(0, 0);
 
-    const mat = new THREE.PointsMaterial({
-      size: 1.5,
+    const mat = new THREE.LineBasicMaterial({
       vertexColors: true,
       transparent: true,
-      opacity: 0.8,
-      sizeAttenuation: true,
+      opacity: 0.9,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
     });
 
-    const points = new THREE.Points(geo, mat);
-    scene.add(points);
+    const line = new THREE.Line(geo, mat);
+    scene.add(line);
 
     particles.push({
-      points,
+      line,
       geo,
       mat,
       positions,
+      // Simulation state (unscaled coordinates)
       x: 0.1 * (p + 1) + Math.random() * 0.01,
       y: 0.1 * Math.sin(p * 1.5),
       z: 0.1 * Math.cos(p * 2.0),
-      writeIndex: 0,
-      filled: false,
+      trailCount: 0,
     });
   }
 
@@ -122,8 +122,7 @@ export function init(canvas, container) {
       p.x = 0.1 * (i + 1) + Math.random() * 0.5;
       p.y = 0.1 * Math.sin(i * 1.5) + Math.random() * 0.5;
       p.z = 0.1 * Math.cos(i * 2.0) + Math.random() * 0.5;
-      p.writeIndex = 0;
-      p.filled = false;
+      p.trailCount = 0;
       p.geo.setDrawRange(0, 0);
     }
   }
@@ -138,23 +137,31 @@ export function init(canvas, container) {
     const dt = clock.getDelta();
     const elapsed = clock.getElapsedTime();
 
-    // Switch attractor every 12 seconds
+    // Switch attractor every 14 seconds
     switchTimer += dt;
-    if (switchTimer > 12.0) {
+    if (switchTimer > 14.0) {
       switchTimer = 0;
       currentAttractorIdx = (currentAttractorIdx + 1) % ATTRACTOR_KEYS.length;
       attractor = ATTRACTORS[ATTRACTOR_KEYS[currentAttractorIdx]];
       resetParticles();
     }
 
-    const simDt = 0.005;
-    const stepsPerFrame = 12;
+    const simDt = 0.004;
+    const stepsPerFrame = 8;
 
     for (const p of particles) {
       for (let s = 0; s < stepsPerFrame; s++) {
-        [p.x, p.y, p.z] = attractor.step(p.x, p.y, p.z, attractor.params, simDt);
+        // RK4-ish: two half-steps for stability
+        const [dx1, dy1, dz1] = attractor.derivative(p.x, p.y, p.z, attractor.params);
+        const mx = p.x + dx1 * simDt * 0.5;
+        const my = p.y + dy1 * simDt * 0.5;
+        const mz = p.z + dz1 * simDt * 0.5;
+        const [dx2, dy2, dz2] = attractor.derivative(mx, my, mz, attractor.params);
+        p.x += dx2 * simDt;
+        p.y += dy2 * simDt;
+        p.z += dz2 * simDt;
 
-        // Check for NaN/Inf — reset if diverged
+        // Divergence guard
         if (!isFinite(p.x) || !isFinite(p.y) || !isFinite(p.z)) {
           p.x = Math.random() * 0.5;
           p.y = Math.random() * 0.5;
@@ -162,25 +169,32 @@ export function init(canvas, container) {
           continue;
         }
 
-        const idx = p.writeIndex * 3;
+        // Shift trail: move everything down by one slot
+        const pos = p.positions;
+        for (let i = (Math.min(p.trailCount, TRAIL_LENGTH) - 1); i > 0; i--) {
+          pos[i * 3] = pos[(i - 1) * 3];
+          pos[i * 3 + 1] = pos[(i - 1) * 3 + 1];
+          pos[i * 3 + 2] = pos[(i - 1) * 3 + 2];
+        }
+
+        // Write new head position (scaled + offset)
         const sc = attractor.scale;
         const off = attractor.offset;
-        p.positions[idx] = p.x * sc + off[0];
-        p.positions[idx + 1] = p.y * sc + off[1];
-        p.positions[idx + 2] = p.z * sc + off[2];
+        pos[0] = p.x * sc + off[0];
+        pos[1] = p.y * sc + off[1];
+        pos[2] = p.z * sc + off[2];
 
-        p.writeIndex = (p.writeIndex + 1) % TRAIL_LENGTH;
-        if (p.writeIndex === 0) p.filled = true;
+        if (p.trailCount < TRAIL_LENGTH) p.trailCount++;
       }
 
       p.geo.attributes.position.needsUpdate = true;
-      p.geo.setDrawRange(0, p.filled ? TRAIL_LENGTH : p.writeIndex);
+      p.geo.setDrawRange(0, p.trailCount);
     }
 
-    // Camera orbit
-    camera.position.x = Math.sin(elapsed * 0.12) * 5;
-    camera.position.z = Math.cos(elapsed * 0.12) * 5;
-    camera.position.y = Math.sin(elapsed * 0.08) * 2;
+    // Slow camera orbit
+    camera.position.x = Math.sin(elapsed * 0.1) * 5;
+    camera.position.z = Math.cos(elapsed * 0.1) * 5;
+    camera.position.y = Math.sin(elapsed * 0.06) * 2;
     camera.lookAt(0, 0, 0);
 
     renderer.render(scene, camera);
