@@ -1,5 +1,187 @@
 [
   {
+    "slug": "2026-03-04-verlet-softbody-physics",
+    "file": "2026-03-04-verlet-softbody-physics.md",
+    "title": "Verlet Integration Softbody Physics — Jelly, Cloth, and Rope",
+    "date": "2026-03-04",
+    "timestamp": "2026-03-05T23:50:44.784Z",
+    "order": 36,
+    "description": "Build a softbody physics engine using Verlet integration and distance constraints, simulating jelly cubes, cloth sheets, and swinging ropes in real time.",
+    "tags": [
+      "physics",
+      "simulation",
+      "verlet",
+      "softbody",
+      "threejs",
+      "creative-coding"
+    ],
+    "body": "\n## Why Verlet Integration\n\nMost physics simulations store position and velocity. Euler integration updates them: `v += a*dt; x += v*dt`. It's simple but fragile — constraints (fixed distances between particles) require velocity corrections that fight the integrator and cause jitter. Verlet integration sidesteps this by storing position and previous position. Velocity is implicit: `v = x_current - x_previous`. The update is:\n\n```\nx_new = 2 * x_current - x_previous + acceleration * dt^2\n```\n\nWhy "
+  },
+  {
+    "slug": "2026-03-04-impossible-geometry-shader-tricks",
+    "file": "2026-03-04-impossible-geometry-shader-tricks.md",
+    "title": "Impossible Geometry — Shader Tricks That Lie About Depth",
+    "date": "2026-03-04",
+    "timestamp": "2026-03-05T23:29:49.047Z",
+    "order": 35,
+    "description": "Render Penrose triangles, Escher staircases, and impossible objects using fragment shaders that manipulate depth to create geometries that cannot exist in 3D.",
+    "tags": [
+      "graphics",
+      "ray-marching",
+      "illusions",
+      "glsl",
+      "creative-coding",
+      "math"
+    ],
+    "body": "\n## Why Impossible Geometry\n\nIn 1958, Lionel and Roger Penrose published \"Impossible Objects: A Special Type of Visual Illusion,\" introducing the Penrose triangle and Penrose stairs. M.C. Escher immediately recognized the potential and created Waterfall and Ascending and Descending — images of structures that look perfectly solid but cannot exist in three dimensions. The objects exploit a flaw in our visual system: we unconsciously resolve 2D projections into 3D interpretations, and these partic"
+  },
+  {
+    "slug": "2026-03-04-audio-spectrogram-terrain",
+    "file": "2026-03-04-audio-spectrogram-terrain.md",
+    "title": "Audio Spectrogram Terrain — Fly Through Sound",
+    "date": "2026-03-04",
+    "timestamp": "2026-03-05T23:24:54.932Z",
+    "order": 34,
+    "description": "Transform audio spectrograms into 3D terrain and fly through the landscape of sound, where frequency is width, time is depth, and amplitude is height.",
+    "tags": [
+      "audio",
+      "visualization",
+      "web-audio",
+      "threejs",
+      "terrain",
+      "creative-coding"
+    ],
+    "body": "\n## Why Spectrogram Terrain\n\nA spectrogram is a 2D image: time on one axis, frequency on the other, brightness showing amplitude. It's the standard way to visualize audio — every audio editor, every speech recognition paper, every birdsong field guide uses spectrograms. But a spectrogram is also a heightmap. Map amplitude to elevation and the spectrogram becomes a 3D terrain you can fly through.\n\nThe mapping is natural: bass frequencies form broad, rolling hills. Treble frequencies create sharp,"
+  },
+  {
+    "slug": "2026-03-04-boids-on-curved-manifolds",
+    "file": "2026-03-04-boids-on-curved-manifolds.md",
+    "title": "Boids on Curved Manifolds — Flocking on a Torus",
+    "date": "2026-03-04",
+    "timestamp": "2026-03-05T23:23:41.463Z",
+    "order": 33,
+    "description": "Simulate Reynolds' flocking algorithm on curved surfaces where topology wraps, twists, and changes the meaning of \"nearby\" — boids on a torus, sphere, and Klein bottle.",
+    "tags": [
+      "simulation",
+      "boids",
+      "flocking",
+      "topology",
+      "threejs",
+      "math",
+      "creative-coding"
+    ],
+    "body": "\n## Why Boids on Manifolds\n\nCraig Reynolds' 1987 boids algorithm demonstrated that complex flocking behavior emerges from three simple rules: separation (don't crowd), alignment (match neighbors' heading), and cohesion (steer toward the group). But Reynolds' original implementation lived in flat Euclidean space — an infinite plane where distance is straightforward and there's no boundary to worry about. What happens when you put boids on a curved surface?\n\nOn a torus, \"nearby\" wraps around both "
+  },
+  {
+    "slug": "2026-03-04-fourier-ocean-waves",
+    "file": "2026-03-04-fourier-ocean-waves.md",
+    "title": "Fourier Ocean Waves — Tessendorf's FFT Water Simulation",
+    "date": "2026-03-04",
+    "timestamp": "2026-03-05T08:53:32.360Z",
+    "order": 32,
+    "description": "Implement Jerry Tessendorf's FFT-based ocean simulation, the same technique used in film VFX at Pixar and Weta, running in real time with Three.js.",
+    "tags": [
+      "graphics",
+      "simulation",
+      "fourier",
+      "ocean",
+      "water",
+      "threejs",
+      "physics"
+    ],
+    "body": "\n## Why Fourier Ocean Waves\n\nIn 2001, Jerry Tessendorf published \"Simulating Ocean Water,\" a paper that became the definitive technique for ocean rendering in film VFX. The insight: ocean waves are a superposition of sinusoidal components with amplitudes drawn from well-studied statistical distributions. Rather than simulating fluid dynamics (expensive, hard to control), you synthesize the height field directly in the frequency domain and transform it to spatial domain with an inverse FFT. The r"
+  },
+  {
+    "slug": "2026-03-04-wave-function-collapse-visualized",
+    "file": "2026-03-04-wave-function-collapse-visualized.md",
+    "title": "Wave Function Collapse — Constraint Propagation Visualized",
+    "date": "2026-03-04",
+    "timestamp": "2026-03-05T03:59:44.166Z",
+    "order": 31,
+    "description": "Visualize the Wave Function Collapse algorithm step by step, watching entropy collapse and constraints propagate to generate coherent tile patterns from local rules.",
+    "tags": [
+      "procedural-generation",
+      "algorithms",
+      "constraint-satisfaction",
+      "visualization",
+      "generative-art",
+      "threejs"
+    ],
+    "body": "\n## Why Wave Function Collapse\n\nIn 2016, Maxim Gumin released Wave Function Collapse (WFC) — an algorithm that generates globally coherent patterns from purely local constraints. Give it a set of tiles with rules about which tiles can be adjacent, and it fills an entire grid with a valid arrangement. The name borrows from quantum mechanics: each cell starts in a \"superposition\" of all possible tiles, and the algorithm progressively \"collapses\" cells to specific values while propagating constrain"
+  },
+  {
+    "slug": "2026-03-04-llm-guided-evolutionary-art",
+    "file": "2026-03-04-llm-guided-evolutionary-art.md",
+    "title": "LLM-Guided Evolutionary Art — Language as Fitness Function",
+    "date": "2026-03-04",
+    "timestamp": "2026-03-05T03:57:03.731Z",
+    "order": 30,
+    "description": "Evolve visual art using genetic algorithms where a local LLM judges fitness, replacing mathematical objectives with natural language like \"more crystalline\" or \"more ominous.\"",
+    "tags": [
+      "generative-art",
+      "genetic-algorithms",
+      "llm",
+      "evolution",
+      "creative-coding",
+      "ai"
+    ],
+    "body": "\n## Why Evolutionary Art\n\nIn 1994, Karl Sims demonstrated that genetic algorithms could evolve stunning visual art. His system bred mathematical expressions — trees of arithmetic operators and functions — selecting survivors based on aesthetic preference. The results were alien and beautiful, but the bottleneck was always the fitness function: either a human sat clicking \"better/worse\" for hours (interactive evolution), or you defined some mathematical proxy for beauty (color entropy, fractal di"
+  },
+  {
+    "slug": "2026-03-04-music-from-geometry-modal-analysis",
+    "file": "2026-03-04-music-from-geometry-modal-analysis.md",
+    "title": "Music From Geometry — Modal Analysis and Shape Acoustics",
+    "date": "2026-03-04",
+    "timestamp": "2026-03-05T03:53:43.908Z",
+    "order": 29,
+    "description": "Synthesize sound from 3D shapes by computing their resonant frequencies, turning geometry into musical instruments using modal analysis.",
+    "tags": [
+      "audio",
+      "physics",
+      "simulation",
+      "web-audio",
+      "threejs",
+      "math"
+    ],
+    "body": "\n## Why Modal Analysis\n\nIn 1966, mathematician Mark Kac asked \"Can one hear the shape of a drum?\" — whether the resonant frequencies of a vibrating membrane uniquely determine its geometry. The answer turned out to be no (counterexamples were found in 1992), but the question revealed something profound: geometry and sound are deeply linked. Every rigid body has a set of resonant frequencies — modes — determined by its shape, material, and boundary conditions. Strike a bell and you hear its geome"
+  },
+  {
+    "slug": "2026-03-04-non-euclidean-rendering",
+    "file": "2026-03-04-non-euclidean-rendering.md",
+    "title": "Non-Euclidean Rendering — Curved Space in the Browser",
+    "date": "2026-03-04",
+    "timestamp": "2026-03-05T03:41:18.898Z",
+    "order": 28,
+    "description": "Ray march through hyperbolic and spherical geometries where parallel lines diverge, rooms are bigger on the inside, and straight lines curve.",
+    "tags": [
+      "graphics",
+      "ray-marching",
+      "non-euclidean",
+      "hyperbolic-geometry",
+      "glsl",
+      "math"
+    ],
+    "body": "\n## Why Non-Euclidean Geometry\n\nFor over two thousand years, Euclid's fifth postulate — that through any point not on a line, exactly one parallel line exists — was assumed to be a necessary truth about space. In the 19th century, Gauss, Bolyai, and Lobachevsky independently proved it wasn't. You can build consistent geometries where infinitely many parallel lines pass through a point (hyperbolic space) or where no parallel lines exist at all (spherical space). These aren't mathematical curiosit"
+  },
+  {
+    "slug": "2026-03-04-physarum-slime-mold-simulation",
+    "file": "2026-03-04-physarum-slime-mold-simulation.md",
+    "title": "Physarum Simulation — Slime Mold Intelligence on the GPU",
+    "date": "2026-03-04",
+    "timestamp": "2026-03-05T03:39:07.961Z",
+    "order": 27,
+    "description": "Simulate Physarum polycephalum's emergent network behavior using GPU ping-pong framebuffers, where 40,000 simple agents create stunning organic transport networks.",
+    "tags": [
+      "simulation",
+      "agent-based",
+      "physarum",
+      "emergent-behavior",
+      "glsl",
+      "generative-art"
+    ],
+    "body": "\n## Why Physarum\n\nPhysarum polycephalum is a slime mold that solves optimization problems without a brain. Place food sources on a petri dish and Physarum will grow a transport network between them that closely approximates the shortest spanning tree. In 2010, researchers recreated the Tokyo rail network by placing oat flakes at the locations of major stations — the slime mold independently converged on a layout strikingly similar to the actual rail system. No central planning, no global knowled"
+  },
+  {
     "slug": "2026-03-02-flow-fields-curl-noise",
     "file": "2026-03-02-flow-fields-curl-noise.md",
     "title": "Flow Fields — Curl Noise and Particle Advection",
