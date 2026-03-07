@@ -207,14 +207,8 @@ export function init(canvas, container) {
   artScene.add(new THREE.Mesh(quadGeo, artMat));
 
   // Display material
-  const thumbUniforms = {};
-  const thumbArray = [];
-  for (let i = 0; i < POP_SIZE; i++) {
-    thumbUniforms[`uThumbs[${i}]`] = { value: thumbs[i].texture };
-    thumbArray.push(thumbs[i].texture);
-  }
   const displayUniforms = {
-    ...thumbUniforms,
+    uThumbs: { value: thumbs.map((thumb) => thumb.texture) },
     uBestIdx: { value: 0 },
     uGeneration: { value: 0 },
   };

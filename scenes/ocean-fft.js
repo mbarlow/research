@@ -195,15 +195,17 @@ export function init(canvas, container) {
   const waveUniforms = {
     uTime: { value: 0 },
     uCameraPos: { value: new THREE.Vector3() },
+    uWaveDir: { value: [] },
+    uWaveFreq: { value: waves.freqs.slice() },
+    uWaveAmp: { value: waves.amps.slice() },
+    uWavePhase: { value: waves.phases.slice() },
+    uWaveSteep: { value: waves.steeps.slice() },
   };
 
-  // Set wave uniforms
   for (let i = 0; i < NUM_WAVES; i++) {
-    waveUniforms[`uWaveDir[${i}]`] = { value: new THREE.Vector2(waves.dirs[i * 2], waves.dirs[i * 2 + 1]) };
-    waveUniforms[`uWaveFreq[${i}]`] = { value: waves.freqs[i] };
-    waveUniforms[`uWaveAmp[${i}]`] = { value: waves.amps[i] };
-    waveUniforms[`uWavePhase[${i}]`] = { value: waves.phases[i] };
-    waveUniforms[`uWaveSteep[${i}]`] = { value: waves.steeps[i] };
+    waveUniforms.uWaveDir.value.push(
+      new THREE.Vector2(waves.dirs[i * 2], waves.dirs[i * 2 + 1])
+    );
   }
 
   const oceanMat = new THREE.ShaderMaterial({

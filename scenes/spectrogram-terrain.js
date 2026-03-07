@@ -89,6 +89,10 @@ export function init(canvas, container) {
   for (let t = 0; t < TIME_SLICES; t++) {
     specBuffer.push(new Float32Array(FREQ_BINS));
   }
+  for (let t = 0; t < TIME_SLICES; t++) {
+    const seededTime = (TIME_SLICES - t) * 0.05;
+    specBuffer[t].set(generateColumn(seededTime));
+  }
 
   // Color ramp
   function heightColor(val) {
@@ -123,7 +127,7 @@ export function init(canvas, container) {
   }
 
   let running = true;
-  let simTime = 0;
+  let simTime = TIME_SLICES * 0.05;
   let scrollTimer = 0;
 
   function animate() {
@@ -141,7 +145,7 @@ export function init(canvas, container) {
         specBuffer[t].set(specBuffer[t - 1]);
       }
       // Generate new front row
-      specBuffer[0] = generateColumn(simTime);
+      specBuffer[0].set(generateColumn(simTime));
     }
 
     updateTerrain();
