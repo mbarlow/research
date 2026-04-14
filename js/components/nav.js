@@ -7,6 +7,7 @@ export function initNav() {
   nav.innerHTML = `
     <div class="nav-inner">
       <div class="nav-brand">
+        <a href="#/" class="nav-logo" aria-hidden="true"><span></span><span></span><span></span><span></span></a>
         <a href="#/" class="nav-title">Research</a>
         <span class="nav-version" id="nav-version" title="Loading version..."></span>
       </div>

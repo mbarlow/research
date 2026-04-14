@@ -9,6 +9,54 @@
   min-height: 100vh;
 }
 
+/* Right-edge accent stripe (festival ticket motif) */
+.edge-stripe {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--stripe-width);
+  background: var(--accent);
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  pointer-events: none;
+}
+
+.edge-stripe-top {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.edge-stripe-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.edge-stripe-mark {
+  width: 18px;
+  height: 18px;
+  background: #0a0a0a;
+}
+
+@media (max-width: 767px) {
+  .edge-stripe {
+    display: none;
+  }
+}
+
 /* Content area */
 .content {
   max-width: var(--max-width);
