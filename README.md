@@ -1,4 +1,5 @@
 [![pages-build-deployment](https://github.com/mbarlow/research/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/mbarlow/research/actions/workflows/pages/pages-build-deployment)
+[![Deploy to GitHub Pages](https://github.com/mbarlow/research/actions/workflows/pages.yml/badge.svg)](https://github.com/mbarlow/research/actions/workflows/pages.yml)
 
 # Research
 
