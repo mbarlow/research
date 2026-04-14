@@ -4,7 +4,14 @@
   <link href="https://mbarlow.github.io/research" rel="alternate"/>
   <link href="https://mbarlow.github.io/research/feed.xml" rel="self"/>
   <id>https://mbarlow.github.io/research/</id>
-  <updated>2026-04-14T03:44:30.229Z</updated>
+  <updated>2026-04-14T04:06:16.083Z</updated>
+  <entry>
+    <title>Saengsation — The Keyboard as System Status</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-04-14-saengsation-keyboard-as-status" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-04-14-saengsation-keyboard-as-status</id>
+    <updated>2026-04-14T04:06:09.517Z</updated>
+    <summary>A Go-only RGB LED controller for the Keychron V7 that mirrors what Claude Code is doing — waiting, acknowledged, working, idle — via keyboard lighting.</summary>
+  </entry>
   <entry>
     <title>Wave Function Collapse — Constraint Propagation Visualized</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-03-04-wave-function-collapse-visualized" rel="alternate"/>
@@ -137,12 +144,5 @@
     <id>https://mbarlow.github.io/research/#/post/2026-03-01-structured-output-local-llms</id>
     <updated>2026-04-14T01:07:25.878Z</updated>
     <summary>Get reliable structured output from local models using JSON mode, grammar-guided decoding, function calling, and validation patterns.</summary>
-  </entry>
-  <entry>
-    <title>Real-Time Point Cloud Processing</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-realtime-point-cloud-processing" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-01-realtime-point-cloud-processing</id>
-    <updated>2026-04-14T01:06:28.515Z</updated>
-    <summary>Clean, align, and downsample point clouds using Open3D with spatial indexing, outlier removal, ICP registration, and voxel filtering.</summary>
   </entry>
 </feed>

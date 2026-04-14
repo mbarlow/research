@@ -1,5 +1,25 @@
 [
   {
+    "slug": "2026-04-14-saengsation-keyboard-as-status",
+    "file": "2026-04-14-saengsation-keyboard-as-status.md",
+    "title": "Saengsation — The Keyboard as System Status",
+    "date": "2026-04-14",
+    "timestamp": "2026-04-14T04:06:09.517Z",
+    "order": 40,
+    "description": "A Go-only RGB LED controller for the Keychron V7 that mirrors what Claude Code is doing — waiting, acknowledged, working, idle — via keyboard lighting.",
+    "tags": [
+      "go",
+      "keychron",
+      "rgb",
+      "hid",
+      "qmk",
+      "claude-code",
+      "linux",
+      "tooling"
+    ],
+    "body": "\n## The idea\n\nPeripheral status is ambient data. The keyboard is already in your field of view. Use it.\n\n`saengsation` turns the Keychron V7 into a status indicator. Claude is waiting for input → the keys glow red. I hit enter → green breathing fade. Claude starts thinking → rainbow spiral. Claude stops → dim blue pulse.\n\nNo alt-tab. No terminal glance. Peripheral vision does the work.\n\n> แสง (saeng) = light. Sensation = the rest.\n\n## Why build one\n\nThe existing options were bad.\n\n- **Via web ap"
+  },
+  {
     "slug": "2026-03-04-wave-function-collapse-visualized",
     "file": "2026-03-04-wave-function-collapse-visualized.md",
     "title": "Wave Function Collapse — Constraint Propagation Visualized",
