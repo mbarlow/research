@@ -1,3 +1,5 @@
+[![pages-build-deployment](https://github.com/mbarlow/research/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/mbarlow/research/actions/workflows/pages/pages-build-deployment)
+
 # Research
 
 Technical research blog. Vanilla JS SPA, markdown-driven, deployed to GitHub Pages.
