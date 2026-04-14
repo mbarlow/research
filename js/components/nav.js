@@ -67,9 +67,14 @@ async function loadVersion() {
     const parts = [];
     if (tag) parts.push(tag);
     if (sha) parts.push(sha);
+    if (builtAt) {
+      const d = new Date(builtAt);
+      const pad = (n) => String(n).padStart(2, '0');
+      const stamp = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      parts.push(stamp);
+    }
     el.textContent = parts.join(' · ');
-    const built = builtAt ? new Date(builtAt).toLocaleString() : '';
-    el.title = built ? `Built ${built}` : '';
+    el.title = builtAt ? `Built ${new Date(builtAt).toLocaleString()}` : '';
   } catch {
     el.textContent = '';
     el.title = '';
