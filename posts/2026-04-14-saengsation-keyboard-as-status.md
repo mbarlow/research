@@ -6,8 +6,8 @@ description: A Go-only RGB LED controller for the Keychron V7 that mirrors what 
 tags: [go, keychron, rgb, hid, qmk, claude-code, linux, tooling]
 ---
 
-<figure class="media-wide">
-  <img src="media/saengsation/keys.jpg" alt="Keychron V7 under saengsation">
+<figure>
+  <img src="media/saengsation/keys.jpg" alt="Keychron V7 under saengsation" style="width:100%;height:auto;">
 </figure>
 
 ## The idea
