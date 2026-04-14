@@ -6,37 +6,31 @@ description: Explore cellular automata from Conway's Game of Life to 3D visualiz
 tags: [simulation, cellular-automata, game-of-life, emergence, generative-art, threejs]
 ---
 
-## Why Cellular Automata
+## Why CA
 
-A cellular automaton is a grid of cells, each in one of a finite number of states, updated simultaneously according to rules that depend only on nearby neighbors. No global coordination, no central plan. Yet from this minimal setup, complex behavior emerges: self-replicating patterns, gliders that travel across the grid, Turing-complete computation, and structures that look unsettlingly biological.
+A grid of cells. A finite number of states. Update rules that depend only on nearby neighbors.
 
-John Conway's Game of Life (1970) is the most famous example, but the concept reaches back to John von Neumann and Stanislaw Ulam in the 1940s, who were trying to understand self-replication. Stephen Wolfram spent decades cataloging one-dimensional cellular automata and arguing that simple rules are sufficient to produce any computable behavior. Whether or not you buy the philosophical claims, cellular automata remain one of the purest demonstrations that complexity does not require complicated causes.
+No global coordination. No central plan. From this minimal setup: self-replicating patterns, gliders, Turing-complete computation, structures that look unsettlingly biological.
+
+Conway's Game of Life (1970) is the famous example. The concept reaches back to von Neumann and Ulam in the 1940s, working on self-replication. Wolfram spent decades cataloguing 1D rules and arguing that simple rules suffice for any computable behavior.
+
+Whether or not you buy the philosophy, CA remain one of the purest demonstrations that complexity does not require complicated causes.
 
 > [!note]
-> Conway's Game of Life is Turing-complete. Logic gates, memory, and arbitrary computation can be constructed from gliders and glider guns. It is a universal computer — one that nobody would want to program, but the theoretical capability is there.
+> Conway's Life is Turing-complete. Logic gates, memory, arbitrary computation — all constructible from gliders and glider guns. A universal computer nobody would actually program. Theoretical capability is there.
 
-## Post Plan (Feature Map)
+## The rules
 
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain the rules | Code blocks + table | Make the birth/survival conditions explicit |
-| Cover implementation | JavaScript code | Grid update with wraparound |
-| Show emergent patterns | Table + callout | Gliders, oscillators, still lifes |
-| Build a 3D visualization | Three.js scene embed | Game of Life with generation history stacked in 3D |
-| Address practical questions | Chat transcript | Variants, performance, higher dimensions |
+2D grid. Each cell alive (1) or dead (0). Every generation, all cells update simultaneously based on their 8 Moore neighbors.
 
-## The Rules
-
-Conway's Game of Life uses a 2D grid where each cell is alive (1) or dead (0). Every generation, all cells update simultaneously based on their 8 neighbors (Moore neighborhood):
-
-| Current State | Neighbor Count | Next State | Name |
+| State | Neighbors | Next | Name |
 |---|---|---|---|
 | Alive | < 2 | Dead | Underpopulation |
 | Alive | 2 or 3 | Alive | Survival |
 | Alive | > 3 | Dead | Overpopulation |
 | Dead | exactly 3 | Alive | Reproduction |
 
-These four rules are often written as shorthand: **B3/S23** (Birth with 3 neighbors, Survive with 2 or 3).
+Shorthand: **B3/S23** (Birth on 3, Survive on 2 or 3).
 
 ```javascript
 function stepGrid(current, next, size) {
@@ -55,9 +49,9 @@ function stepGrid(current, next, size) {
 }
 ```
 
-## Neighbor Counting
+## Neighbors
 
-The Moore neighborhood includes all 8 surrounding cells. Wrapping at grid edges makes the grid toroidal -- patterns that exit one side reenter from the opposite side.
+8 surrounding cells. Wrap at edges → toroidal grid. Patterns exit one side, return on the opposite.
 
 ```javascript
 function countNeighbors(grid, x, y, size) {
@@ -74,29 +68,29 @@ function countNeighbors(grid, x, y, size) {
 }
 ```
 
-The double-buffer pattern (current → next, then swap) is essential. If you update cells in-place, later cells see already-updated neighbors and the simulation breaks. This is the same ping-pong pattern used in the reaction-diffusion post, but on the CPU side.
+Double-buffer (current → next, swap) is essential. Update in place and later cells see already-updated neighbors. Simulation breaks. Same ping-pong as reaction-diffusion, on the CPU.
 
-## Emergent Structures
+## Emergent zoo
 
-From the four rules above, these structures emerge without being designed:
+From four rules, no design:
 
 | Pattern | Type | Behavior |
 |---|---|---|
-| **Block** (2x2 square) | Still life | Never changes |
-| **Beehive** | Still life | Stable hexagonal shape |
-| **Blinker** (3 in a row) | Oscillator | Toggles between horizontal and vertical, period 2 |
-| **Pulsar** | Oscillator | Complex 13x13 pattern, period 3 |
-| **Glider** | Spaceship | Moves diagonally one cell every 4 generations |
-| **LWSS** | Spaceship | Lightweight spaceship, moves horizontally |
-| **Gosper Glider Gun** | Gun | Emits a new glider every 30 generations |
-| **R-pentomino** | Methuselah | 5 cells that take 1103 generations to stabilize |
+| Block (2×2 square) | Still life | Never changes |
+| Beehive | Still life | Stable hexagon |
+| Blinker (3 in a row) | Oscillator | Period 2 |
+| Pulsar | Oscillator | 13×13, period 3 |
+| Glider | Spaceship | Diagonal, one cell per 4 generations |
+| LWSS | Spaceship | Lightweight, horizontal |
+| Gosper Glider Gun | Gun | New glider every 30 generations |
+| R-pentomino | Methuselah | 5 cells, 1103 generations to stabilize |
 
 > [!tip]
-> The R-pentomino is the classic demonstration of sensitive dependence in cellular automata. Five cells. Over a thousand generations of chaotic evolution before settling into a stable configuration of still lifes, oscillators, and escaped gliders.
+> R-pentomino is the classic sensitive-dependence demo. Five cells. Over a thousand generations of chaos before settling into still lifes, oscillators, and escaped gliders.
 
-## Wolfram's Elementary Automata
+## Wolfram's elementary automata
 
-Before Life, there are the 1D cellular automata that Wolfram classified. A single row of cells, each looking at itself and its two neighbors (3 cells = 8 possible configurations), producing one of 2^8 = 256 possible rules. Each rule number encodes the output for all 8 input patterns:
+1D. Single row. Each cell looks at itself and two neighbors (3 cells = 8 input patterns). Output is 0 or 1 → 2⁸ = 256 possible rules. Each rule number encodes the output for all 8 inputs.
 
 ```javascript
 function elementaryCA(rule, width, steps) {
@@ -121,17 +115,21 @@ function elementaryCA(rule, width, steps) {
 }
 ```
 
-**Rule 30** produces chaotic, random-looking output from a single cell. **Rule 110** is proven Turing-complete. **Rule 90** produces the Sierpinski triangle. All from a single byte specifying the rule.
+**Rule 30** — chaotic, random-looking output from a single seed.
+**Rule 110** — proven Turing-complete.
+**Rule 90** — Sierpinski triangle.
 
-## 3D Visualization
+A single byte specifies the rule.
 
-The demo below runs Conway's Game of Life on a 40x40 grid. The current generation is shown at the top, and the previous 12 generations are stacked below it as translucent layers, creating a 3D history of the simulation. Cells are rendered as instanced cubes for performance. When the pattern stagnates or dies, the grid reseeds automatically.
+## 3D demo
+
+40×40 grid. Current generation on top. Previous 12 stacked below as translucent layers — 3D history. Cells as instanced cubes for performance. Reseeds when the pattern stagnates.
 
 <div data-scene="cellular-automata.js" style="width:100%;height:420px;"></div>
 
-## GPU Implementation
+## On the GPU
 
-For larger grids, move the simulation to the GPU using the same ping-pong framebuffer technique from reaction-diffusion:
+Larger grids → ping-pong framebuffer. Same trick as reaction-diffusion.
 
 ```glsl
 void main() {
@@ -160,31 +158,31 @@ void main() {
 }
 ```
 
-This handles grids of 1024x1024+ at 60fps easily. The texture lookup handles the neighbor sampling, and the GPU processes all cells in parallel.
+1024×1024 at 60fps. All cells in parallel.
 
-## Notable Variants
+## Variants
 
-| Rule | Birth/Survival | Character |
+| Rule | B/S | Character |
 |---|---|---|
-| **B3/S23** (Life) | Classic | Balanced chaos and stability |
-| **B36/S23** (HighLife) | Replicator | Has a small self-replicating pattern |
-| **B3678/S34678** (Day & Night) | Symmetric | Dead and alive cells are interchangeable |
-| **B1/S12** (Seeds) | Explosive | Everything explodes into chaos |
-| **B2/S** (Seeds variant) | Chaotic | Patterns die quickly but produce bursts |
-| **B368/S245** | Organic | Slow, amoeba-like growth |
+| B3/S23 (Life) | Classic | Balanced chaos and stability |
+| B36/S23 (HighLife) | Replicator | Has a small self-replicating pattern |
+| B3678/S34678 (Day & Night) | Symmetric | Dead and alive cells interchangeable |
+| B1/S12 (Seeds) | Explosive | Everything explodes |
+| B2/S | Chaotic | Quick deaths, bursts |
+| B368/S245 | Organic | Slow, amoeba-like growth |
 
-## Common Questions
+## Common questions
 
 ```chat
-user: How do I make the grid larger without killing performance?
-assistant: On the CPU, a 100x100 grid runs fine in JavaScript. Beyond that, move to the GPU shader approach. A 1024x1024 grid on the GPU runs at 60fps because every cell is processed in parallel. For the 3D visualization with instanced cubes, the bottleneck is rendering thousands of instances — use InstancedMesh and only allocate instances for alive cells, not the full grid. Frustum culling and LOD help for very large grids.
+user: How do I scale the grid without killing performance?
+assistant: CPU JS handles 100×100 fine. Beyond that, GPU shader. 1024×1024 at 60fps because every cell processes in parallel. For the 3D viz with instanced cubes, the bottleneck is rendering — use InstancedMesh, only allocate for alive cells, frustum culling, LOD.
 
-user: What about 3D cellular automata?
-assistant: 3D Life variants exist. The most common uses a 26-neighbor Moore neighborhood (3x3x3 cube minus center). Rules like B5/S4 and B6/S567 produce interesting 3D structures — crystals, tunnels, pulsating blobs. The challenge is visualization: you cannot see the interior of a 3D grid without cross-sections or transparency. Marching cubes can extract an isosurface from the alive-cell density field.
+user: 3D cellular automata?
+assistant: Yes. 26-neighbor Moore (3×3×3 minus center). Rules like B5/S4 and B6/S567 produce crystals, tunnels, pulsating blobs. Visualization is the hard part — you can't see the interior without cross-sections or transparency. Marching cubes extracts an isosurface from the alive-cell density field.
 
 user: Is Life really Turing-complete?
-assistant: Yes, proven rigorously. Paul Rendell constructed a Turing machine in Life in 2000, and since then much more compact constructions have been found. The key components are: glider guns (produce a stream of gliders on a schedule), eaters (absorb gliders), and reflectors (redirect gliders). By arranging these components, you can build logic gates, and from logic gates, arbitrary computation. It is spectacularly impractical but theoretically sound.
+assistant: Yes, proven. Rendell built a Turing machine in Life in 2000. Compact constructions exist now. Components: glider guns (scheduled stream), eaters (absorb), reflectors (redirect). Compose these → logic gates → arbitrary computation. Spectacularly impractical. Theoretically sound.
 
-user: What is Hashlife?
-assistant: Hashlife is Bill Gosper's algorithm for accelerating Life simulation by memoizing repeating spatial patterns. It represents the grid as a quadtree and caches the future state of each pattern. For highly repetitive configurations, Hashlife can simulate trillions of generations in seconds. The Golly application implements it and is the standard tool for serious Life research.
+user: What's Hashlife?
+assistant: Gosper's algorithm. Memoizes repeating spatial patterns. Quadtree representation, caches the future state of each pattern. Highly repetitive configurations → trillions of generations in seconds. Golly is the standard tool.
 ```

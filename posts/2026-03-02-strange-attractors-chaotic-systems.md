@@ -6,28 +6,22 @@ description: Simulate and render strange attractors (Lorenz, Rössler, Aizawa) a
 tags: [math, chaos, attractors, simulation, visualization, generative-art, threejs]
 ---
 
-## Why Strange Attractors
+## Why strange attractors
 
-Deterministic chaos is one of the most counterintuitive ideas in mathematics: systems governed by exact, deterministic equations that nonetheless produce behavior indistinguishable from randomness. Strange attractors are the geometric signatures of these systems -- sets in phase space that trajectories spiral toward but never repeat exactly. They have fractal structure, infinite detail, and a haunting aesthetic that has made them icons of both mathematics and generative art.
+Deterministic chaos: systems governed by exact equations that produce behavior indistinguishable from randomness.
 
-Edward Lorenz discovered the first strange attractor in 1963 while modeling atmospheric convection. He noticed that rounding an initial condition from six decimal places to three produced a completely different trajectory after a few simulated days. This "butterfly effect" -- sensitive dependence on initial conditions -- is the hallmark of chaos, and the Lorenz attractor is its poster child.
+Strange attractors are the geometric signatures. Sets in phase space that trajectories spiral toward but never repeat exactly. Fractal structure. Infinite detail. A haunting aesthetic that made them icons of math and generative art.
+
+Lorenz discovered the first one in 1963 modeling atmospheric convection. Rounding an initial condition from six decimals to three produced a completely different trajectory after a few simulated days.
+
+That's the butterfly effect. Sensitive dependence on initial conditions. Chaos's hallmark. Lorenz is its poster child.
 
 > [!note]
-> Chaotic systems are deterministic. Given exact initial conditions, the trajectory is perfectly predictable. The chaos arises because any measurement error, no matter how small, grows exponentially over time. In practice, long-term prediction is impossible even though short-term behavior is perfectly governed by the equations.
+> Chaotic systems are deterministic. Exact initial conditions → perfectly predictable trajectory. Chaos arises because any measurement error, however small, grows exponentially. Long-term prediction is impossible even though short-term behavior is governed exactly.
 
-## Post Plan (Feature Map)
+## Lorenz
 
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain the Lorenz system | Code blocks + math | Make the ODEs concrete and copy-pasteable |
-| Cover numerical integration | Code + callout | Euler vs RK4, when accuracy matters |
-| Show multiple attractor types | Table + code | Lorenz, Rössler, and Aizawa side by side |
-| Build an interactive visualization | Three.js scene embed | Particle traces with additive blending |
-| Address practical questions | Chat transcript | Lyapunov exponents, bifurcations, etc. |
-
-## The Lorenz System
-
-Three coupled ordinary differential equations:
+Three coupled ODEs:
 
 ```
 dx/dt = σ(y - x)
@@ -35,7 +29,7 @@ dy/dt = x(ρ - z) - y
 dz/dt = xy - βz
 ```
 
-With the classic parameters σ = 10, ρ = 28, β = 8/3, the system produces the famous butterfly-shaped attractor. The trajectory never crosses itself (it is embedded in 3D, so intersections are impossible), never repeats, and never escapes to infinity. It orbits between two lobes, switching unpredictably.
+Classic params σ = 10, ρ = 28, β = 8/3 produce the famous butterfly. The trajectory never crosses itself, never repeats, never escapes. Orbits between two lobes, switching unpredictably.
 
 ```javascript
 function lorenzStep(x, y, z, sigma, rho, beta, dt) {
@@ -46,11 +40,11 @@ function lorenzStep(x, y, z, sigma, rho, beta, dt) {
 }
 ```
 
-The Euler integration above is the simplest approach. For visualization, it works well because small errors just create slightly different trajectories -- and all trajectories on the attractor are equally valid. For quantitative science, use RK4 (see below).
+Forward Euler. Works for visualization because small errors just create slightly different trajectories — and all trajectories on the attractor are equally valid. For quantitative work, use RK4.
 
-## The Rössler Attractor
+## Rössler
 
-Otto Rössler designed this system in 1976 as the simplest possible chaotic attractor. It has only one nonlinear term (xz):
+Otto Rössler, 1976. The simplest possible chaotic attractor. One nonlinear term (xz):
 
 ```
 dx/dt = -y - z
@@ -58,7 +52,7 @@ dy/dt = x + ay
 dz/dt = b + z(x - c)
 ```
 
-With a = 0.2, b = 0.2, c = 5.7, the trajectory spirals outward in the xy-plane, occasionally making large excursions in z before falling back. The result looks like a folded ribbon -- simpler than the Lorenz attractor but unmistakably chaotic.
+a = 0.2, b = 0.2, c = 5.7. Trajectory spirals outward in the xy-plane, occasionally makes large excursions in z, falls back. Looks like a folded ribbon.
 
 ```javascript
 function rosslerStep(x, y, z, a, b, c, dt) {
@@ -69,9 +63,9 @@ function rosslerStep(x, y, z, a, b, c, dt) {
 }
 ```
 
-## The Aizawa Attractor
+## Aizawa
 
-A more exotic system that produces a torus-like shape with chaotic whiskers:
+Torus-like with chaotic whiskers:
 
 ```
 dx/dt = (z - b)x - dy
@@ -79,18 +73,18 @@ dy/dt = dx + (z - b)y
 dz/dt = c + az - z³/3 - (x² + y²)(1 + ez) + fzx³
 ```
 
-With a = 0.95, b = 0.7, c = 0.6, d = 3.5, e = 0.25, f = 0.1, the trajectory traces a mushroom-cap shape with tendrils spiraling off the edges. It is less well-known than Lorenz and Rössler but produces some of the most visually striking attractor geometry.
+a = 0.95, b = 0.7, c = 0.6, d = 3.5, e = 0.25, f = 0.1. Mushroom-cap with tendrils spiraling off the edges. Less famous than Lorenz or Rössler but visually striking.
 
-## Numerical Integration
+## Integration
 
-For visualization, forward Euler is usually sufficient:
+Visualization: Euler is enough.
 
 ```javascript
 // Euler: simplest, O(dt) error per step
 [x, y, z] = step(x, y, z, params, dt);
 ```
 
-For quantitative work, fourth-order Runge-Kutta (RK4) gives O(dt⁴) error:
+Quantitative work: RK4. O(dt⁴) error.
 
 ```javascript
 function rk4Step(x, y, z, params, dt, stepFn) {
@@ -113,17 +107,19 @@ function rk4Step(x, y, z, params, dt, stepFn) {
 ```
 
 > [!tip]
-> For attractors, the choice of integrator matters less than you might expect. The attractor is a global geometric structure — all trajectories converge to it regardless of integration errors. Euler with a small dt (0.005) produces visually identical results to RK4 on most attractors. Where it matters is in computing Lyapunov exponents or tracking specific trajectory divergences.
+> For attractors, integrator choice matters less than you'd think. The attractor is a global geometric structure — all trajectories converge regardless of integration error. Euler with small dt (0.005) looks identical to RK4. Where it matters: Lyapunov exponents, tracking specific divergences.
 
-## Interactive Visualization
+## Demo
 
-The scene below traces six particles through three strange attractors: Lorenz, Rössler, and Aizawa, switching every 12 seconds. Each particle starts from a slightly different initial condition, demonstrating sensitive dependence — they quickly diverge despite nearly identical starting points. Trails use additive blending for a luminous, data-visualization aesthetic.
+Six particles. Three attractors (Lorenz, Rössler, Aizawa), switching every 12s. Each particle starts from a slightly different IC — they diverge despite nearly identical starting points. Trails use additive blending.
 
 <div data-scene="strange-attractor.js" style="width:100%;height:420px;"></div>
 
-## Sensitive Dependence
+## Sensitive dependence
 
-The defining feature of chaos. Start two particles at (0.1, 0, 0) and (0.1001, 0, 0) on the Lorenz attractor. Initially they track together. After a few hundred steps, they diverge completely — one orbits the left lobe while the other orbits the right. The rate of divergence is measured by the **Lyapunov exponent**: positive means chaos, negative means convergence, zero means neutral.
+The defining feature. Two particles at (0.1, 0, 0) and (0.1001, 0, 0) on the Lorenz attractor. Initially they track. After a few hundred steps, they diverge completely — one orbits the left lobe, the other the right.
+
+The divergence rate is the **Lyapunov exponent**. Positive = chaos. Negative = convergence. Zero = neutral.
 
 ```javascript
 // Compute divergence between two nearby trajectories
@@ -140,31 +136,31 @@ const dist = Math.sqrt((x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2);
 // from an initial separation of 0.0001
 ```
 
-## Gallery of Attractors
+## Gallery
 
-| Attractor | Year | Equations | Visual Character |
+| Attractor | Year | Equations | Character |
 |---|---|---|---|
-| **Lorenz** | 1963 | 3 coupled ODEs, 2 nonlinear terms | Butterfly wings |
-| **Rössler** | 1976 | 3 coupled ODEs, 1 nonlinear term | Folded ribbon |
-| **Aizawa** | 1990 | 3 coupled ODEs, multiple nonlinear terms | Mushroom with tendrils |
-| **Chen** | 1999 | Modified Lorenz | Denser butterfly |
-| **Thomas** | 1999 | Cyclically symmetric | Three-lobed symmetric |
-| **Halvorsen** | 1990s | Cyclically symmetric | Knotted loops |
-| **Dadras** | 2010 | 5 parameters | Multi-scroll |
-| **Sprott** | Various | Minimal polynomial systems | Diverse minimal forms |
+| Lorenz | 1963 | 3 ODEs, 2 nonlinear | Butterfly wings |
+| Rössler | 1976 | 3 ODEs, 1 nonlinear | Folded ribbon |
+| Aizawa | 1990 | 3 ODEs, multiple nonlinear | Mushroom with tendrils |
+| Chen | 1999 | Modified Lorenz | Denser butterfly |
+| Thomas | 1999 | Cyclically symmetric | Three-lobed symmetric |
+| Halvorsen | 1990s | Cyclically symmetric | Knotted loops |
+| Dadras | 2010 | 5 parameters | Multi-scroll |
+| Sprott | Various | Minimal polynomial | Diverse minimal forms |
 
-## Common Questions
+## Common questions
 
 ```chat
 user: What makes an attractor "strange"?
-assistant: Two properties: it has fractal dimension (not an integer — the Lorenz attractor has a dimension of about 2.06), and trajectories on it exhibit sensitive dependence on initial conditions. A regular attractor, like a limit cycle, is a simple closed curve with integer dimension (1). A strange attractor has the topological complexity of infinite folding and stretching, which gives it non-integer dimension and makes trajectories diverge exponentially.
+assistant: Two properties. Fractal dimension (non-integer — Lorenz is ~2.06). And sensitive dependence — trajectories diverge exponentially. A regular attractor like a limit cycle is a closed curve with integer dimension (1). Strange attractors have infinite folding and stretching → non-integer dimension and exponential divergence.
 
 user: Can you hear chaos?
-assistant: Yes. Map the x, y, or z coordinate to audio frequency or amplitude and you get a sound that is tonal but never repeating — somewhere between noise and music. The Lorenz attractor produces a distinctive warbling between two pitch centers. Sonification of chaotic systems is an active area in both art and data exploration.
+assistant: Yes. Map x, y, or z to audio frequency or amplitude. Sound that's tonal but never repeating — between noise and music. Lorenz produces a distinctive warbling between two pitch centers. Sonification of chaotic systems is an active area in both art and data exploration.
 
 user: What about the double pendulum?
-assistant: The double pendulum is the classic mechanical system exhibiting chaos. It has a 4D phase space (two angles, two angular velocities), and for sufficient energy it produces a strange attractor. The equations of motion are more complex than the Lorenz system (they involve trigonometric functions and coupled nonlinear terms), but the visualization techniques are identical — integrate the ODEs and plot the trajectory.
+assistant: The classic mechanical chaos. 4D phase space (two angles, two angular velocities). Sufficient energy → strange attractor. Equations of motion are more complex (trig + coupled nonlinear), but the visualization is identical — integrate, plot.
 
-user: How do bifurcation diagrams relate to attractors?
-assistant: A bifurcation diagram shows how the attractor changes as you vary a parameter. For the Lorenz system, varying ρ from 0 to 30 shows the transition from a fixed point (ρ < 24.74) to a chaotic attractor (ρ ≈ 28). At some parameter values, the attractor is periodic (a limit cycle); at others, it is chaotic. The diagram plots the visited states as a function of the parameter, revealing the structure of these transitions.
+user: How do bifurcation diagrams relate?
+assistant: They show how the attractor changes as you vary a parameter. For Lorenz, varying ρ from 0 → 30 shows transition from fixed point (ρ < 24.74) to chaotic attractor (ρ ≈ 28). Periodic at some values, chaotic at others. The diagram plots visited states vs parameter, revealing the structure of these transitions.
 ```

@@ -6,34 +6,28 @@ description: Generate procedural trees and plants using Lindenmayer systems, tur
 tags: [graphics, l-systems, procedural-generation, generative-art, threejs]
 ---
 
-## Why L-Systems
+## Why L-systems
 
-In 1968, biologist Aristid Lindenmayer invented a formal grammar to model the growth of algae. The system was simple: start with a string of symbols, apply rewriting rules to each symbol in parallel, repeat. The result was a grammar that could describe branching, recursive growth -- exactly the process that produces trees, ferns, flowers, and vascular networks.
+1968. Aristid Lindenmayer invents a formal grammar to model algae growth. Start with a string of symbols. Apply rewriting rules to each symbol in parallel. Repeat.
 
-The connection to computer graphics came later, when Przemyslaw Prusinkiewicz realized that if you interpret L-System strings as instructions for a "turtle" (move forward, turn left, turn right, push/pop state), the output is geometry. Suddenly you could generate photorealistic plants from a handful of rules, no artist required. The same framework generates Sierpinski triangles, Koch snowflakes, Hilbert curves, and dozens of other fractal forms.
+The result describes branching, recursive growth — exactly what produces trees, ferns, flowers, vascular networks.
+
+The graphics connection came later. Prusinkiewicz realized that interpreting L-system strings as turtle instructions (move, turn, push/pop) makes them geometry. Photorealistic plants from a handful of rules. No artist required.
+
+The same framework generates Sierpinski triangles, Koch snowflakes, Hilbert curves, dozens of fractal forms.
 
 > [!note]
-> L-Systems are parallel rewriting grammars. Every symbol in the string is rewritten simultaneously at each step. This distinguishes them from sequential grammars (like Chomsky grammars) and is what gives them their biological flavor -- every cell in an organism divides at the same time.
+> L-systems are *parallel* rewriting grammars. Every symbol rewrites simultaneously at each step. Distinguishes them from sequential grammars (Chomsky). Models the biological flavor — every cell divides at the same time.
 
-## Post Plan (Feature Map)
+## String rewriting
 
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain the rewriting mechanism | Code blocks + examples | Make the string expansion tangible |
-| Cover turtle interpretation | Code + Mermaid diagram | Bridge from strings to geometry |
-| Show 3D extensions | GLSL-like code | Pitch, yaw, roll for volumetric trees |
-| Build interactive examples | Three.js scene embed | Multiple L-System presets cycling live |
-| Address practical questions | Chat transcript | Handle branching, randomness, context sensitivity |
+Three components:
 
-## String Rewriting
+1. **Alphabet** — symbols (F, +, -, [, ])
+2. **Axiom** — starting string
+3. **Rules** — substitutions applied in parallel
 
-An L-System has three components:
-
-1. **Alphabet**: The set of symbols (F, +, -, [, ], etc.)
-2. **Axiom**: The starting string
-3. **Rules**: Substitution rules applied in parallel
-
-The classic example -- Algae growth:
+Algae:
 
 ```
 Axiom:  A
@@ -47,20 +41,20 @@ Step 3: ABAAB
 Step 4: ABAABABA
 ```
 
-The string length follows the Fibonacci sequence. This is not a coincidence -- many botanical growth patterns are Fibonacci-structured, and L-Systems naturally produce them.
+String length is Fibonacci. Not coincidence — many botanical patterns are Fibonacci-structured.
 
 For graphics, the alphabet gets a geometric interpretation:
 
 | Symbol | Meaning |
 |---|---|
-| F | Move forward, drawing a line |
-| G | Move forward without drawing |
+| F | Move forward, draw a line |
+| G | Move forward, no draw |
 | + | Turn left by angle |
 | - | Turn right by angle |
 | [ | Push state (save position + direction) |
-| ] | Pop state (restore position + direction) |
+| ] | Pop state (restore) |
 
-## The Rewriting Engine
+## The rewriter
 
 ```javascript
 function rewrite(axiom, rules, iterations) {
@@ -76,7 +70,7 @@ function rewrite(axiom, rules, iterations) {
 }
 ```
 
-A simple tree: axiom `F`, rule `F → FF[+F][-F]`, angle 25°, 4 iterations. Each F segment splits into a trunk extension and two branches. The brackets save and restore the turtle's position, creating the branching structure.
+Simple tree: axiom `F`, rule `F → FF[+F][-F]`, angle 25°, 4 iterations. Each F splits into trunk + two branches. Brackets save/restore turtle position → branching structure.
 
 ```
 Iteration 0: F
@@ -85,11 +79,11 @@ Iteration 2: FF[+F][-F]FF[+F][-F][+FF[+F][-F]][-FF[+F][-F]]
 ...
 ```
 
-The string grows exponentially. 5 iterations of a branching rule can produce strings of 50,000+ characters, generating thousands of line segments. This is fine -- the turtle interpreter is linear in string length.
+Strings grow exponentially. 5 iterations of a branching rule = 50K+ characters, thousands of segments. Fine — turtle interpretation is linear in string length.
 
-## Turtle Interpretation
+## Turtle interpretation
 
-The 2D case is straightforward: maintain position (x, y) and heading angle, advance on F, rotate on +/-:
+2D: position, heading. Advance on F. Rotate on +/-.
 
 ```javascript
 function interpret2D(str, angle, step) {
@@ -118,15 +112,15 @@ function interpret2D(str, angle, step) {
 }
 ```
 
-## Extending to 3D
+## 3D extension
 
-2D trees are flat. Real trees branch in three dimensions. The extension requires a full orientation frame (direction, right, up) instead of a single heading angle, and additional symbols for pitch and roll:
+2D trees are flat. Real ones branch in three dimensions. Need a full orientation frame (direction, right, up) and additional rotation symbols.
 
-| Symbol | 3D Meaning |
+| Symbol | 3D meaning |
 |---|---|
-| + / - | Yaw (rotate around up axis) |
-| & / ^ | Pitch (rotate around right axis) |
-| \ / / | Roll (rotate around direction axis) |
+| + / - | Yaw (around up axis) |
+| & / ^ | Pitch (around right axis) |
+| \ / / | Roll (around direction axis) |
 
 ```javascript
 // 3D turtle state
@@ -143,30 +137,30 @@ case '&': { // Pitch down
 }
 ```
 
-With 6 rotation symbols and the push/pop stack, you can describe any branching structure in 3D space.
+Six rotation symbols + push/pop stack = any branching structure in 3D.
 
-## Classic Rulesets
+## Battle-tested rulesets
 
-These are battle-tested L-System configurations from Prusinkiewicz and Lindenmayer's "The Algorithmic Beauty of Plants":
+From Prusinkiewicz and Lindenmayer's *The Algorithmic Beauty of Plants*:
 
-| Name | Axiom | Rule | Angle | Iterations | Character |
+| Name | Axiom | Rule | Angle | Iter | Character |
 |---|---|---|---|---|---|
-| Sympodial Tree | F | F → FF[+F][-F][&F][^F] | 25° | 5 | Bushy deciduous tree |
+| Sympodial Tree | F | F → FF[+F][-F][&F][^F] | 25° | 5 | Bushy deciduous |
 | Bush | F | F → F[+F]F[-F][F] | 24° | 5 | Dense shrub |
-| 3D Fern | F | F → FF&[+F^F][\F^F] | 22° | 5 | Spiral fern fronds |
-| Dragon Curve | FX | X → X+YF+, Y → -FX-Y | 90° | 12 | Space-filling fractal |
+| 3D Fern | F | F → FF&[+F^F][\F^F] | 22° | 5 | Spiral fronds |
+| Dragon Curve | FX | X → X+YF+, Y → -FX-Y | 90° | 12 | Space-filling |
 | Sierpinski | F-G-G | F → F-G+F+G-F, G → GG | 120° | 6 | Triangle fractal |
-| Koch Snowflake | F | F → F+F--F+F | 60° | 4 | Classic snowflake edge |
+| Koch Snowflake | F | F → F+F--F+F | 60° | 4 | Classic snowflake |
 
-## Interactive Demo
+## Demo
 
-The scene below cycles through three 3D L-System presets: a sympodial tree, a dense bush, and a 3D fern. Each is generated from scratch using string rewriting and turtle interpretation. The camera orbits to show the 3D branching structure.
+Cycles through three 3D presets: sympodial tree, dense bush, 3D fern. String rewriting + turtle interpretation. Camera orbits.
 
 <div data-scene="l-system-tree.js" style="width:100%;height:420px;"></div>
 
-## Stochastic L-Systems
+## Stochastic L-systems
 
-Deterministic L-Systems produce identical output every time. Adding randomness creates natural variation:
+Deterministic = identical output every time. Stochastic = natural variation.
 
 ```javascript
 // Stochastic rules: multiple replacements with probabilities
@@ -201,20 +195,20 @@ function stochasticRewrite(axiom, rules, iterations) {
 }
 ```
 
-Every evaluation produces a different tree, all sharing the same structural DNA. This is how you populate a forest without everything looking cloned.
+Every evaluation produces a different tree. Same structural DNA. How you populate a forest without everything looking cloned.
 
-## Common Questions
+## Common questions
 
 ```chat
 user: How do I control branch thickness?
-assistant: Add a width parameter to the turtle state that decreases at each bracket push. When building geometry, use the width to set cylinder radius instead of drawing simple lines. A common formula is width = initialWidth * (ratio ^ depth), where ratio is between 0.6 and 0.8. This matches Leonardo da Vinci's observation that branch cross-section area is conserved at each fork.
+assistant: Add a width parameter to the turtle state. Decrease at each bracket push. Build cylinders, not lines. `width = initial * (ratio ^ depth)`, ratio 0.6–0.8. Matches da Vinci's observation that branch cross-section area is conserved at each fork.
 
-user: The string gets enormous. Is there a way to limit it?
-assistant: Yes. Most renderers cap at 5-6 iterations for branching rules because the string grows exponentially. You can also prune: after rewriting, walk the string and remove branches below a certain depth threshold before interpretation. Another approach is lazy evaluation -- only expand branches that are visible to the camera.
+user: The string gets enormous. How do I limit it?
+assistant: Cap at 5–6 iterations for branching rules. Or prune: walk the string after rewriting and drop branches below a depth threshold. Or lazy evaluation — only expand branches visible to the camera.
 
-user: Can L-Systems produce flowers and leaves?
-assistant: Yes. Add symbols that are not rewritten but trigger geometry at interpretation time. For example, L could mean "draw a leaf polygon at the current position" and * could mean "draw a flower." Prusinkiewicz's work includes parametric L-Systems where symbols carry numeric arguments (size, age, color) that change with each rewriting step. The combination produces strikingly realistic botanical models.
+user: Can L-systems produce flowers and leaves?
+assistant: Yes. Symbols that aren't rewritten but trigger geometry at interpretation. `L` = draw a leaf polygon. `*` = draw a flower. Prusinkiewicz's parametric L-systems carry numeric args (size, age, color) that change per rewrite. Strikingly realistic botanical models.
 
-user: What is the difference between context-free and context-sensitive L-Systems?
-assistant: In context-free L-Systems, each symbol is rewritten independently. In context-sensitive L-Systems, the rewriting rule can depend on neighboring symbols. For example, A < B > C → D means "replace B with D only if preceded by A and followed by C." This allows information to propagate along the string, modeling things like hormone signals in plants that cause branching only at certain distances from the root.
+user: Context-free vs context-sensitive?
+assistant: Context-free — each symbol rewrites independently. Context-sensitive — rules depend on neighbors. `A < B > C → D` means "replace B with D only if preceded by A and followed by C." Lets information propagate along the string. Models hormone signals in plants that cause branching only at certain distances from the root.
 ```
