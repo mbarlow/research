@@ -56,24 +56,6 @@
     "body": "\n## Why WFC\n\n2016. Maxim Gumin releases Wave Function Collapse. Algorithm that generates globally coherent patterns from purely local constraints.\n\nGive it a set of tiles with adjacency rules. It fills an entire grid with a valid arrangement.\n\nThe name borrows from quantum mechanics. Each cell starts in a superposition of all possible tiles. The algorithm progressively collapses cells to specific values while propagating constraints to neighbors.\n\nPowers level generation in Caves of Qud, Bad Nor"
   },
   {
-    "slug": "2026-03-04-verlet-softbody-physics",
-    "file": "2026-03-04-verlet-softbody-physics.md",
-    "title": "Verlet Integration Softbody Physics — Jelly, Cloth, and Rope",
-    "date": "2026-03-04",
-    "timestamp": "2026-04-14T01:25:44.579Z",
-    "order": 36,
-    "description": "Build a softbody physics engine using Verlet integration and distance constraints, simulating jelly cubes, cloth sheets, and swinging ropes in real time.",
-    "tags": [
-      "physics",
-      "simulation",
-      "verlet",
-      "softbody",
-      "threejs",
-      "creative-coding"
-    ],
-    "body": "\n## Why Verlet\n\nMost physics sims store position and velocity. Euler integration: `v += a*dt; x += v*dt`. Simple but fragile — constraints (fixed distances between particles) need velocity corrections that fight the integrator and cause jitter.\n\nVerlet sidesteps this by storing position and previous position. Velocity is implicit: `v = x_current - x_previous`.\n\n```\nx_new = 2 * x_current - x_previous + acceleration * dt^2\n```\n\nWhy it's better: constraints modify positions directly. After integrat"
-  },
-  {
     "slug": "2026-03-04-physarum-slime-mold-simulation",
     "file": "2026-03-04-physarum-slime-mold-simulation.md",
     "title": "Physarum Simulation — Slime Mold Intelligence on the GPU",
@@ -92,42 +74,6 @@
     "body": "\n## Why Physarum\n\nPhysarum polycephalum is a slime mold that solves optimization problems without a brain. Place food sources on a petri dish. Physarum grows a transport network between them that closely approximates the shortest spanning tree.\n\n2010. Researchers recreated the Tokyo rail network by placing oat flakes at major station locations. The slime mold independently converged on a layout strikingly similar to the actual rail system.\n\nNo central planning. No global knowledge. Just local ch"
   },
   {
-    "slug": "2026-03-04-non-euclidean-rendering",
-    "file": "2026-03-04-non-euclidean-rendering.md",
-    "title": "Non-Euclidean Rendering — Curved Space in the Browser",
-    "date": "2026-03-04",
-    "timestamp": "2026-04-14T01:24:13.476Z",
-    "order": 28,
-    "description": "Ray march through hyperbolic and spherical geometries where parallel lines diverge, rooms are bigger on the inside, and straight lines curve.",
-    "tags": [
-      "graphics",
-      "ray-marching",
-      "non-euclidean",
-      "hyperbolic-geometry",
-      "glsl",
-      "math"
-    ],
-    "body": "\n## Why non-Euclidean\n\nTwo thousand years. Euclid's fifth postulate — through any point not on a line, exactly one parallel line exists — was assumed to be a necessary truth about space.\n\n19th century. Gauss, Bolyai, and Lobachevsky independently proved it wasn't. You can build consistent geometries where infinitely many parallel lines pass through a point (hyperbolic) or where no parallels exist at all (spherical).\n\nThese aren't curiosities. Einstein showed physical spacetime is non-Euclidean, "
-  },
-  {
-    "slug": "2026-03-04-music-from-geometry-modal-analysis",
-    "file": "2026-03-04-music-from-geometry-modal-analysis.md",
-    "title": "Music From Geometry — Modal Analysis and Shape Acoustics",
-    "date": "2026-03-04",
-    "timestamp": "2026-04-14T01:23:34.700Z",
-    "order": 29,
-    "description": "Synthesize sound from 3D shapes by computing their resonant frequencies, turning geometry into musical instruments using modal analysis.",
-    "tags": [
-      "audio",
-      "physics",
-      "simulation",
-      "web-audio",
-      "threejs",
-      "math"
-    ],
-    "body": "\n## Hear the shape\n\n1966. Mark Kac asks: *Can one hear the shape of a drum?* Whether the resonant frequencies of a vibrating membrane uniquely determine its geometry.\n\nThe answer turned out to be no (counterexamples found in 1992). But the question revealed something profound: geometry and sound are deeply linked.\n\nEvery rigid body has a set of resonant frequencies — modes — determined by its shape, material, and boundary conditions. Strike a bell and you hear its geometry.\n\nA cube rings differe"
-  },
-  {
     "slug": "2026-03-04-llm-guided-evolutionary-art",
     "file": "2026-03-04-llm-guided-evolutionary-art.md",
     "title": "LLM-Guided Evolutionary Art — Language as Fitness Function",
@@ -144,43 +90,6 @@
       "ai"
     ],
     "body": "\n## Why now\n\n1994. Karl Sims showed genetic algorithms could evolve stunning visual art. Bred mathematical expressions — trees of arithmetic operators — selecting survivors by aesthetic preference.\n\nThe bottleneck was always the fitness function. Either a human clicked \"better/worse\" for hours (interactive evolution), or you defined some math proxy for beauty (color entropy, fractal dimension) that inevitably felt sterile.\n\nLocal LLMs change the equation.\n\nDon't define a math proxy. Describe wha"
-  },
-  {
-    "slug": "2026-03-04-impossible-geometry-shader-tricks",
-    "file": "2026-03-04-impossible-geometry-shader-tricks.md",
-    "title": "Impossible Geometry — Shader Tricks That Lie About Depth",
-    "date": "2026-03-04",
-    "timestamp": "2026-04-14T01:22:15.052Z",
-    "order": 35,
-    "description": "Render Penrose triangles, Escher staircases, and impossible objects using fragment shaders that manipulate depth to create geometries that cannot exist in 3D.",
-    "tags": [
-      "graphics",
-      "ray-marching",
-      "illusions",
-      "glsl",
-      "creative-coding",
-      "math"
-    ],
-    "body": "\n## Why impossible geometry\n\n1958. Lionel and Roger Penrose publish \"Impossible Objects: A Special Type of Visual Illusion.\" Penrose triangle. Penrose stairs.\n\nEscher recognizes the potential and creates Waterfall and Ascending and Descending. Structures that look perfectly solid but can't exist in 3D.\n\nThe objects exploit a flaw in the visual system. We unconsciously resolve 2D projections into 3D interpretations, and these particular projections admit multiple contradictory 3D interpretations "
-  },
-  {
-    "slug": "2026-03-04-fourier-ocean-waves",
-    "file": "2026-03-04-fourier-ocean-waves.md",
-    "title": "Fourier Ocean Waves — Tessendorf's FFT Water Simulation",
-    "date": "2026-03-04",
-    "timestamp": "2026-04-14T01:21:34.696Z",
-    "order": 32,
-    "description": "Implement Jerry Tessendorf's FFT-based ocean simulation, the same technique used in film VFX at Pixar and Weta, running in real time with Three.js.",
-    "tags": [
-      "graphics",
-      "simulation",
-      "fourier",
-      "ocean",
-      "water",
-      "threejs",
-      "physics"
-    ],
-    "body": "\n## Why Tessendorf\n\n2001. Jerry Tessendorf publishes \"Simulating Ocean Water.\" Becomes the definitive technique for ocean rendering in film VFX.\n\nThe insight: ocean waves are a superposition of sinusoidal components with amplitudes drawn from well-studied statistical distributions. Don't simulate fluid dynamics — synthesize the height field directly in the frequency domain, IFFT to spatial domain.\n\nLooks physically correct because it's derived from the same oceanographic spectra measured in real"
   },
   {
     "slug": "2026-03-04-boids-on-curved-manifolds",
@@ -307,25 +216,6 @@
       "threejs"
     ],
     "body": "\n## Why L-systems\n\n1968. Aristid Lindenmayer invents a formal grammar to model algae growth. Start with a string of symbols. Apply rewriting rules to each symbol in parallel. Repeat.\n\nThe result describes branching, recursive growth — exactly what produces trees, ferns, flowers, vascular networks.\n\nThe graphics connection came later. Prusinkiewicz realized that interpreting L-system strings as turtle instructions (move, turn, push/pop) makes them geometry. Photorealistic plants from a handful of"
-  },
-  {
-    "slug": "2026-03-02-flow-fields-curl-noise",
-    "file": "2026-03-02-flow-fields-curl-noise.md",
-    "title": "Flow Fields — Curl Noise and Particle Advection",
-    "date": "2026-03-02",
-    "timestamp": "2026-04-14T01:10:34.485Z",
-    "order": 26,
-    "description": "Build flow field visualizations using curl noise for divergence-free vector fields, with thousands of advected particles in Three.js.",
-    "tags": [
-      "graphics",
-      "flow-field",
-      "curl-noise",
-      "particles",
-      "procedural-generation",
-      "generative-art",
-      "threejs"
-    ],
-    "body": "\n## Why flow fields\n\nA vector field that tells particles where to go. At every point, a vector specifying direction and magnitude. Drop particles in. Let them follow.\n\nResult: organic, fluid motion. Some of the most visually striking generative art in the medium.\n\nThe technique is everywhere — wind maps, ocean currents, Tyler Hobbs' work, fluid VFX, flocking, hair dynamics. A well-designed vector field produces coherent motion with no explicit path planning.\n\n> [!note]\n> The noise choice determi"
   },
   {
     "slug": "2026-03-02-cellular-automata-emergent-complexity",

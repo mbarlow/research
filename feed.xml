@@ -4,7 +4,7 @@
   <link href="https://mbarlow.github.io/research" rel="alternate"/>
   <link href="https://mbarlow.github.io/research/feed.xml" rel="self"/>
   <id>https://mbarlow.github.io/research/</id>
-  <updated>2026-04-14T04:36:41.136Z</updated>
+  <updated>2026-04-14T10:01:57.902Z</updated>
   <entry>
     <title>Own Your Tools — Three Chrome Extensions, No Store Required</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-04-14-chrome-extensions-own-your-tools" rel="alternate"/>
@@ -27,13 +27,6 @@
     <summary>Visualize the Wave Function Collapse algorithm step by step, watching entropy collapse and constraints propagate to generate coherent tile patterns from local rules.</summary>
   </entry>
   <entry>
-    <title>Verlet Integration Softbody Physics — Jelly, Cloth, and Rope</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-verlet-softbody-physics" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-verlet-softbody-physics</id>
-    <updated>2026-04-14T01:25:44.579Z</updated>
-    <summary>Build a softbody physics engine using Verlet integration and distance constraints, simulating jelly cubes, cloth sheets, and swinging ropes in real time.</summary>
-  </entry>
-  <entry>
     <title>Physarum Simulation — Slime Mold Intelligence on the GPU</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-03-04-physarum-slime-mold-simulation" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-03-04-physarum-slime-mold-simulation</id>
@@ -41,39 +34,11 @@
     <summary>Simulate Physarum polycephalum's emergent network behavior using GPU ping-pong framebuffers, where 40,000 simple agents create stunning organic transport networks.</summary>
   </entry>
   <entry>
-    <title>Non-Euclidean Rendering — Curved Space in the Browser</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-non-euclidean-rendering" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-non-euclidean-rendering</id>
-    <updated>2026-04-14T01:24:13.476Z</updated>
-    <summary>Ray march through hyperbolic and spherical geometries where parallel lines diverge, rooms are bigger on the inside, and straight lines curve.</summary>
-  </entry>
-  <entry>
-    <title>Music From Geometry — Modal Analysis and Shape Acoustics</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-music-from-geometry-modal-analysis" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-music-from-geometry-modal-analysis</id>
-    <updated>2026-04-14T01:23:34.700Z</updated>
-    <summary>Synthesize sound from 3D shapes by computing their resonant frequencies, turning geometry into musical instruments using modal analysis.</summary>
-  </entry>
-  <entry>
     <title>LLM-Guided Evolutionary Art — Language as Fitness Function</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-03-04-llm-guided-evolutionary-art" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-03-04-llm-guided-evolutionary-art</id>
     <updated>2026-04-14T01:22:57.288Z</updated>
     <summary>Evolve visual art using genetic algorithms where a local LLM judges fitness, replacing mathematical objectives with natural language like &quot;more crystalline&quot; or &quot;more ominous.&quot;</summary>
-  </entry>
-  <entry>
-    <title>Impossible Geometry — Shader Tricks That Lie About Depth</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-impossible-geometry-shader-tricks" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-impossible-geometry-shader-tricks</id>
-    <updated>2026-04-14T01:22:15.052Z</updated>
-    <summary>Render Penrose triangles, Escher staircases, and impossible objects using fragment shaders that manipulate depth to create geometries that cannot exist in 3D.</summary>
-  </entry>
-  <entry>
-    <title>Fourier Ocean Waves — Tessendorf's FFT Water Simulation</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-fourier-ocean-waves" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-fourier-ocean-waves</id>
-    <updated>2026-04-14T01:21:34.696Z</updated>
-    <summary>Implement Jerry Tessendorf's FFT-based ocean simulation, the same technique used in film VFX at Pixar and Weta, running in real time with Three.js.</summary>
   </entry>
   <entry>
     <title>Boids on Curved Manifolds — Flocking on a Torus</title>
@@ -125,13 +90,6 @@
     <summary>Generate procedural trees and plants using Lindenmayer systems, turtle interpretation, and 3D branching rules with interactive Three.js rendering.</summary>
   </entry>
   <entry>
-    <title>Flow Fields — Curl Noise and Particle Advection</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-flow-fields-curl-noise" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-flow-fields-curl-noise</id>
-    <updated>2026-04-14T01:10:34.485Z</updated>
-    <summary>Build flow field visualizations using curl noise for divergence-free vector fields, with thousands of advected particles in Three.js.</summary>
-  </entry>
-  <entry>
     <title>Cellular Automata — Emergent Complexity from Simple Rules</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-03-02-cellular-automata-emergent-complexity" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-03-02-cellular-automata-emergent-complexity</id>
@@ -144,5 +102,47 @@
     <id>https://mbarlow.github.io/research/#/post/2026-03-01-webgpu-compute-shaders</id>
     <updated>2026-04-14T01:08:46.022Z</updated>
     <summary>Set up WebGPU compute pipelines with WGSL, manage buffers, size workgroups, and run parallel operations entirely in the browser.</summary>
+  </entry>
+  <entry>
+    <title>Structured Output and Tool Use with Local LLMs</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-structured-output-local-llms" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-structured-output-local-llms</id>
+    <updated>2026-04-14T01:07:25.878Z</updated>
+    <summary>Get reliable structured output from local models using JSON mode, grammar-guided decoding, function calling, and validation patterns.</summary>
+  </entry>
+  <entry>
+    <title>Real-Time Point Cloud Processing</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-realtime-point-cloud-processing" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-realtime-point-cloud-processing</id>
+    <updated>2026-04-14T01:06:28.515Z</updated>
+    <summary>Clean, align, and downsample point clouds using Open3D with spatial indexing, outlier removal, ICP registration, and voxel filtering.</summary>
+  </entry>
+  <entry>
+    <title>Procedural Geometry with Signed Distance Functions</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-procedural-geometry-with-sdfs" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-procedural-geometry-with-sdfs</id>
+    <updated>2026-04-14T01:05:25.934Z</updated>
+    <summary>Build real-time procedural scenes using SDF primitives, CSG operations, and ray marching in GLSL, with Three.js integration.</summary>
+  </entry>
+  <entry>
+    <title>PBR Materials — Physics-Based Shading in Three.js</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-pbr-physics-based-shading" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-pbr-physics-based-shading</id>
+    <updated>2026-04-14T01:04:33.194Z</updated>
+    <summary>Understand Cook-Torrance BRDF, metalness-roughness workflows, and environment lighting with an interactive material parameter grid.</summary>
+  </entry>
+  <entry>
+    <title>Particle Systems on the GPU</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-particle-systems-gpu-simulation" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-particle-systems-gpu-simulation</id>
+    <updated>2026-04-14T00:45:32.497Z</updated>
+    <summary>Build high-count particle systems with instanced rendering, integration schemes, and GPU-friendly update patterns in Three.js.</summary>
+  </entry>
+  <entry>
+    <title>Noise Functions and Procedural Terrain</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-noise-functions-procedural-terrain" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-noise-functions-procedural-terrain</id>
+    <updated>2026-04-14T00:43:58.090Z</updated>
+    <summary>Generate procedural terrain using layered noise functions, FBM, and domain warping, with an interactive Three.js heightmap demo.</summary>
   </entry>
 </feed>
