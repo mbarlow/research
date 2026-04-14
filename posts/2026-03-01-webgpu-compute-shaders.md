@@ -6,28 +6,20 @@ description: Set up WebGPU compute pipelines with WGSL, manage buffers, size wor
 tags: [webgpu, compute-shaders, wgsl, gpu-programming, browser]
 ---
 
-## Why Compute Shaders in the Browser Matter
+## What WebGL never gave us
 
-WebGL gave us pixel shaders and vertex shaders, but no general-purpose compute. If you wanted to run a parallel reduction, sort an array, or process an image kernel without rendering a quad, you were hacking around the graphics pipeline. WebGPU fixes this with first-class compute shaders: you dispatch work to the GPU, read results back, and never touch a framebuffer.
+WebGL gave us pixel and vertex shaders. No general-purpose compute. To run a parallel reduction or sort an array without rendering a quad, you were hacking around the graphics pipeline.
 
-This matters because real applications -- physics simulations, ML inference, audio processing, particle systems -- need parallel compute, not just triangles. WebGPU compute pipelines give you that with explicit buffer management, workgroup control, and a clean shader language (WGSL) designed for the job.
+WebGPU fixes it. First-class compute. Dispatch work, read results, never touch a framebuffer.
+
+Real applications need parallel compute, not just triangles. Physics, ML inference, audio, particles. WebGPU compute pipelines give you that with explicit buffer management, workgroup control, and a clean shader language (WGSL) designed for the job.
 
 > [!note]
-> WebGPU is available in Chrome 113+ and Firefox Nightly. Check `navigator.gpu` before relying on it in production.
+> Chrome 113+ and Firefox Nightly. Check `navigator.gpu` before relying on it.
 
-## Post Plan (Feature Map)
+## Pipeline architecture
 
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain compute pipeline architecture | Mermaid diagram | Make the dispatch model concrete |
-| Teach WGSL and buffer setup | Code blocks + callouts | Provide copy-paste-ready starting points |
-| Clarify workgroup sizing | Table + tip callout | Sizing mistakes are the most common compute bug |
-| Walk through a complete example | Steps block | Reproducible end-to-end path |
-| Address common confusion | Chat transcript | Short-circuit the usual stumbling blocks |
-
-## WebGPU Compute Pipeline Architecture
-
-A compute pipeline has fewer moving parts than a render pipeline. There is no vertex stage, no rasterizer, no fragment output. You write a single compute shader, bind buffers, and dispatch workgroups.
+Fewer moving parts than render. No vertex stage. No rasterizer. No fragment output. Compute shader, bind buffers, dispatch.
 
 ```mermaid
 flowchart LR
@@ -41,9 +33,9 @@ flowchart LR
     H --> I["Map + Read Results in JS"]
 ```
 
-## WGSL Basics for Compute
+## WGSL basics
 
-WGSL compute shaders declare an entry point with `@compute` and a `@workgroup_size` attribute. The built-in `global_invocation_id` tells each thread which element it owns.
+Compute entry point: `@compute` + `@workgroup_size`. `global_invocation_id` tells each thread which element it owns.
 
 ```wgsl
 @group(0) @binding(0) var<storage, read>       input:  array<f32>;
@@ -59,23 +51,21 @@ fn main(@builtin(global_invocation_id) gid: vec3u) {
 }
 ```
 
-This shader squares every element in the input array. Each thread handles one index. The `if` guard prevents out-of-bounds writes when the array length is not a clean multiple of the workgroup size.
+Squares every element. One thread per index. The guard prevents OOB writes when array length isn't a clean multiple of workgroup size.
 
 > [!tip]
-> Always guard against out-of-bounds access. `dispatchWorkgroups` rounds up, so trailing threads in the last workgroup may exceed your data length.
+> Always guard against OOB. `dispatchWorkgroups` rounds up. Trailing threads in the last workgroup may exceed your data length.
 
-## Workgroup Sizing
+## Workgroup sizing
 
-Workgroup size is the number of threads that execute together and share local memory. The total number of threads dispatched equals `workgroup_size * num_workgroups`.
+Workgroup size = threads that execute together and share local memory. Total threads = `workgroup_size × num_workgroups`.
 
-| Workgroup Size | Best For | Notes |
+| Size | Best for | Notes |
 |---|---|---|
-| 64 | General-purpose, simple kernels | Safe default, good occupancy on most GPUs |
-| 128 | Medium-complexity kernels | Better latency hiding on desktop GPUs |
+| 64 | General-purpose, simple kernels | Safe default. Good occupancy on most GPUs. |
+| 128 | Medium-complexity kernels | Better latency hiding on desktop |
 | 256 | Reduction / scan patterns | Maximizes shared memory utility |
-| 1 | Debugging only | Serializes execution, never ship this |
-
-The dispatch count is calculated as:
+| 1 | Debugging only | Serializes execution. Never ship. |
 
 ```javascript
 const workgroupSize = 64;
@@ -83,9 +73,9 @@ const numWorkgroups = Math.ceil(dataLength / workgroupSize);
 pass.dispatchWorkgroups(numWorkgroups);
 ```
 
-## Buffer Management
+## Buffers
 
-WebGPU buffers have explicit usage flags. A compute shader needs `STORAGE` buffers for input/output and a `MAP_READ | COPY_DST` staging buffer to read results back to JavaScript.
+Explicit usage flags. Compute needs `STORAGE` for I/O and `MAP_READ | COPY_DST` staging to read back to JS.
 
 ```javascript
 // Input buffer: upload data from JS, read in shader
@@ -109,11 +99,11 @@ const stagingBuffer = device.createBuffer({
 ```
 
 > [!warning]
-> You cannot map a `STORAGE` buffer directly. You must copy to a staging buffer with `COPY_DST | MAP_READ` and then `mapAsync` on that. Skipping this step is the single most common WebGPU compute mistake.
+> You cannot map a `STORAGE` buffer directly. Copy to a staging buffer with `COPY_DST | MAP_READ`, then `mapAsync`. The single most common WebGPU compute mistake.
 
-## Complete Working Example
+## End-to-end example
 
-Here is a full pipeline that squares 1024 floats on the GPU and reads the results back.
+Square 1024 floats on the GPU. Read the results back.
 
 ```javascript
 async function runComputeShader() {
@@ -200,9 +190,9 @@ async function runComputeShader() {
 runComputeShader();
 ```
 
-## Practical Pattern: Parallel Reduction (Sum)
+## Pattern: parallel reduction (sum)
 
-Summing an array is the classic compute pattern. Each workgroup reduces a chunk using shared memory, and a second pass combines the partial sums.
+The classic compute pattern. Each workgroup reduces a chunk using shared memory. Second pass combines partials.
 
 ```wgsl
 @group(0) @binding(0) var<storage, read>       data:    array<f32>;
@@ -241,11 +231,11 @@ fn reduce(
 }
 ```
 
-The JavaScript side dispatches this, then runs a second pass (or reads back a small partial-sums array and finishes on CPU).
+JS dispatches this. Then either second pass on GPU, or read back the small partial-sums array and finish on CPU.
 
-## Practical Pattern: Per-Pixel Image Processing
+## Pattern: image processing
 
-Compute shaders can process image data stored in a flat buffer. This is a simple brightness adjustment.
+Image data in a flat buffer. Brightness adjustment.
 
 ```wgsl
 @group(0) @binding(0) var<storage, read_write> pixels: array<u32>;
@@ -263,35 +253,35 @@ fn adjust(@builtin(global_invocation_id) gid: vec3u) {
 }
 ```
 
-## WebGL Compute Comparison
+## WebGL vs WebGPU
 
 | Capability | WebGL 2 | WebGPU |
 |---|---|---|
-| Compute shaders | Not available | First-class support |
-| General buffer read/write | Texture workarounds only | Storage buffers |
-| Workgroup shared memory | None | `var<workgroup>` |
-| Atomic operations | None | `atomicAdd`, `atomicMax`, etc. |
-| Multiple queues | No | Future spec (single queue today) |
+| Compute shaders | — | ✓ |
+| General buffer R/W | Texture workarounds | Storage buffers |
+| Workgroup shared memory | — | `var<workgroup>` |
+| Atomics | — | `atomicAdd`, `atomicMax`, etc. |
+| Multiple queues | — | Single queue today |
 | Buffer readback | `readPixels` on framebuffer | `mapAsync` on staging buffer |
 
-## Conversation: Common Confusion
+## Common confusion
 
 ```chat
 user: My compute shader runs but the output buffer is all zeros. What am I missing?
-assistant: You are probably reading from the output buffer directly instead of copying to a staging buffer first. Storage buffers cannot be mapped for reading. Add a copyBufferToBuffer from your output buffer to a staging buffer with MAP_READ usage, then mapAsync on the staging buffer.
+assistant: You're reading from the output buffer directly. Storage buffers can't be mapped. Add `copyBufferToBuffer` from output to a staging buffer with `MAP_READ`. Then `mapAsync` on the staging buffer.
 
-user: How do I choose between workgroup size 64 and 256?
-assistant: Start with 64 for simple element-wise kernels. Move to 256 when you need more shared memory or are doing reductions. The key constraint is that total threads per workgroup (x * y * z) must not exceed the device limit, typically 256. Profile both and check occupancy if performance matters.
+user: 64 or 256 for workgroup size?
+assistant: 64 for simple element-wise kernels. 256 when you need shared memory or are doing reductions. Total threads per workgroup (x·y·z) must not exceed the device limit, typically 256. Profile and check occupancy if performance matters.
 
-user: Can I use WebGPU compute without ever rendering anything?
-assistant: Yes. You do not need a canvas or any rendering pipeline. Request an adapter and device, create compute pipelines and buffers, dispatch work, and read results. This is ideal for data processing, ML inference, or any non-visual parallel workload.
+user: Can I use WebGPU compute without rendering anything?
+assistant: Yes. No canvas, no rendering pipeline. Request adapter and device, create compute pipelines and buffers, dispatch, read. Ideal for data processing, ML inference, any non-visual parallel workload.
 ```
 
-## Hands-on: Run Your First Compute Shader
+## Run your first compute shader
 
 ````steps
-### Step 1: Set up a minimal HTML file
-Create a file with no canvas required -- compute runs headless on the GPU.
+### Step 1: Minimal HTML
+No canvas needed.
 
 ```html
 <!DOCTYPE html>
@@ -305,7 +295,7 @@ Create a file with no canvas required -- compute runs headless on the GPU.
 ```
 
 ### Step 2: Initialize the device
-Request an adapter and device. Fail gracefully if WebGPU is not available.
+Fail gracefully if WebGPU is missing.
 
 ```javascript
 if (!navigator.gpu) {
@@ -316,22 +306,27 @@ const adapter = await navigator.gpu.requestAdapter();
 const device = await adapter.requestDevice();
 ```
 
-### Step 3: Create buffers, pipeline, and dispatch
-Use the complete example from the section above. Save it as `compute.js` and wrap the body in an async IIFE or top-level await (module script).
+### Step 3: Buffers, pipeline, dispatch
+Use the example above. Save as `compute.js`. Wrap in an async IIFE or top-level await.
 
 ### Step 4: Serve and test
-Serve the files locally and open in Chrome:
 
 ```bash
 bunx serve .
 # Open https://localhost:3000 in Chrome 113+
-# Check DevTools console for output
+# Check DevTools console
 ```
 ````
 
-## Wrap-Up
+## The summary
 
-WebGPU compute shaders give you direct access to massively parallel execution without leaving the browser. The mental model is straightforward: create buffers, write a WGSL kernel, dispatch workgroups, and read results through a staging buffer. The main pitfalls are buffer usage flags and workgroup sizing, both of which become routine after a few iterations. If you have been working around WebGL's lack of compute, this is the upgrade worth learning.
+Direct access to massively parallel execution without leaving the browser.
+
+Buffers. WGSL kernel. Dispatch workgroups. Read through a staging buffer.
+
+Pitfalls are buffer usage flags and workgroup sizing. Both become routine after a few iterations.
+
+If you've been working around WebGL's lack of compute, this is the upgrade.
 
 ## Generation Metadata
 

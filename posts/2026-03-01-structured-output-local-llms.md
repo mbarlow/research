@@ -6,29 +6,24 @@ description: Get reliable structured output from local models using JSON mode, g
 tags: [llm, structured-output, tool-use, ollama, constrained-decoding]
 ---
 
-## Why Structured Output Matters
+## Why structure
 
-Free-form text is easy to generate but hard to consume programmatically. The moment your LLM output feeds into another system -- a database insert, an API call, a downstream agent step -- you need guarantees about shape and type. Without them you are writing brittle regex parsers and praying.
+Free-form text is easy to generate. Hard to consume programmatically.
 
-Local LLMs make this harder than hosted APIs because you own the enforcement layer. The upside: you also control it completely. Grammar-guided decoding, schema validation, and retry loops let you build pipelines where structured output is a contract, not a hope.
+The moment LLM output feeds into another system — a DB insert, an API call, a downstream agent — you need guarantees about shape and type. Without them you're writing brittle regex parsers and praying.
+
+Local LLMs make this harder than hosted APIs because you own the enforcement layer. You also control it completely.
+
+Grammar-guided decoding. Schema validation. Retry loops.
+
+Structured output becomes a contract, not a hope.
 
 > [!note]
-> This post focuses on practical enforcement patterns, not model fine-tuning. We assume you have a capable instruct model already running locally.
+> Enforcement patterns. Not fine-tuning. Assumes you have a capable instruct model running locally.
 
-## Post Plan (Feature Map)
+## JSON mode
 
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain structured output landscape | Prose + callouts | Set context before implementation |
-| Show JSON mode and grammar decoding | Code blocks (bash, Python, JSON) | Copy-paste-ready patterns |
-| Visualize the validation pipeline | Mermaid flowchart | Make the retry/fallback logic explicit |
-| Tool-use agent loop | Python code + diagram | Show function calling end-to-end |
-| Troubleshoot common failures | Chat transcript | Address real confusion points |
-| Hands-on reproduction | Steps block | Give a reproducible setup path |
-
-## JSON Mode: The Simplest Starting Point
-
-Ollama and llama.cpp both support a `format: json` flag that biases the model toward producing valid JSON. This is the lowest-effort option.
+Ollama and llama.cpp both support `format: json` — biases the model toward valid JSON. Lowest-effort option.
 
 ```bash
 # Ollama JSON mode
@@ -60,13 +55,13 @@ print(data["response"])
 ```
 
 > [!tip]
-> JSON mode only guarantees syntactically valid JSON. It does not guarantee the correct keys, types, or nesting. You still need schema validation downstream.
+> JSON mode guarantees syntactically valid JSON. Not the right keys, types, or nesting. Validate downstream.
 
-## Grammar-Guided Decoding (GBNF)
+## Grammar-guided decoding (GBNF)
 
-When JSON mode is not strict enough, constrained decoding with GBNF grammars forces the model to produce output matching an exact grammar at the token level. Every generated token is checked against allowed continuations -- malformed output is structurally impossible.
+When JSON mode isn't strict enough, GBNF grammars constrain output at the token level. Every generated token is checked against allowed continuations. Malformed output is structurally impossible.
 
-llama.cpp supports GBNF grammars natively via the `--grammar` flag or the `/completion` API.
+llama.cpp supports GBNF natively via `--grammar` or the `/completion` API.
 
 ```text
 # tool_call.gbnf -- constrains output to a tool call object
@@ -98,11 +93,11 @@ curl http://localhost:8080/completion \
 ```
 
 > [!warning]
-> GBNF grammars constrain syntax, not semantics. The model will produce valid JSON matching the grammar, but the values inside can still be hallucinated or wrong. Always validate values downstream.
+> GBNF constrains syntax. Not semantics. Values inside can still be hallucinated. Validate downstream.
 
-## Pydantic Schema Validation
+## Pydantic validation
 
-The practical pattern: let the model generate, then validate with Pydantic. On failure, feed the error back and retry.
+Generate. Validate. On failure, feed the error back. Retry.
 
 ```python
 import json
@@ -157,7 +152,7 @@ print(result)
 # person='Maria' age=34 city='Portland'
 ```
 
-## Validation Pipeline
+## Validation pipeline
 
 ```mermaid
 flowchart TD
@@ -174,9 +169,9 @@ flowchart TD
     I -->|No| J[Raise / Fallback]
 ```
 
-## Tool-Use Agent Loop
+## Tool-use loop
 
-Function calling with local models follows a straightforward loop: describe available tools in the system prompt, ask the model to emit a tool call, execute it, and feed the result back.
+Function calling with local models: describe tools in the system prompt, ask the model to emit a call, execute, feed the result back.
 
 ```python
 import json
@@ -244,32 +239,31 @@ def agent_turn(user_message: str, max_steps: int = 5) -> str:
 print(agent_turn("What is the weather in Portland?"))
 ```
 
-## Conversation: Common Structured Output Problems
+## Common problems
 
 ```chat
-user: The model returns valid JSON but with random extra keys I did not ask for. How do I handle that?
-assistant: Use Pydantic with model_validate and set model_config with extra="forbid". This rejects any keys not in your schema. Combine with a clear prompt that lists only the expected keys.
+user: Model returns valid JSON but with random extra keys.
+assistant: Pydantic with `model_validate` and `model_config = {"extra": "forbid"}`. Rejects keys not in your schema. Combine with a prompt that lists only the expected keys.
 
-user: Grammar-guided decoding makes generation noticeably slower. Is that expected?
-assistant: Yes. GBNF grammar checking adds overhead at each token. For most schemas the cost is small (10-20% slower). If it is too slow, try JSON mode without grammar and rely on Pydantic validation with retries instead -- the retry path is usually faster end-to-end than heavy grammar constraints.
+user: Grammar-guided decoding is noticeably slower. Expected?
+assistant: Yes. Per-token constraint check. Usually 10–20% slower. If too slow, drop to JSON mode + Pydantic validation with retries — the retry path is often faster end-to-end than heavy grammar constraints.
 
-user: My tool-use loop keeps calling the same tool repeatedly and never produces a final answer.
-assistant: Add an explicit stop condition in your system prompt like "After receiving a tool result, answer the user directly." Also cap tool steps and consider including a done/answer tool that signals completion with a structured response.
+user: My tool loop calls the same tool repeatedly and never finishes.
+assistant: Add an explicit stop condition: "After receiving a tool result, answer the user directly." Cap tool steps. Or add a `done` tool that signals completion with a structured response.
 ```
 
-## Hands-On: End-to-End Structured Extraction
+## End to end
 
 ````steps
 ### Step 1: Start Ollama with a capable model
-Pull an instruct model and verify it responds. Qwen 2.5 7B or Llama 3.1 8B work well.
 
 ```bash
 ollama pull qwen2.5:7b-instruct
 ollama run qwen2.5:7b-instruct "Say hello in JSON format." --format json
 ```
 
-### Step 2: Write a Pydantic schema for your target output
-Define the exact shape you need. Be explicit about types and required fields.
+### Step 2: Pydantic schema for target output
+Be explicit about types and required fields.
 
 ```python
 from pydantic import BaseModel
@@ -281,20 +275,26 @@ class Incident(BaseModel):
     timestamp_utc: str
 ```
 
-### Step 3: Build the generate-validate loop
-Use the `generate_structured` function from above. Test with 10-20 real inputs and log validation failures.
+### Step 3: Generate-validate loop
+Use `generate_structured`. Test with 10–20 real inputs. Log failures.
 
 ```bash
 uv run python extract.py --input incidents.jsonl --schema Incident --retries 3
 ```
 
-### Step 4: Measure reliability and tune
-Track success rate across your test set. If validation failures exceed 5%, improve the prompt, switch to grammar-guided decoding, or try a larger model. Freeze once stable.
+### Step 4: Measure + tune
+Track success rate. If failures > 5%: improve the prompt, switch to grammar-guided, or try a larger model. Freeze once stable.
 ````
 
-## Wrap-Up
+## The summary
 
-Structured output from local LLMs is an enforcement problem, not a generation problem. The model is usually capable of producing the right shape -- your job is to make that shape unavoidable (grammars), verifiable (Pydantic), and recoverable (retries). Stack these layers: JSON mode as the baseline, grammar constraints when you need token-level guarantees, Pydantic validation as the final gate, and error-fed retries to close the loop. The result is a pipeline where structured output is reliable by construction.
+Structured output is an enforcement problem, not a generation problem.
+
+The model can usually produce the right shape. Your job is to make that shape unavoidable (grammar), verifiable (Pydantic), and recoverable (retries).
+
+Stack the layers. JSON mode baseline. Grammar when you need token-level guarantees. Pydantic as the final gate. Error-fed retries to close the loop.
+
+Reliable by construction.
 
 ## Generation Metadata
 

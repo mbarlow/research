@@ -1,5 +1,90 @@
 [
   {
+    "slug": "2026-03-01-webgpu-compute-shaders",
+    "file": "2026-03-01-webgpu-compute-shaders.md",
+    "title": "WebGPU Compute Shaders — Parallel Processing in the Browser",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-14T01:08:46.022Z",
+    "order": 7,
+    "description": "Set up WebGPU compute pipelines with WGSL, manage buffers, size workgroups, and run parallel operations entirely in the browser.",
+    "tags": [
+      "webgpu",
+      "compute-shaders",
+      "wgsl",
+      "gpu-programming",
+      "browser"
+    ],
+    "body": "\n## What WebGL never gave us\n\nWebGL gave us pixel and vertex shaders. No general-purpose compute. To run a parallel reduction or sort an array without rendering a quad, you were hacking around the graphics pipeline.\n\nWebGPU fixes it. First-class compute. Dispatch work, read results, never touch a framebuffer.\n\nReal applications need parallel compute, not just triangles. Physics, ML inference, audio, particles. WebGPU compute pipelines give you that with explicit buffer management, workgroup cont"
+  },
+  {
+    "slug": "2026-03-01-structured-output-local-llms",
+    "file": "2026-03-01-structured-output-local-llms.md",
+    "title": "Structured Output and Tool Use with Local LLMs",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-14T01:07:25.878Z",
+    "order": 10,
+    "description": "Get reliable structured output from local models using JSON mode, grammar-guided decoding, function calling, and validation patterns.",
+    "tags": [
+      "llm",
+      "structured-output",
+      "tool-use",
+      "ollama",
+      "constrained-decoding"
+    ],
+    "body": "\n## Why structure\n\nFree-form text is easy to generate. Hard to consume programmatically.\n\nThe moment LLM output feeds into another system — a DB insert, an API call, a downstream agent — you need guarantees about shape and type. Without them you're writing brittle regex parsers and praying.\n\nLocal LLMs make this harder than hosted APIs because you own the enforcement layer. You also control it completely.\n\nGrammar-guided decoding. Schema validation. Retry loops.\n\nStructured output becomes a cont"
+  },
+  {
+    "slug": "2026-03-01-realtime-point-cloud-processing",
+    "file": "2026-03-01-realtime-point-cloud-processing.md",
+    "title": "Real-Time Point Cloud Processing",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-14T01:06:28.515Z",
+    "order": 11,
+    "description": "Clean, align, and downsample point clouds using Open3D with spatial indexing, outlier removal, ICP registration, and voxel filtering.",
+    "tags": [
+      "point-clouds",
+      "open3d",
+      "spatial-indexing",
+      "3d-reconstruction",
+      "photogrammetry"
+    ],
+    "body": "\n## The plumbing nobody writes about\n\nEvery 3D capture pipeline — photogrammetry, LiDAR, gaussian splatting — produces point clouds. Raw clouds are noisy, misaligned, and far too dense for downstream consumption.\n\nIf you can't clean and register clouds, nothing downstream works. Meshing fails. Splatting trains on garbage. Real-time viewers choke on millions of redundant points.\n\nThe goal: a repeatable pipeline. Raw input → clean, aligned, downsampled output ready for meshing or splatting.\n\n> [!n"
+  },
+  {
+    "slug": "2026-03-01-procedural-geometry-with-sdfs",
+    "file": "2026-03-01-procedural-geometry-with-sdfs.md",
+    "title": "Procedural Geometry with Signed Distance Functions",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-14T01:05:25.934Z",
+    "order": 9,
+    "description": "Build real-time procedural scenes using SDF primitives, CSG operations, and ray marching in GLSL, with Three.js integration.",
+    "tags": [
+      "graphics",
+      "sdf",
+      "ray-marching",
+      "glsl",
+      "procedural-generation"
+    ],
+    "body": "\n## Why SDFs\n\nMesh geometry forces you to define every vertex and face up front. SDFs flip that: describe shapes as math, the renderer figures out where surfaces are at runtime.\n\nSmooth CSG. Infinite detail at any zoom. Scenes parameterized by a handful of floats instead of megabytes of vertex data.\n\n> [!note]\n> Not a replacement for mesh pipelines. SDFs win at procedural content, prototyping, and effects where analytic surface definitions beat polygon soup.\n\n## What an SDF is\n\nA function that t"
+  },
+  {
+    "slug": "2026-03-01-pbr-physics-based-shading",
+    "file": "2026-03-01-pbr-physics-based-shading.md",
+    "title": "PBR Materials — Physics-Based Shading in Three.js",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-14T01:04:33.194Z",
+    "order": 16,
+    "description": "Understand Cook-Torrance BRDF, metalness-roughness workflows, and environment lighting with an interactive material parameter grid.",
+    "tags": [
+      "graphics",
+      "pbr",
+      "brdf",
+      "materials",
+      "threejs"
+    ],
+    "body": "\n## Why PBR\n\nPhong and Blinn-Phong let you push numbers around until a material looks right. PBR replaces guesswork with constraints: energy conservation, microfacet statistics, Fresnel reflectance.\n\nMaterials respond correctly to any lighting. No per-scene hand-tuning. That's the whole pitch.\n\nEvery major engine adopted metalness-roughness for this reason. Once you see the math, you understand why every sphere in a PBR chart looks the way it does.\n\n> [!note]\n> PBR ≠ photorealism. It means the s"
+  },
+  {
     "slug": "2026-03-01-particle-systems-gpu-simulation",
     "file": "2026-03-01-particle-systems-gpu-simulation.md",
     "title": "Particle Systems on the GPU",
@@ -571,90 +656,5 @@
       "threejs"
     ],
     "body": "\n## Why Flow Fields\n\nA flow field is a vector field that tells particles where to move. At every point in space, a vector specifies the direction and magnitude of flow. Drop particles into the field and let them follow the vectors -- the result is organic, fluid motion that produces some of the most visually striking generative art in the medium.\n\nThe technique appears everywhere: data visualization (wind maps, ocean currents), generative art (Tyler Hobbs' work, Matt DesLauriers' sketches), VFX "
-  },
-  {
-    "slug": "2026-03-01-webgpu-compute-shaders",
-    "file": "2026-03-01-webgpu-compute-shaders.md",
-    "title": "WebGPU Compute Shaders — Parallel Processing in the Browser",
-    "date": "2026-03-01",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 7,
-    "description": "Set up WebGPU compute pipelines with WGSL, manage buffers, size workgroups, and run parallel operations entirely in the browser.",
-    "tags": [
-      "webgpu",
-      "compute-shaders",
-      "wgsl",
-      "gpu-programming",
-      "browser"
-    ],
-    "body": "\n## Why Compute Shaders in the Browser Matter\n\nWebGL gave us pixel shaders and vertex shaders, but no general-purpose compute. If you wanted to run a parallel reduction, sort an array, or process an image kernel without rendering a quad, you were hacking around the graphics pipeline. WebGPU fixes this with first-class compute shaders: you dispatch work to the GPU, read results back, and never touch a framebuffer.\n\nThis matters because real applications -- physics simulations, ML inference, audio"
-  },
-  {
-    "slug": "2026-03-01-procedural-geometry-with-sdfs",
-    "file": "2026-03-01-procedural-geometry-with-sdfs.md",
-    "title": "Procedural Geometry with Signed Distance Functions",
-    "date": "2026-03-01",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 9,
-    "description": "Build real-time procedural scenes using SDF primitives, CSG operations, and ray marching in GLSL, with Three.js integration.",
-    "tags": [
-      "graphics",
-      "sdf",
-      "ray-marching",
-      "glsl",
-      "procedural-generation"
-    ],
-    "body": "\n## Why SDFs\n\nTraditional mesh-based geometry requires you to define every vertex and face up front. Signed distance functions flip that: you describe shapes as math, and the renderer figures out where surfaces are at runtime. The payoff is smooth CSG operations, infinite detail at any zoom level, and scenes you can parameterize with a handful of floats instead of megabytes of vertex data.\n\n> [!note]\n> SDFs are not a replacement for mesh pipelines. They excel at procedural content, prototyping, "
-  },
-  {
-    "slug": "2026-03-01-structured-output-local-llms",
-    "file": "2026-03-01-structured-output-local-llms.md",
-    "title": "Structured Output and Tool Use with Local LLMs",
-    "date": "2026-03-01",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 10,
-    "description": "Get reliable structured output from local models using JSON mode, grammar-guided decoding, function calling, and validation patterns.",
-    "tags": [
-      "llm",
-      "structured-output",
-      "tool-use",
-      "ollama",
-      "constrained-decoding"
-    ],
-    "body": "\n## Why Structured Output Matters\n\nFree-form text is easy to generate but hard to consume programmatically. The moment your LLM output feeds into another system -- a database insert, an API call, a downstream agent step -- you need guarantees about shape and type. Without them you are writing brittle regex parsers and praying.\n\nLocal LLMs make this harder than hosted APIs because you own the enforcement layer. The upside: you also control it completely. Grammar-guided decoding, schema validation"
-  },
-  {
-    "slug": "2026-03-01-realtime-point-cloud-processing",
-    "file": "2026-03-01-realtime-point-cloud-processing.md",
-    "title": "Real-Time Point Cloud Processing",
-    "date": "2026-03-01",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 11,
-    "description": "Clean, align, and downsample point clouds using Open3D with spatial indexing, outlier removal, ICP registration, and voxel filtering.",
-    "tags": [
-      "point-clouds",
-      "open3d",
-      "spatial-indexing",
-      "3d-reconstruction",
-      "photogrammetry"
-    ],
-    "body": "\n## Why Point Cloud Processing Matters\n\nEvery 3D capture pipeline -- photogrammetry, LiDAR, gaussian splatting -- produces point clouds as an intermediate or final representation. Raw clouds are noisy, misaligned between scans, and far too dense for downstream consumption. If you cannot clean and register point clouds efficiently, nothing downstream works: meshing fails, splatting trains on garbage, and real-time viewers choke on millions of redundant points.\n\nThe goal is a repeatable pipeline t"
-  },
-  {
-    "slug": "2026-03-01-pbr-physics-based-shading",
-    "file": "2026-03-01-pbr-physics-based-shading.md",
-    "title": "PBR Materials — Physics-Based Shading in Three.js",
-    "date": "2026-03-01",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 16,
-    "description": "Understand Cook-Torrance BRDF, metalness-roughness workflows, and environment lighting with an interactive material parameter grid.",
-    "tags": [
-      "graphics",
-      "pbr",
-      "brdf",
-      "materials",
-      "threejs"
-    ],
-    "body": "\n## Why PBR\n\nTraditional shading models -- Phong, Blinn-Phong -- let you push numbers around until a material \"looks right.\" PBR (Physically-Based Rendering) replaces that guesswork with constraints derived from actual physics: energy conservation, microfacet statistics, and Fresnel reflectance. The result is materials that respond correctly to any lighting environment without per-scene hand-tuning. Every major engine (Unreal, Unity, Godot, Three.js) adopted the metalness-roughness workflow for "
   }
 ]

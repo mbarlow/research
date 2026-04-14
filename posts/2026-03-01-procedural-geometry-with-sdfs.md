@@ -8,24 +8,18 @@ tags: [graphics, sdf, ray-marching, glsl, procedural-generation]
 
 ## Why SDFs
 
-Traditional mesh-based geometry requires you to define every vertex and face up front. Signed distance functions flip that: you describe shapes as math, and the renderer figures out where surfaces are at runtime. The payoff is smooth CSG operations, infinite detail at any zoom level, and scenes you can parameterize with a handful of floats instead of megabytes of vertex data.
+Mesh geometry forces you to define every vertex and face up front. SDFs flip that: describe shapes as math, the renderer figures out where surfaces are at runtime.
+
+Smooth CSG. Infinite detail at any zoom. Scenes parameterized by a handful of floats instead of megabytes of vertex data.
 
 > [!note]
-> SDFs are not a replacement for mesh pipelines. They excel at procedural content, prototyping, and effects where analytic surface definitions beat polygon soup.
+> Not a replacement for mesh pipelines. SDFs win at procedural content, prototyping, and effects where analytic surface definitions beat polygon soup.
 
-## Post Plan (Feature Map)
+## What an SDF is
 
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain SDF fundamentals | Code blocks + callouts | Ground the math in copy-paste GLSL |
-| Show the rendering pipeline | Mermaid diagram | Make ray marching stages explicit |
-| Demonstrate CSG operations | GLSL code blocks | Provide working boolean and blend ops |
-| Walk through integration | Steps block | Turn theory into a running Three.js demo |
-| Address common confusion | Chat transcript | Handle the questions that always come up |
+A function that takes a point and returns the shortest distance to the nearest surface. Negative = inside. Positive = outside. Zero = the surface.
 
-## What Is a Signed Distance Function?
-
-An SDF takes a point in space and returns the shortest distance to the nearest surface. Negative values mean inside, positive means outside, and zero is the surface itself. That single contract is enough to build a full renderer.
+That single contract is enough to build a renderer.
 
 ```glsl
 // Sphere: distance from center minus radius
@@ -53,11 +47,11 @@ float sdCylinder(vec3 p, float r, float h) {
 ```
 
 > [!tip]
-> Centering primitives at the origin and using `p - offset` to position them keeps your distance functions clean and composable.
+> Center primitives at the origin. Position via `p - offset`. Keeps distance functions clean and composable.
 
-## CSG Operations
+## CSG ops
 
-The real power of SDFs is combining primitives with simple min/max operations. No mesh booleans, no topology headaches.
+Combine primitives with min/max. No mesh booleans. No topology headaches.
 
 ```glsl
 // Union: closest surface wins
@@ -82,7 +76,7 @@ float opSmoothUnion(float d1, float d2, float k) {
 }
 ```
 
-## Ray Marching Pipeline
+## Ray march pipeline
 
 ```mermaid
 graph TD
@@ -99,9 +93,9 @@ graph TD
     J --> K[Output Color]
 ```
 
-## The Ray Marcher
+## The marcher
 
-This is the core loop. Start at the camera, step along the ray by the distance the SDF reports, and stop when you are close enough to a surface or have gone too far.
+Start at the camera. Step along the ray by the distance the SDF reports. Stop when close enough to a surface or too far gone.
 
 ```glsl
 float sceneSDF(vec3 p) {
@@ -133,9 +127,9 @@ float rayMarch(vec3 ro, vec3 rd) {
 }
 ```
 
-## Normals and Lighting
+## Normals + lighting
 
-Surface normals come from the gradient of the distance field. No vertex normals needed -- the math gives you smooth normals everywhere for free.
+Surface normals come from the gradient of the distance field. No vertex normals. Smooth normals everywhere, free.
 
 ```glsl
 vec3 estimateNormal(vec3 p) {
@@ -162,26 +156,25 @@ vec3 lighting(vec3 p, vec3 rd) {
 ```
 
 > [!warning]
-> The normal estimation calls `sceneSDF` six extra times per hit point. For complex scenes, this is your primary per-pixel cost. Keep `sceneSDF` lean.
+> Normal estimation calls `sceneSDF` six extra times per hit. For complex scenes, this is your primary per-pixel cost. Keep `sceneSDF` lean.
 
-## Conversation: Common SDF Questions
+## Common questions
 
 ```chat
-user: My shapes look blocky at glancing angles. What is going wrong?
-assistant: You likely have too few march steps or EPSILON is too large. Increase MAX_STEPS to 128-256 and drop EPSILON to 0.0005. Glancing angles need more steps because the ray skims the surface slowly.
+user: My shapes look blocky at glancing angles. Why?
+assistant: Too few march steps, or EPSILON too large. Bump MAX_STEPS to 128–256. Drop EPSILON to 0.0005. Glancing rays skim slowly and need more steps.
 
-user: How do I animate SDF scenes without rebuilding geometry?
-assistant: Just change the parameters you pass into your distance functions -- positions, radii, blend factors. The ray marcher re-evaluates every frame anyway, so animation is just uniform updates. No buffers to rebuild.
+user: How do I animate without rebuilding geometry?
+assistant: Change the parameters you pass into your distance functions. The marcher re-evaluates every frame anyway. Animation = uniform updates. No buffers.
 
 user: Can I mix SDFs with regular Three.js meshes?
-assistant: Yes. Render the SDF on a fullscreen quad via ShaderMaterial, write depth to gl_FragDepth so it composites correctly with the Three.js depth buffer, and render your meshes in the same scene. Depth testing handles the rest.
+assistant: Yes. Render the SDF on a fullscreen quad via ShaderMaterial. Write `gl_FragDepth` so it composites with the scene depth buffer. Then render meshes normally. Depth testing handles the rest.
 ```
 
-## Three.js Integration
+## Three.js integration
 
 ````steps
-### Step 1: Create a fullscreen quad with ShaderMaterial
-Set up a plane geometry that fills the camera and pass your SDF shader as a custom material:
+### Step 1: Fullscreen quad with ShaderMaterial
 
 ```javascript
 const material = new THREE.ShaderMaterial({
@@ -199,8 +192,7 @@ const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
 scene.add(quad);
 ```
 
-### Step 2: Build the camera ray in the vertex shader
-Pass screen coordinates through to the fragment shader for ray construction:
+### Step 2: Vertex shader passes UVs through
 
 ```glsl
 varying vec2 vUv;
@@ -210,8 +202,8 @@ void main() {
 }
 ```
 
-### Step 3: Assemble the fragment shader
-Combine all the SDF primitives, CSG ops, ray marcher, normals, and lighting into one fragment shader. Use uniforms for time and camera:
+### Step 3: Fragment shader assembles everything
+SDFs, CSG ops, ray marcher, normals, lighting. Time and camera as uniforms.
 
 ```glsl
 uniform vec2 uResolution;
@@ -239,8 +231,7 @@ void main() {
 }
 ```
 
-### Step 4: Animate in the render loop
-Update time and camera uniforms each frame:
+### Step 4: Animate
 
 ```javascript
 const clock = new THREE.Clock();
@@ -254,22 +245,28 @@ animate();
 ```
 ````
 
-## SDF Primitive Reference
+## Primitive reference
 
 | Primitive | Parameters | Notes |
 |---|---|---|
-| Sphere | radius | Cheapest to evaluate |
-| Box | half-extents vec3 | Exact distance, sharp edges |
-| Torus | major radius, minor radius | Ring around Y axis by default |
+| Sphere | radius | Cheapest |
+| Box | half-extents vec3 | Exact, sharp edges |
+| Torus | major, minor radius | Ring around Y |
 | Cylinder | radius, half-height | Capped, axis-aligned |
-| Plane | implicit via `p.y` | Infinite ground plane |
+| Plane | implicit via `p.y` | Infinite ground |
 
 > [!tip]
-> Combine `abs()`, `mod()`, and domain repetition (`p = mod(p, spacing) - 0.5 * spacing`) to instance primitives infinitely across space with zero memory cost.
+> Combine `abs()`, `mod()`, and domain repetition (`p = mod(p, spacing) - 0.5 * spacing`) to instance primitives infinitely across space. Zero memory cost.
 
-## Wrap-Up
+## The summary
 
-SDFs let you define geometry as pure math: a few distance functions, a handful of CSG operations, and a ray marcher that ties it all together. The workflow is unusually tight -- change a float, get a new shape. For procedural content, prototyping, and shader-driven effects, this is hard to beat. Start with the primitives above, wire them into a Three.js ShaderMaterial, and iterate from there.
+Geometry as math.
+
+A few distance functions. A handful of CSG ops. A marcher.
+
+Change a float. Get a new shape.
+
+For procedural content and shader-driven effects, hard to beat.
 
 ## Generation Metadata
 

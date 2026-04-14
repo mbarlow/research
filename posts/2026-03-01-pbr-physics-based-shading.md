@@ -8,48 +8,42 @@ tags: [graphics, pbr, brdf, materials, threejs]
 
 ## Why PBR
 
-Traditional shading models -- Phong, Blinn-Phong -- let you push numbers around until a material "looks right." PBR (Physically-Based Rendering) replaces that guesswork with constraints derived from actual physics: energy conservation, microfacet statistics, and Fresnel reflectance. The result is materials that respond correctly to any lighting environment without per-scene hand-tuning. Every major engine (Unreal, Unity, Godot, Three.js) adopted the metalness-roughness workflow for this reason. Once you understand the math, you understand why every sphere in a PBR material chart looks the way it does.
+Phong and Blinn-Phong let you push numbers around until a material looks right. PBR replaces guesswork with constraints: energy conservation, microfacet statistics, Fresnel reflectance.
+
+Materials respond correctly to any lighting. No per-scene hand-tuning. That's the whole pitch.
+
+Every major engine adopted metalness-roughness for this reason. Once you see the math, you understand why every sphere in a PBR chart looks the way it does.
 
 > [!note]
-> PBR does not mean photorealism. It means the shading math obeys physical constraints. You can use PBR for stylized rendering -- the energy conservation and Fresnel response still make materials feel grounded.
+> PBR ≠ photorealism. It means the shading math obeys physical constraints. Stylized rendering still benefits — energy conservation and Fresnel response keep things grounded.
 
-## Post Plan (Feature Map)
+## The reflectance equation
 
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Ground the Cook-Torrance BRDF | Code blocks + callouts | Show the actual math, not just API calls |
-| Visualize the metalness/roughness parameter space | Interactive Three.js scene | A grid of spheres beats a thousand words |
-| Explain the rendering equation components | Mermaid diagram | Map how D, F, G terms compose into the specular BRDF |
-| Walk through a Three.js implementation | Steps block | From MeshStandardMaterial to custom PBR |
-| Address common misconceptions | Chat transcript | Metalness confusion, energy conservation, IBL fallback |
-
-## The Rendering Equation (Simplified)
-
-Real-time PBR starts from the reflectance equation. For a single surface point illuminated by direct lights:
+For a single point illuminated by direct lights:
 
 ```
 L_o(p, v) = sum over lights [ f(l, v) * L_i(p, l) * (n . l) ]
 ```
 
-Where `f(l, v)` is the BRDF -- the function that determines how much light arriving from direction `l` scatters toward view direction `v`. The Cook-Torrance model splits this into diffuse and specular terms:
+`f(l, v)` is the BRDF — how much light from direction `l` scatters toward view direction `v`. Cook-Torrance splits it:
 
 ```
 f(l, v) = k_d * f_lambert + k_s * f_cook_torrance
 ```
 
-The diffuse term is trivial: `f_lambert = albedo / PI`. The specular term is where the physics lives.
+Diffuse is trivial: `f_lambert = albedo / PI`. Specular is where the physics lives.
 
-## Cook-Torrance Specular BRDF
+## Cook-Torrance specular
 
-The specular component is built from three distribution functions:
+Three distribution functions:
 
 ```
 f_cook_torrance = D(h) * F(v, h) * G(l, v) / (4 * (n . l) * (n . v))
 ```
 
-- **D(h)** -- Normal Distribution Function. How many microfacets are aligned with the half-vector `h`. Controls specular highlight shape.
-- **F(v, h)** -- Fresnel term. How reflectance changes at grazing angles. All materials become mirrors at steep angles.
-- **G(l, v)** -- Geometry function. Accounts for microfacet self-shadowing and masking.
+- **D(h)** — Normal Distribution Function. How many microfacets align with the half-vector. Controls highlight shape.
+- **F(v, h)** — Fresnel. How reflectance changes at grazing angles. All materials become mirrors at steep angles.
+- **G(l, v)** — Geometry. Microfacet self-shadowing and masking.
 
 ```mermaid
 graph LR
@@ -68,9 +62,9 @@ graph LR
     K --> L[Final Radiance L_o]
 ```
 
-## GGX Normal Distribution
+## GGX
 
-GGX (Trowbridge-Reitz) is the industry-standard NDF. It produces long specular tails that match real-world measured materials better than Blinn-Phong.
+Industry-standard NDF. Long specular tails that match measured materials better than Blinn-Phong.
 
 ```glsl
 float distributionGGX(vec3 N, vec3 H, float roughness) {
@@ -86,14 +80,14 @@ float distributionGGX(vec3 N, vec3 H, float roughness) {
 }
 ```
 
-At roughness = 0, the NDF collapses to a near-delta function (perfect mirror). At roughness = 1, it spreads energy uniformly across the hemisphere. The `roughness * roughness` remapping (alpha = roughness squared) is deliberate -- it makes the 0-to-1 slider perceptually linear.
+Roughness 0 → near-delta function (perfect mirror). Roughness 1 → uniform spread. The `roughness²` remapping (alpha = roughness²) makes the slider perceptually linear.
 
 > [!tip]
-> Three.js applies the `roughness * roughness` remapping internally. When you set `material.roughness = 0.5`, the shader uses `alpha = 0.25`. This is why roughness 0.5 still looks fairly shiny.
+> Three.js applies `roughness²` internally. `material.roughness = 0.5` → shader uses `alpha = 0.25`. Why 0.5 still looks fairly shiny.
 
-## Schlick Fresnel Approximation
+## Schlick Fresnel
 
-Fresnel reflectance is the ratio of reflected to refracted light at a surface boundary. Schlick's approximation is computationally cheap and accurate enough for real-time:
+Cheap, accurate enough for real-time:
 
 ```glsl
 vec3 fresnelSchlick(float cosTheta, vec3 F0) {
@@ -101,7 +95,10 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0) {
 }
 ```
 
-`F0` is the surface reflectance at normal incidence. For dielectrics (plastic, wood, stone), F0 is around 0.04 -- low base reflectivity, strong Fresnel at grazing angles. For metals, F0 is the albedo color itself -- that is why metals reflect their own tint.
+`F0` = surface reflectance at normal incidence.
+
+- Dielectrics (plastic, wood, stone): F0 ≈ 0.04. Low base reflectivity. Strong Fresnel at grazing angles.
+- Metals: F0 = albedo. Why metals reflect their own tint.
 
 ```javascript
 // In the metalness workflow:
@@ -111,9 +108,9 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0) {
 // metalness = 1 -> F0 = albedo (conductor)
 ```
 
-## Smith-GGX Geometry Function
+## Smith-GGX geometry
 
-The geometry term accounts for microfacet occlusion. Smith's method splits it into two factors: light-side shadowing and view-side masking.
+Microfacet occlusion. Smith splits it into shadowing (light side) and masking (view side).
 
 ```glsl
 float geometrySchlickGGX(float NdotV, float roughness) {
@@ -131,11 +128,11 @@ float geometrySmith(vec3 N, vec3 V, vec3 L, float roughness) {
 }
 ```
 
-At high roughness, more microfacets block each other, reducing specular intensity. This is part of how PBR achieves energy conservation: rough surfaces scatter more light diffusely because the geometry function dampens specular output.
+Higher roughness → more microfacets blocking each other → less specular. Part of how PBR achieves energy conservation: rough surfaces scatter diffusely because the geometry function dampens specular.
 
-## Energy Conservation
+## Energy conservation
 
-A PBR material must never reflect more light than it receives. The metalness workflow enforces this structurally:
+A PBR material never reflects more than it receives. The metalness workflow enforces it:
 
 ```glsl
 vec3 kS = fresnelSchlick(max(dot(H, V), 0.0), F0);
@@ -143,27 +140,32 @@ vec3 kD = vec3(1.0) - kS;
 kD *= 1.0 - metalness; // metals have no diffuse
 ```
 
-`kS + kD` never exceeds 1.0. Metals redirect all energy to specular (tinted by albedo). Dielectrics split energy between diffuse and specular based on the Fresnel curve. This constraint is why PBR materials look correct under any light -- there is no scenario where they "blow out" from accumulated reflectance.
+`kS + kD ≤ 1.0`. Always.
+
+Metals: all energy → tinted specular.
+Dielectrics: split by Fresnel curve.
+
+This is why PBR materials never blow out under any light.
 
 > [!warning]
-> Setting both metalness and roughness to extreme values (metalness=1, roughness=0) creates a perfect mirror. If you have no environment map, the sphere will render nearly black -- there is nothing to reflect. Always provide environment lighting for metallic materials.
+> metalness=1 + roughness=0 = perfect mirror. No environment map = nearly black sphere. Always provide environment lighting for metals.
 
-## Metalness-Roughness Parameter Space
+## Parameter space
 
-The interactive scene below renders a 5x5 grid of spheres. The X-axis sweeps metalness from 0 (left, dielectric) to 1 (right, conductor). The Y-axis sweeps roughness from 0 (top, smooth) to 1 (bottom, rough). Watch how the Fresnel rim, specular highlight width, and color response change across the grid.
+5×5 grid. X = metalness 0→1. Y = roughness 0→1. Watch the Fresnel rim, highlight width, and color response shift.
 
 <div data-scene="pbr-material-ball.js" style="width:100%;height:420px;"></div>
 
-Top-left: smooth dielectric (plastic). Top-right: smooth metal (polished gold). Bottom-left: rough dielectric (clay). Bottom-right: rough metal (brushed iron). The diagonal from top-left to bottom-right shows the full parameter space.
+Top-left: smooth dielectric (plastic). Top-right: smooth metal (polished gold). Bottom-left: rough dielectric (clay). Bottom-right: rough metal (brushed iron).
 
-## Image-Based Lighting (IBL)
+## Image-Based Lighting
 
-Direct lights alone produce harsh, unrealistic PBR results. Real environments illuminate objects from all directions. IBL captures this with two precomputed textures:
+Direct lights alone produce harsh PBR. Real environments illuminate from all directions. IBL captures that with two precomputed textures:
 
-1. **Irradiance map** -- low-frequency diffuse lighting from the environment, sampled by surface normal.
-2. **Prefiltered specular map** -- environment convolved at multiple roughness levels, sampled by reflection vector with mip level driven by roughness.
+1. **Irradiance map** — low-frequency diffuse, sampled by surface normal
+2. **Prefiltered specular map** — environment convolved at multiple roughness levels, sampled by reflection vector with mip driven by roughness
 
-Three.js handles this through `scene.environment`:
+Three.js handles it through `scene.environment`:
 
 ```javascript
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
@@ -178,44 +180,41 @@ loader.load('studio_small_09_1k.hdr', (texture) => {
 ```
 
 > [!note]
-> Without an HDR environment, `MeshStandardMaterial` falls back to the scene's lights for specular reflections. The result is functional but lacks the nuanced reflections that make PBR convincing. For production, always provide an environment map.
+> Without HDR environment, MeshStandardMaterial falls back to scene lights for specular. Functional but lacks the nuanced reflections that make PBR convincing. Always provide an environment in production.
 
-## Three.js: MeshStandardMaterial vs MeshPhysicalMaterial
-
-`MeshStandardMaterial` implements the metalness-roughness PBR model described above. `MeshPhysicalMaterial` extends it with advanced features:
+## Standard vs Physical
 
 | Feature | Standard | Physical |
 |---|---|---|
-| Metalness/roughness | Yes | Yes |
-| Normal/AO/emissive maps | Yes | Yes |
-| Clearcoat | No | Yes |
-| Sheen | No | Yes |
-| Transmission (glass) | No | Yes |
-| Iridescence | No | Yes |
-| IOR control | No | Yes |
+| Metalness/roughness | ✓ | ✓ |
+| Normal/AO/emissive maps | ✓ | ✓ |
+| Clearcoat | — | ✓ |
+| Sheen | — | ✓ |
+| Transmission (glass) | — | ✓ |
+| Iridescence | — | ✓ |
+| IOR control | — | ✓ |
 | Shader cost | Lower | Higher |
 
-Use `MeshStandardMaterial` by default. Reach for `MeshPhysicalMaterial` only when you need clearcoat (car paint), transmission (glass, water), or sheen (fabric).
+Default to MeshStandardMaterial. Reach for MeshPhysicalMaterial only when you need clearcoat (car paint), transmission (glass, water), or sheen (fabric).
 
-## Conversation: PBR Misconceptions
+## Common misreads
 
 ```chat
-user: Why does my metallic material look black even though I set a bright albedo?
-assistant: Metals have no diffuse component -- all their color comes from specular reflection. If there is no environment map and your direct lights do not hit the surface at the right angle, there is nothing to reflect and the surface goes dark. Add an HDR environment to scene.environment or add more lights from multiple directions.
+user: Why does my metallic material look black even with bright albedo?
+assistant: Metals have no diffuse — color comes from specular reflection. No environment map + no light hitting at the right angle = nothing to reflect = dark. Add an HDR environment to `scene.environment`, or add lights from multiple directions.
 
-user: Should I ever set metalness to a value between 0 and 1?
-assistant: Rarely. Real materials are either conductors (metal, metalness=1) or dielectrics (everything else, metalness=0). Intermediate values exist for blending at texture boundaries (rust over metal, paint chips) but a uniform 0.5 metalness does not correspond to any real material. Use a metalness map for transitions.
+user: Should I ever set metalness between 0 and 1?
+assistant: Rarely. Real materials are conductors (1) or dielectrics (0). Intermediate values exist for blending at texture boundaries (rust over metal, paint chips), but a uniform 0.5 doesn't correspond to any real material. Use a metalness map for transitions.
 
 user: Does roughness affect performance?
-assistant: Not directly -- the shader cost is the same regardless of roughness value. However, very low roughness (near-mirror) surfaces expose IBL map resolution more aggressively. If your environment map is low-res, smooth metals will look blurry or show artifacts. Use at least 1K HDR maps for scenes with polished metals.
+assistant: Not directly. Same shader cost regardless of value. But near-mirror surfaces expose IBL map resolution. Low-res environment maps look blurry on smooth metals. Use 1K HDR minimum for polished metals.
 ```
 
-## Building a PBR Material From Scratch
+## Build a PBR material
 
 ````steps
-### Step 1: Set up the base material with maps
-
-Start with `MeshStandardMaterial` and load your texture maps. The minimum viable PBR material needs an albedo (color) map, a roughness map, and a metalness map.
+### Step 1: Base material with maps
+Minimum viable PBR: albedo, roughness, metalness.
 
 ```javascript
 const textureLoader = new THREE.TextureLoader();
@@ -230,9 +229,8 @@ const material = new THREE.MeshStandardMaterial({
 });
 ```
 
-### Step 2: Configure environment lighting
-
-Load an HDR environment map and assign it to the scene. This provides the indirect illumination that makes PBR materials respond realistically.
+### Step 2: Environment lighting
+HDR map → indirect illumination → PBR responds realistically.
 
 ```javascript
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
@@ -249,9 +247,8 @@ new RGBELoader().load('environment.hdr', (hdr) => {
 });
 ```
 
-### Step 3: Add advanced layers with MeshPhysicalMaterial
-
-If you need clearcoat, transmission, or sheen, switch to `MeshPhysicalMaterial` and layer the effects:
+### Step 3: Advanced layers (Physical only)
+Clearcoat, transmission, sheen.
 
 ```javascript
 const carPaint = new THREE.MeshPhysicalMaterial({
@@ -267,9 +264,8 @@ const carPaint = new THREE.MeshPhysicalMaterial({
 });
 ```
 
-### Step 4: Validate with a material ball grid
-
-Create a parameter sweep grid -- metalness on one axis, roughness on the other -- and visually inspect under your target lighting. This catches bad textures, missing environment maps, and energy conservation issues immediately.
+### Step 4: Validate with a parameter sweep
+Material ball grid. Metalness × roughness. Catches bad textures, missing environment, energy conservation issues immediately.
 
 ```javascript
 for (let m = 0; m < 5; m++) {
@@ -287,20 +283,22 @@ for (let m = 0; m < 5; m++) {
 ```
 ````
 
-## Quick Reference
+## Reference
 
 | Parameter | Range | Effect |
 |---|---|---|
-| metalness | 0-1 | 0 = dielectric (diffuse + subtle specular), 1 = conductor (colored specular only) |
-| roughness | 0-1 | 0 = mirror-smooth, 1 = fully diffuse specular spread |
-| F0 (derived) | 0.04 to albedo | Base reflectivity at normal incidence |
-| clearcoat | 0-1 | Additional smooth reflective layer (PhysicalMaterial only) |
-| transmission | 0-1 | Light passes through surface (PhysicalMaterial only) |
-| ior | 1.0-2.33 | Index of refraction for transmission (PhysicalMaterial only) |
+| metalness | 0–1 | 0 = dielectric, 1 = conductor (colored specular only) |
+| roughness | 0–1 | 0 = mirror, 1 = fully diffuse spread |
+| F0 (derived) | 0.04 → albedo | Base reflectivity at normal incidence |
+| clearcoat | 0–1 | Additional smooth reflective layer (Physical) |
+| transmission | 0–1 | Light through surface (Physical) |
+| ior | 1.0–2.33 | Index of refraction (Physical) |
 
-## Wrap-Up
+## The summary
 
-PBR is not a black box -- it is three functions (D, F, G) composed into a specular BRDF, balanced against a Lambertian diffuse term, under an energy conservation constraint. The metalness-roughness workflow maps that math into two intuitive parameters that cover the full space of real-world materials. Three.js gives you `MeshStandardMaterial` as a production-ready implementation and `MeshPhysicalMaterial` for advanced surface types. The key practical takeaways: always provide environment lighting for metals, use roughness-squared remapping awareness when authoring textures, keep metalness binary (0 or 1) except at transition boundaries, and validate with a material ball grid before shipping.
+Three functions (D, F, G) composed into a specular BRDF. Balanced against Lambertian diffuse. Constrained by energy conservation.
+
+Practical: always provide environment lighting for metals. Be aware of roughness² remapping when authoring textures. Keep metalness binary except at transitions. Validate with a material ball grid before shipping.
 
 ## Generation Metadata
 
