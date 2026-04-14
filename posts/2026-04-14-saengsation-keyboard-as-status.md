@@ -6,6 +6,8 @@ description: A Go-only RGB LED controller for the Keychron V7 that mirrors what 
 tags: [go, keychron, rgb, hid, qmk, claude-code, linux, tooling]
 ---
 
+![Keychron V7 under saengsation](media/saengsation/keys.jpg)
+
 ## The idea
 
 Peripheral status is ambient data. The keyboard is already in your field of view. Use it.
