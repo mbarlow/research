@@ -6,27 +6,20 @@ description: Extract meshes from scalar fields using marching cubes, with lookup
 tags: [graphics, marching-cubes, isosurface, mesh-generation, threejs]
 ---
 
-## Why Marching Cubes
+## SDF → triangles
 
-The previous post on SDFs showed how to describe geometry as math. But if you want to feed that geometry into a standard mesh pipeline -- physics engines, vertex shaders, exporters -- you need actual triangles. Marching cubes is the bridge: it takes a scalar field (any function that returns a value at a point in space) and extracts a triangle mesh along a chosen threshold. It has been the workhorse isosurface algorithm since Lorensen and Cline published it in 1987, and it remains the default choice when you need to polygonize an implicit surface.
+The previous SDF post showed how to describe geometry as math. But physics engines, vertex shaders, and exporters want triangles.
+
+Marching cubes is the bridge. Take a scalar field. Choose a threshold. Get a triangle mesh.
+
+It's been the workhorse since Lorensen and Cline (1987). When you need to polygonize an implicit surface, this is still the default.
 
 > [!note]
-> Marching cubes is not the only isosurface method. Marching tetrahedra, surface nets, and dual contouring each have tradeoffs around sharp features and manifoldness. Marching cubes wins on simplicity and lookup-table performance.
+> Not the only method. Marching tetrahedra, surface nets, dual contouring all trade differently around sharp features and manifoldness. Marching cubes wins on simplicity and lookup-table speed.
 
-## Post Plan (Feature Map)
+## The algorithm
 
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain the core algorithm | Code blocks + Mermaid diagram | Make the cube-classification pipeline concrete |
-| Detail the lookup tables | Code + callouts | The tables ARE the algorithm -- show them |
-| Implement scalar field evaluation | JavaScript code | Metaballs are the classic test case |
-| Cover normal estimation | Code block | Flat vs. smooth normals, tradeoffs |
-| Build an interactive demo | Three.js scene embed | Prove the code works, let the reader see it morph |
-| Address practical questions | Chat transcript | Handle the questions that come up in real implementations |
-
-## The Algorithm
-
-Marching cubes works by dividing space into a regular grid of cubes. For each cube, you sample the scalar field at all eight corners. Corners whose values exceed a threshold (the isolevel) are classified as "inside" the surface. The pattern of inside/outside corners -- 256 possible combinations for 8 binary states -- determines which edges of the cube the surface crosses. A pair of precomputed lookup tables maps each pattern to the specific triangles needed.
+Divide space into a grid of cubes. For each cube, sample the field at all 8 corners. Each corner is "inside" or "outside" the surface based on whether it crosses the threshold. 8 binary states = 256 possible patterns. A pair of precomputed lookup tables maps each pattern to triangles.
 
 ```mermaid
 graph TD
@@ -45,9 +38,13 @@ graph TD
     K -->|No| L[Compute normals, build final mesh]
 ```
 
-## The Lookup Tables
+## The tables
 
-The edge table has 256 entries. Each is a 12-bit mask telling you which of the cube's 12 edges are crossed by the isosurface. The tri table has 256 entries, each listing edge indices grouped in threes to form triangles, terminated by -1. These tables encode every possible surface configuration through a cube.
+EDGE_TABLE: 256 entries, each a 12-bit mask saying which of the cube's 12 edges the surface crosses.
+
+TRI_TABLE: 256 entries, each a list of edge indices grouped by 3 (one triangle each), terminated by -1.
+
+The tables ARE the algorithm.
 
 ```javascript
 // 256-entry edge table: which of the 12 edges are intersected
@@ -67,8 +64,6 @@ const TRI_TABLE = [
 ];
 ```
 
-The edge-to-vertex mapping connects each edge index to the two corners it spans:
-
 ```javascript
 // Each edge connects two of the 8 cube corners
 const EDGE_VERTICES = [
@@ -85,11 +80,11 @@ const CORNER_OFFSETS = [
 ```
 
 > [!tip]
-> The original Lorensen-Cline paper used a different corner numbering. Most online implementations follow the Paul Bourke convention. If your meshes come out inverted, the corner ordering is almost certainly the issue.
+> The original Lorensen-Cline paper used different corner numbering. Most online implementations use the Bourke convention. If your meshes invert, that's the bug.
 
-## Scalar Field: Metaballs
+## Scalar field: metaballs
 
-A metaball field is the sum of inverse-squared-distance contributions from point charges. Where the summed field exceeds a threshold, the surface appears. Multiple charges produce smooth blends -- the classic blobby look.
+Sum of inverse-squared-distance from point charges. Surface appears where the sum exceeds the threshold. Multiple charges blend smoothly.
 
 ```javascript
 function metaballField(x, y, z, balls) {
@@ -106,11 +101,9 @@ function metaballField(x, y, z, balls) {
 }
 ```
 
-The isolevel controls surface tightness. A higher isolevel pulls the surface closer to the charge centers; a lower value makes the blobs expand and merge more readily.
+Higher isolevel → tighter surface. Lower → blobs expand and merge.
 
-## The Extraction Loop
-
-For each cube in the grid, sample all eight corners, build a cube index, and use the lookup tables to emit triangles:
+## Extraction loop
 
 ```javascript
 function marchingCubes(resolution, bounds, isoLevel, balls) {
@@ -179,11 +172,11 @@ function marchingCubes(resolution, bounds, isoLevel, balls) {
 ```
 
 > [!warning]
-> At resolution 32, the grid has 32,768 cubes with 8 field lookups each. At 64, that jumps to 262,144. Cache the field values in a flat array -- recomputing them per-cube will destroy your frame rate.
+> 32³ = 33K cubes. 64³ = 262K. Cache the field values in a flat array. Recomputing per cube destroys frame rate.
 
-## Normal Estimation
+## Normals
 
-The simplest approach is flat normals: compute each triangle's face normal from its edge vectors. This is fast and works well for low-resolution grids where you want to see the faceted structure.
+Flat: face normal from edge cross product. Fast. Faceted look.
 
 ```javascript
 function computeFlatNormals(positions) {
@@ -209,32 +202,32 @@ function computeFlatNormals(positions) {
 }
 ```
 
-For smooth normals, you can evaluate the scalar field gradient at each vertex (central differences, same technique as SDF normals). This costs six extra field evaluations per vertex but gives you smooth shading regardless of grid resolution.
+Smooth: evaluate the field gradient at each vertex (central differences, same trick as SDF normals). Six extra field evaluations per vertex. Smooth shading at any grid resolution.
 
-## Interactive Demo
+## Demo
 
-The scene below runs a full marching cubes extraction every two frames. Four metaballs orbit and drift through the field, and the extracted isosurface updates in real time. The grid resolution is 32 -- high enough to see smooth blends, low enough to maintain 60fps.
+Full extraction every 2 frames. Four metaballs orbiting through the field. Resolution 32 — smooth blends, 60fps.
 
 <div data-scene="marching-cubes.js" style="width:100%;height:420px;"></div>
 
-## Conversation: Practical Questions
+## Practical questions
 
 ```chat
-user: The mesh has holes or missing faces in certain orientations. What causes this?
-assistant: Almost always a cube index or corner ordering mismatch. The edge table and tri table must agree on which corner is which. If you mixed the Bourke numbering with a different convention, some configurations will emit triangles with flipped or missing faces. Double-check that CORNER_OFFSETS matches the order your cube index bits are assigned.
+user: Mesh has holes or missing faces in some orientations. Why?
+assistant: Cube index or corner ordering mismatch. EDGE_TABLE and TRI_TABLE must agree on which corner is which. Mixing Bourke's numbering with another convention gives flipped or missing triangles. Verify CORNER_OFFSETS matches the order your cube index bits are assigned.
 
 user: How do I get smooth normals without the gradient approach?
-assistant: After extraction, build a map from vertex position to face normals. Average the face normals of all triangles sharing the same vertex position, then normalize the result. This is essentially what BufferGeometry.computeVertexNormals does in Three.js, but you need indexed geometry for it to work. Non-indexed geometry treats every triangle vertex as unique, so you have to weld vertices first.
+assistant: Build a vertex-position → face-normals map. Average and normalize. That's what `BufferGeometry.computeVertexNormals` does — but it needs indexed geometry. Non-indexed treats every triangle vertex as unique, so weld first.
 
-user: Can I use marching cubes on a non-uniform grid, like an octree?
-assistant: Yes, but you need to handle the T-junctions where cells of different sizes share an edge. Without stitching, you get cracks at resolution boundaries. Dual contouring handles adaptive grids more gracefully. For marching cubes, the simplest fix is to constrain adjacent cells to differ by at most one level of subdivision and interpolate boundary vertices to match.
+user: Can I use marching cubes on a non-uniform grid (octree)?
+assistant: Yes, but T-junctions where cells of different sizes meet cause cracks. Without stitching, you get visible seams at resolution boundaries. Dual contouring handles adaptive grids better. For marching cubes, constrain neighbors to differ by at most one level and interpolate boundary vertices.
 ```
 
-## Integration Guide
+## Integration
 
 ````steps
-### Step 1: Define the scalar field and grid
-Choose your field function (metaballs, noise, SDF), grid bounds, and resolution. Cache field values in a flat `Float32Array` indexed as `ix + iy * size + iz * size * size`:
+### Step 1: Define the field and grid
+Function, bounds, resolution. Cache field values flat: `ix + iy * size + iz * size * size`.
 
 ```javascript
 const GRID_RES = 32;
@@ -244,15 +237,15 @@ const size = GRID_RES + 1;
 const field = new Float32Array(size * size * size);
 ```
 
-### Step 2: Run the extraction
-Pass the grid through the marching cubes function. The output is a flat array of triangle vertex positions, three floats per vertex, nine per triangle:
+### Step 2: Extract
+Output is a flat array of triangle vertices. Three floats per vertex, nine per triangle.
 
 ```javascript
 const positions = marchingCubes(GRID_RES, BOUNDS, ISO_LEVEL, balls);
 ```
 
-### Step 3: Build the Three.js geometry
-Create a `BufferGeometry`, attach position and normal attributes, and assign it to a mesh:
+### Step 3: Three.js geometry
+BufferGeometry with position + normal attributes.
 
 ```javascript
 const geometry = new THREE.BufferGeometry();
@@ -269,8 +262,8 @@ const mesh = new THREE.Mesh(geometry, material);
 scene.add(mesh);
 ```
 
-### Step 4: Animate by rebuilding each frame
-Update your metaball positions (or any field parameters), re-run extraction, dispose the old geometry, and assign the new one. Rebuilding every 2-3 frames is a reasonable tradeoff between smoothness and CPU load:
+### Step 4: Animate
+Update field params, re-extract, dispose old geometry, swap. Every 2–3 frames is the right tradeoff between smoothness and CPU.
 
 ```javascript
 function animate() {
@@ -292,21 +285,25 @@ function animate() {
 ```
 ````
 
-## Performance Considerations
+## Performance
 
 | Factor | Impact | Mitigation |
 |---|---|---|
-| Grid resolution | Cubic growth: 32^3 = 33K cubes, 64^3 = 262K | Stay at 24-40 for real-time, higher for offline |
-| Field evaluation | Runs once per grid vertex (size^3 calls) | Cache in flat array, never recompute per-cube |
-| Geometry upload | New buffer every rebuild frame | Reuse typed arrays, rebuild every 2-3 frames |
-| Normal computation | Linear in triangle count | Flat normals are one cross product per face |
+| Grid resolution | Cubic — 32³ = 33K cubes, 64³ = 262K | 24–40 for real-time. Higher for offline. |
+| Field evaluation | One call per grid vertex (size³) | Cache flat. Never recompute per cube. |
+| Geometry upload | New buffer per rebuild | Rebuild every 2–3 frames. Reuse typed arrays. |
+| Normal computation | Linear in triangle count | Flat = one cross product per face |
 
 > [!tip]
-> For static or slowly-changing fields, consider running the extraction in a Web Worker. Post the `Float32Array` back to the main thread via `transferable` and you avoid blocking the render loop entirely.
+> Static or slow-changing fields? Run extraction in a Web Worker. Post the `Float32Array` back via transferable. No render-loop blocking.
 
-## Wrap-Up
+## The summary
 
-Marching cubes converts implicit surfaces into explicit triangle meshes using nothing more than a scalar field, a grid, and two lookup tables. The algorithm is mechanical: sample corners, classify, look up, interpolate, emit. The tables encode the geometry knowledge so your code stays simple. Combined with metaballs or any other scalar field, it gives you animated, blobby, organic-looking meshes from a handful of parameters. From here, the natural next steps are smooth normals via field gradients, adaptive resolution with octrees, and GPU-side extraction using compute shaders.
+Sample. Classify. Look up. Interpolate. Emit.
+
+The tables encode the geometry knowledge so the code stays simple.
+
+From here: smooth normals via field gradients, adaptive resolution with octrees, GPU extraction in compute shaders.
 
 ## Generation Metadata
 

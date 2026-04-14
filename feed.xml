@@ -4,7 +4,63 @@
   <link href="https://mbarlow.github.io/research" rel="alternate"/>
   <link href="https://mbarlow.github.io/research/feed.xml" rel="self"/>
   <id>https://mbarlow.github.io/research/</id>
-  <updated>2026-04-14T00:35:34.530Z</updated>
+  <updated>2026-04-14T00:45:43.350Z</updated>
+  <entry>
+    <title>Particle Systems on the GPU</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-particle-systems-gpu-simulation" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-particle-systems-gpu-simulation</id>
+    <updated>2026-04-14T00:45:32.497Z</updated>
+    <summary>Build high-count particle systems with instanced rendering, integration schemes, and GPU-friendly update patterns in Three.js.</summary>
+  </entry>
+  <entry>
+    <title>Noise Functions and Procedural Terrain</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-noise-functions-procedural-terrain" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-noise-functions-procedural-terrain</id>
+    <updated>2026-04-14T00:43:58.090Z</updated>
+    <summary>Generate procedural terrain using layered noise functions, FBM, and domain warping, with an interactive Three.js heightmap demo.</summary>
+  </entry>
+  <entry>
+    <title>Neural Text-to-Speech on Consumer Hardware</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-neural-tts-consumer-hardware" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-neural-tts-consumer-hardware</id>
+    <updated>2026-04-14T00:42:43.246Z</updated>
+    <summary>Run neural TTS locally with streaming inference, voice cloning, and quality-latency trade-offs using Coqui TTS and Piper.</summary>
+  </entry>
+  <entry>
+    <title>Marching Cubes — Isosurface Extraction from Scalar Fields</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-marching-cubes-isosurface-extraction" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-marching-cubes-isosurface-extraction</id>
+    <updated>2026-04-14T00:41:37.545Z</updated>
+    <summary>Extract meshes from scalar fields using marching cubes, with lookup tables, normal estimation, and an interactive metaball demo.</summary>
+  </entry>
+  <entry>
+    <title>LoRA Fine-Tuning on a Single GPU</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-lora-fine-tuning-single-gpu" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-lora-fine-tuning-single-gpu</id>
+    <updated>2026-04-14T00:40:27.357Z</updated>
+    <summary>Adapt foundation models on consumer hardware using LoRA, covering dataset prep, PEFT training, VRAM management, and adapter merging.</summary>
+  </entry>
+  <entry>
+    <title>Fourier Transforms Visualized</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-fourier-transforms-visualized" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-fourier-transforms-visualized</id>
+    <updated>2026-04-14T00:39:25.942Z</updated>
+    <summary>Understand DFT and FFT through interactive epicycle animations, frequency decomposition, and practical signal processing patterns.</summary>
+  </entry>
+  <entry>
+    <title>Embedding Spaces in 3D</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-embedding-spaces-in-3d" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-embedding-spaces-in-3d</id>
+    <updated>2026-04-14T00:38:21.968Z</updated>
+    <summary>Visualize high-dimensional embeddings using PCA, t-SNE, and UMAP, with an interactive 3D scatter plot of word clusters.</summary>
+  </entry>
+  <entry>
+    <title>Attention Visualization in Transformers</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-attention-visualization-transformers" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-attention-visualization-transformers</id>
+    <updated>2026-04-14T00:37:08.777Z</updated>
+    <summary>Extract and visualize self-attention patterns from transformer models, showing what different heads learn with interactive heatmaps.</summary>
+  </entry>
   <entry>
     <title>Three.js Rendering Techniques - Patterns for Stable Real-World Performance</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-02-14-threejs-rendering-techniques-that-hold-up" rel="alternate"/>
@@ -88,61 +144,5 @@
     <id>https://mbarlow.github.io/research/#/post/2026-03-04-llm-guided-evolutionary-art</id>
     <updated>2026-04-13T23:10:54.867Z</updated>
     <summary>Evolve visual art using genetic algorithms where a local LLM judges fitness, replacing mathematical objectives with natural language like &quot;more crystalline&quot; or &quot;more ominous.&quot;</summary>
-  </entry>
-  <entry>
-    <title>Wave Function Collapse — Constraint Propagation Visualized</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-wave-function-collapse-visualized" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-wave-function-collapse-visualized</id>
-    <updated>2026-04-13T23:10:54.867Z</updated>
-    <summary>Visualize the Wave Function Collapse algorithm step by step, watching entropy collapse and constraints propagate to generate coherent tile patterns from local rules.</summary>
-  </entry>
-  <entry>
-    <title>Fourier Ocean Waves — Tessendorf's FFT Water Simulation</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-fourier-ocean-waves" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-fourier-ocean-waves</id>
-    <updated>2026-04-13T23:10:54.867Z</updated>
-    <summary>Implement Jerry Tessendorf's FFT-based ocean simulation, the same technique used in film VFX at Pixar and Weta, running in real time with Three.js.</summary>
-  </entry>
-  <entry>
-    <title>Boids on Curved Manifolds — Flocking on a Torus</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-boids-on-curved-manifolds" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-boids-on-curved-manifolds</id>
-    <updated>2026-04-13T23:10:54.867Z</updated>
-    <summary>Simulate Reynolds' flocking algorithm on curved surfaces where topology wraps, twists, and changes the meaning of &quot;nearby&quot; — boids on a torus, sphere, and Klein bottle.</summary>
-  </entry>
-  <entry>
-    <title>Audio Spectrogram Terrain — Fly Through Sound</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-audio-spectrogram-terrain" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-audio-spectrogram-terrain</id>
-    <updated>2026-04-13T23:10:54.867Z</updated>
-    <summary>Transform audio spectrograms into 3D terrain and fly through the landscape of sound, where frequency is width, time is depth, and amplitude is height.</summary>
-  </entry>
-  <entry>
-    <title>Impossible Geometry — Shader Tricks That Lie About Depth</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-impossible-geometry-shader-tricks" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-impossible-geometry-shader-tricks</id>
-    <updated>2026-04-13T23:10:54.867Z</updated>
-    <summary>Render Penrose triangles, Escher staircases, and impossible objects using fragment shaders that manipulate depth to create geometries that cannot exist in 3D.</summary>
-  </entry>
-  <entry>
-    <title>Verlet Integration Softbody Physics — Jelly, Cloth, and Rope</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-verlet-softbody-physics" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-verlet-softbody-physics</id>
-    <updated>2026-04-13T23:10:54.867Z</updated>
-    <summary>Build a softbody physics engine using Verlet integration and distance constraints, simulating jelly cubes, cloth sheets, and swinging ropes in real time.</summary>
-  </entry>
-  <entry>
-    <title>Mandelbulb — 3D Fractals via Ray Marching</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-mandelbulb-3d-fractals" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-mandelbulb-3d-fractals</id>
-    <updated>2026-04-13T23:10:54.867Z</updated>
-    <summary>Render the Mandelbulb fractal in real time using ray marching, triplex algebra, and distance estimation, with an interactive GLSL viewer.</summary>
-  </entry>
-  <entry>
-    <title>Reaction-Diffusion — Turing Patterns on the GPU</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-reaction-diffusion-turing-patterns" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-reaction-diffusion-turing-patterns</id>
-    <updated>2026-04-13T23:10:54.867Z</updated>
-    <summary>Simulate the Gray-Scott reaction-diffusion model using GPU ping-pong framebuffers to generate Turing patterns in real time.</summary>
   </entry>
 </feed>

@@ -6,35 +6,26 @@ description: Extract and visualize self-attention patterns from transformer mode
 tags: [llm, transformers, attention, visualization, pytorch]
 ---
 
-## Why Visualize Attention
+## Why bother
 
-If you followed the microGPT build in an earlier post, you implemented multi-head self-attention as a matrix multiply followed by softmax. The weights that softmax produces are the attention pattern -- a probability distribution over positions for every query token. These patterns are not opaque. You can extract them, plot them, and learn what each head specializes in.
+If you built microGPT, you already wrote the matrix multiply + softmax that produces attention weights. Those weights aren't opaque. Extract them. Plot them. Read what each head learned.
 
-This matters for three reasons. First, visualization confirms your model is learning structure rather than memorizing noise. Second, it exposes bugs in masking and positional encoding that are invisible in aggregate loss curves. Third, it builds intuition about why transformers generalize: different heads decompose the sequence into parallel streams of positional, syntactic, and semantic information.
+Three reasons to do this:
+
+- **Sanity** — confirm the model is learning structure, not noise
+- **Debugging** — masking and positional encoding bugs are invisible in the loss curve
+- **Intuition** — heads decompose the sequence into parallel streams of position, syntax, and meaning
 
 > [!note]
-> This post assumes familiarity with the transformer attention mechanism. If you need a refresher on Q/K/V and scaled dot-product attention, start with the microGPT post in this blog.
+> Assumes you know Q/K/V and scaled dot-product attention. If not, read the microGPT post first.
 
-## Post Plan (Feature Map)
-
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Recap attention computation | Mermaid diagram + code | Ground the visualization in math |
-| Show extraction from real models | Python code blocks | Copy-paste-ready extraction script |
-| Classify head behaviors | Table + callouts | Give vocabulary for what you see |
-| Interactive heatmap | Embedded scene | Let readers see head switching live |
-| Connect to tooling ecosystem | Steps block | Path from extraction to bertviz |
-| Address common confusion | Chat transcript | Short-circuit misinterpretations |
-
-## Self-Attention Recap
-
-Scaled dot-product attention computes:
+## The math, briefly
 
 ```
 Attention(Q, K, V) = softmax(QK^T / sqrt(d_k)) V
 ```
 
-The softmax output is the attention weight matrix. For a sequence of length T, this matrix has shape (T x T) per head, per layer. A model with L layers and H heads produces L x H attention matrices per forward pass. That is a lot of data, but most insight comes from inspecting individual heads.
+Softmax output = the (T × T) attention matrix. Per head. Per layer. Model with L layers and H heads = L × H matrices per forward pass.
 
 ```mermaid
 flowchart LR
@@ -53,11 +44,11 @@ flowchart LR
     style ATT fill:#58a6ff,stroke:#388bfd,color:#0d1117
 ```
 
-The blue node is what we extract and visualize. Everything else is either frozen (at inference) or computed as a side effect.
+The blue node is what we extract. Everything else is a side effect.
 
-## Extracting Attention Weights from a Trained Model
+## Extract from a trained model
 
-Hugging Face transformers expose attention weights via the `output_attentions` flag. Here is a minimal extraction script that works with any causal LM:
+Hugging Face exposes attention via `output_attentions=True`.
 
 ```python
 import torch
@@ -89,20 +80,20 @@ print(attn_matrix.round(3))
 ```
 
 > [!tip]
-> GPT-2 is the best model for learning attention visualization. It is small (124M parameters), well-documented, and every head has been catalogued by researchers. Start there before moving to larger models.
+> Start with GPT-2. Small (124M), well-documented, every head catalogued. Move to bigger models once you can read these.
 
-## What Different Heads Learn
+## Four head archetypes
 
-When you visualize attention across all 12 layers and 12 heads of GPT-2, distinct patterns emerge. Here are the four most common archetypes:
+Across all 12 layers and 12 heads of GPT-2, four patterns dominate:
 
-| Pattern | Description | Example | Typical Layer |
+| Pattern | Description | Example | Typical layer |
 |---|---|---|---|
-| Previous token | Strong diagonal shifted by one position | Bigram-like local context | Early layers (0-2) |
-| Identity / self | Strong main diagonal | Token refines its own representation | Early-mid layers (1-4) |
-| First token (BOS) | First column dominates | Global anchor, often used as a "no-op" | All layers |
-| Broad / uniform | Roughly even distribution | Aggregating global context | Mid-late layers (5-10) |
+| Previous token | Diagonal shifted by one | Bigram-like local context | Early (0-2) |
+| Identity | Strong main diagonal | Token refines itself | Early-mid (1-4) |
+| First token (BOS) | First column dominates | Global anchor / "no-op" | All layers |
+| Broad / uniform | Roughly even distribution | Aggregates global context | Mid-late (5-10) |
 
-There are also syntactic heads (attending to the verb from its subject), positional heads (fixed-offset patterns), and rare specialized heads (separator token attention, induction heads). The four above cover what you will see most often.
+There are syntactic, positional, and induction heads too. The four above account for most of what you'll see.
 
 ```mermaid
 graph TD
@@ -128,11 +119,9 @@ graph TD
 ```
 
 > [!warning]
-> Attention weights show where the model looks, not what it does with what it finds. A head with high attention to position X does not mean position X causally determines the output. For causal analysis, you need activation patching or ablation studies.
+> Attention shows where the model looks. Not what it does with what it finds. High attention to position X does not imply X causes the output. For causal claims, ablate.
 
-## Plotting a Heatmap with Matplotlib
-
-The simplest visualization is a 2D heatmap. This function takes one attention matrix and produces a labeled plot:
+## Heatmap
 
 ```python
 import matplotlib.pyplot as plt
@@ -145,7 +134,6 @@ def plot_attention_head(attn_matrix: np.ndarray, tokens: list[str],
     if ax is None:
         fig, ax = plt.subplots(figsize=(6, 5))
 
-    # Custom colormap: dark blue -> cyan -> yellow
     colors = ["#0d1117", "#0d4a6b", "#17a2b8", "#d4a017", "#f5f5dc"]
     cmap = mcolors.LinearSegmentedColormap.from_list("attn", colors)
 
@@ -182,15 +170,15 @@ def plot_all_heads(attentions, tokens, layer: int):
     plt.show()
 ```
 
-## Interactive Heatmap
+## Interactive heatmap
 
-The visualization below animates between four attention head patterns for the sentence "The cat sat on the mat." Watch how each head focuses on different positions -- the previous-token head lights up a shifted diagonal, while the first-token head concentrates weight in the first column.
+Animates between four archetypes for "The cat sat on the mat." Watch the previous-token head light up the shifted diagonal, then the BOS head pull weight into column zero.
 
 <div data-scene="attention-heatmap.js" style="width:100%;height:420px;"></div>
 
-## BertViz and Arc Diagrams
+## Arc diagrams via bertviz
 
-For deeper exploration, the bertviz library renders multi-head attention as interactive arc diagrams. Arcs connect each query token to the keys it attends to, with arc thickness proportional to attention weight. This is more readable than heatmaps when comparing many heads simultaneously.
+For comparing many heads at once, arc diagrams beat heatmaps. Arc thickness = attention weight.
 
 ```python
 # Install: uv pip install bertviz
@@ -212,11 +200,11 @@ head_view(outputs.attentions, tokens)
 ```
 
 > [!tip]
-> bertviz works in Jupyter notebooks with inline rendering. For scripts, save the HTML output and open it in a browser. The neuron_view mode shows Q/K/V decompositions per head.
+> bertviz renders inline in Jupyter. For scripts, save the HTML and open it. `neuron_view` mode shows Q/K/V decomposition per head.
 
-## Attention Patterns Across Layers
+## Attention rollout
 
-One of the most informative visualizations is an attention rollout or attention flow across all layers. Rather than looking at single heads, you can compute the cumulative attention from the input layer to any later layer by multiplying attention matrices:
+Single heads tell you about local routing. Rollout tells you about cumulative information flow across the whole stack.
 
 ```python
 import numpy as np
@@ -249,26 +237,26 @@ def attention_rollout(attentions, head_reduction="mean"):
     return rollout
 ```
 
-This gives a single (T x T) matrix showing the effective attention from each output position back to each input position, accounting for residual connections and multi-layer composition.
+One (T × T) matrix. Effective attention from each output position back to each input position, with residuals factored in.
 
-## Conversation: Common Misunderstandings
+## Common misreads
 
 ```chat
-user: A head has near-uniform attention. Is it broken or useless?
-assistant: Probably not. Uniform attention computes something close to a bag-of-words average, which is useful context for later layers. Some heads genuinely learn to aggregate global information. Clark et al. (2019) found that pruning uniform heads often hurts downstream performance. Do not assume a head is useless just because its pattern looks boring.
+user: A head has near-uniform attention. Broken or useless?
+assistant: Probably neither. Uniform = bag-of-words average, which is useful context for later layers. Clark et al. (2019) showed pruning uniform heads often hurts performance. Boring is not useless.
 
-user: I see the same token getting high attention in every head of layer 0. Is that a bug?
-assistant: Check if that token is a special token like [CLS], [SEP], or BOS. Models frequently route excess attention to these anchor tokens as a learned "no-op" -- the value vector for these tokens tends to carry little information, so attending to them is a safe default. This is expected behavior, not a bug.
+user: Same token getting high attention in every head of layer 0. Bug?
+assistant: Check if it's [CLS], [SEP], or BOS. Models route excess attention to anchor tokens as a learned no-op — the value vector carries little, so attending there is safe. Expected, not a bug.
 
-user: How do I know which heads are actually important for a specific prediction?
-assistant: Attention weights alone cannot tell you. You need causal interventions. The standard approach is attention head ablation: zero out one head at a time and measure the change in loss or output probability. Heads where ablation causes large changes are causally important. The mechanistic interpretability literature calls these "circuit discovery" methods.
+user: How do I tell which heads actually matter for a prediction?
+assistant: Attention can't tell you. Ablate. Zero one head at a time, measure the loss/probability shift. Heads where ablation hurts are causally important. The interpretability folks call this circuit discovery.
 ```
 
-## From Extraction to Visualization: Step by Step
+## End to end
 
 ````steps
-### Step 1: Set up the environment and load a model
-Install dependencies and confirm attention output is available:
+### Step 1: Set up + load a model
+Confirm attention output is wired up.
 
 ```bash
 mkdir attn-viz && cd attn-viz
@@ -281,8 +269,7 @@ print(f'Layers: {m.config.n_layer}, Heads: {m.config.n_head}')
 "
 ```
 
-### Step 2: Extract attention weights for a test sentence
-Run a forward pass and save the attention tensors:
+### Step 2: Extract for a test sentence
 
 ```python
 import torch, json
@@ -298,13 +285,11 @@ with torch.no_grad():
     attentions = model(**inputs).attentions
 
 tokens = tokenizer.convert_ids_to_tokens(inputs["input_ids"][0])
-# Save layer 0 attention for inspection
 torch.save({"tokens": tokens, "attn_l0": attentions[0]}, "attn_data.pt")
 print(f"Saved attention for {len(tokens)} tokens, {len(attentions)} layers")
 ```
 
-### Step 3: Generate heatmaps for all heads in layer 0
-Plot and save a grid of attention heatmaps:
+### Step 3: Heatmap grid for all heads in layer 0
 
 ```python
 import torch, matplotlib.pyplot as plt
@@ -336,8 +321,7 @@ plt.savefig("gpt2_layer0_heads.png", dpi=150, bbox_inches="tight")
 print("Saved gpt2_layer0_heads.png")
 ```
 
-### Step 4: Launch bertviz for interactive exploration
-Use bertviz head_view for a richer, interactive visualization in Jupyter:
+### Step 4: bertviz for interactive exploration
 
 ```python
 # In a Jupyter notebook:
@@ -353,25 +337,20 @@ with torch.no_grad():
 
 tokens = tokenizer.convert_ids_to_tokens(inputs["input_ids"][0])
 head_view(outputs.attentions, tokens)
-# Use the dropdown to switch layers, click heads to isolate them
 ```
 ````
 
-## Practical Notes
+## Things easy to miss
 
-A few things that are easy to overlook:
+1. **Subword tokens distort the picture.** BPE splits words. Attention between subword fragments is noisy. Use short, common words for first exploration.
+2. **Layer matters more than head.** Early = positional/lexical. Middle = syntactic. Late = task-specific. If you only inspect one layer, pick layer 0 for sanity and a middle layer for structure.
+3. **Batch size 1 is fine.** Attention weights don't depend on batch. Keep shapes simple.
 
-1. **Subword tokens change the picture.** BPE tokenizers split words into subword pieces. "sitting" might become ["sit", "ting"]. Attention patterns between subword fragments are noisy and hard to interpret. Use short, common words for initial exploration.
+## The summary
 
-2. **Layer matters more than head.** Early layers tend to learn positional and lexical patterns. Middle layers learn syntactic structure. Late layers are task-specific. If you only have time to inspect one layer, pick layer 0 for sanity checking and a middle layer for interesting structure.
+Extract the (T × T) softmax outputs. Plot them. Classify against the four archetypes.
 
-3. **Batch size 1 is fine for visualization.** Attention weights do not change with batch size (they depend only on the input sequence). Always extract with batch size 1 to keep shapes simple.
-
-## Wrap-Up
-
-Attention visualization turns the transformer's internal routing into something you can inspect and reason about. The pipeline is straightforward: extract the (T x T) softmax outputs per head per layer, plot them as heatmaps or arc diagrams, and classify the patterns you find. The four main archetypes -- previous token, identity, first token, and broad -- account for most of what you will see in early and middle layers.
-
-The key limitation is that attention weights show correlation, not causation. A head attending strongly to a position does not mean that position drives the output. For causal claims, you need ablation or activation patching. But for building intuition, debugging models, and understanding what multi-head attention actually does with its capacity, visualization is the fastest tool available.
+But: attention is correlation, not causation. For causal claims, you need ablation or activation patching. For intuition and debugging, visualization is the fastest tool you have.
 
 ## Generation Metadata
 

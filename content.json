@@ -1,5 +1,141 @@
 [
   {
+    "slug": "2026-03-01-particle-systems-gpu-simulation",
+    "file": "2026-03-01-particle-systems-gpu-simulation.md",
+    "title": "Particle Systems on the GPU",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-14T00:45:32.497Z",
+    "order": 15,
+    "description": "Build high-count particle systems with instanced rendering, integration schemes, and GPU-friendly update patterns in Three.js.",
+    "tags": [
+      "graphics",
+      "particles",
+      "gpu-simulation",
+      "instancing",
+      "threejs"
+    ],
+    "body": "\n## Why particles still matter\n\nOld trick. Still useful.\n\nFire, smoke, rain, starfields, debris, magic — anything that's many small things moving independently. The technique generalizes.\n\nThe hard part has always been count. A few hundred is trivial. 10K starts to hurt. 100K demands you think about where data lives and how it moves.\n\nThe GPU is built for this. Thousands of identical lightweight objects doing the same math with different inputs is exactly what parallel hardware devours. The ques"
+  },
+  {
+    "slug": "2026-03-01-noise-functions-procedural-terrain",
+    "file": "2026-03-01-noise-functions-procedural-terrain.md",
+    "title": "Noise Functions and Procedural Terrain",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-14T00:43:58.090Z",
+    "order": 13,
+    "description": "Generate procedural terrain using layered noise functions, FBM, and domain warping, with an interactive Three.js heightmap demo.",
+    "tags": [
+      "graphics",
+      "procedural-generation",
+      "noise",
+      "terrain",
+      "threejs"
+    ],
+    "body": "\n## Why noise\n\nRandom numbers alone produce static. Feed `Math.random()` into a heightmap and you get jagged nonsense.\n\nNoise functions generate smooth, continuous pseudo-randomness that varies gradually across space. That smoothness is what makes mountains look like mountains.\n\nPerlin noise dropped in 1983 (for Tron). Simplex followed in 2001, fixing dimensional scaling issues. Both share the same idea: interpolate pseudo-random gradients on a lattice. Continuous. Repeatable. Deterministic for "
+  },
+  {
+    "slug": "2026-03-01-neural-tts-consumer-hardware",
+    "file": "2026-03-01-neural-tts-consumer-hardware.md",
+    "title": "Neural Text-to-Speech on Consumer Hardware",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-14T00:42:43.246Z",
+    "order": 12,
+    "description": "Run neural TTS locally with streaming inference, voice cloning, and quality-latency trade-offs using Coqui TTS and Piper.",
+    "tags": [
+      "tts",
+      "speech-synthesis",
+      "neural-audio",
+      "voice-cloning",
+      "inference"
+    ],
+    "body": "\n## Why local TTS\n\nCloud TTS is convenient until it isn't. Latency spikes. Per-character billing. No voice cloning without uploading audio to a third party.\n\nAll three push the same direction: run it yourself.\n\nModern neural TTS has crossed the quality threshold where a single consumer GPU — or a capable CPU — produces natural speech in real time. Pick a model. Serve it locally. Done.\n\n> [!note]\n> Inference, not training. Pre-trained models, optional speaker fine-tuning. No vocoders from scratch"
+  },
+  {
+    "slug": "2026-03-01-marching-cubes-isosurface-extraction",
+    "file": "2026-03-01-marching-cubes-isosurface-extraction.md",
+    "title": "Marching Cubes — Isosurface Extraction from Scalar Fields",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-14T00:41:37.545Z",
+    "order": 14,
+    "description": "Extract meshes from scalar fields using marching cubes, with lookup tables, normal estimation, and an interactive metaball demo.",
+    "tags": [
+      "graphics",
+      "marching-cubes",
+      "isosurface",
+      "mesh-generation",
+      "threejs"
+    ],
+    "body": "\n## SDF → triangles\n\nThe previous SDF post showed how to describe geometry as math. But physics engines, vertex shaders, and exporters want triangles.\n\nMarching cubes is the bridge. Take a scalar field. Choose a threshold. Get a triangle mesh.\n\nIt's been the workhorse since Lorensen and Cline (1987). When you need to polygonize an implicit surface, this is still the default.\n\n> [!note]\n> Not the only method. Marching tetrahedra, surface nets, dual contouring all trade differently around sharp fe"
+  },
+  {
+    "slug": "2026-03-01-lora-fine-tuning-single-gpu",
+    "file": "2026-03-01-lora-fine-tuning-single-gpu.md",
+    "title": "LoRA Fine-Tuning on a Single GPU",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-14T00:40:27.357Z",
+    "order": 8,
+    "description": "Adapt foundation models on consumer hardware using LoRA, covering dataset prep, PEFT training, VRAM management, and adapter merging.",
+    "tags": [
+      "llm",
+      "fine-tuning",
+      "lora",
+      "peft",
+      "pytorch"
+    ],
+    "body": "\n## Why fine-tune\n\nPrompting gets you 80%. The last 20% — consistent format, domain terminology, reliable tone — usually requires patterns the model can't reliably enforce from a prompt.\n\nFine-tuning encodes those patterns into the weights.\n\nFull fine-tuning of a 7B model needs 56GB+ of VRAM just for optimizer state. Consumer hardware can't.\n\nLoRA freezes the original weights and trains small rank-decomposition matrices injected into attention layers. You train 0.1–1% of the parameters. You need"
+  },
+  {
+    "slug": "2026-03-01-fourier-transforms-visualized",
+    "file": "2026-03-01-fourier-transforms-visualized.md",
+    "title": "Fourier Transforms Visualized",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-14T00:39:25.942Z",
+    "order": 17,
+    "description": "Understand DFT and FFT through interactive epicycle animations, frequency decomposition, and practical signal processing patterns.",
+    "tags": [
+      "math",
+      "fourier-transform",
+      "signal-processing",
+      "visualization",
+      "dft"
+    ],
+    "body": "\n## Why visualize it\n\nThe DFT is one of the most useful algorithms in computing. Most explanations jump to the summation and lose people at the complex exponential.\n\nThe core idea is simple: any periodic signal decomposes into sine and cosine waves. The DFT tells you which frequencies are there, and how strong. The inverse DFT puts the signal back together.\n\nIt's the foundation of audio analysis, image compression (JPEG = DCT), filtering (zero out a frequency bin), and modulation (OFDM in WiFi/L"
+  },
+  {
+    "slug": "2026-03-01-embedding-spaces-in-3d",
+    "file": "2026-03-01-embedding-spaces-in-3d.md",
+    "title": "Embedding Spaces in 3D",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-14T00:38:21.968Z",
+    "order": 19,
+    "description": "Visualize high-dimensional embeddings using PCA, t-SNE, and UMAP, with an interactive 3D scatter plot of word clusters.",
+    "tags": [
+      "llm",
+      "embeddings",
+      "dimensionality-reduction",
+      "umap",
+      "visualization"
+    ],
+    "body": "\n## The geometry of meaning\n\nEvery token your model touches lives as a point in a high-dimensional vector space. That space has structure — synonyms cluster, analogies form parallelograms, semantic categories occupy distinct regions.\n\n768 dimensions is unreadable. 3 isn't.\n\nProject, plot, debug.\n\nWhen semantic search returns garbage, the visualization tells you whether the query landed in the wrong neighborhood or whether the neighborhood itself is poorly formed. The plot is the diagnostic.\n\n> ["
+  },
+  {
+    "slug": "2026-03-01-attention-visualization-transformers",
+    "file": "2026-03-01-attention-visualization-transformers.md",
+    "title": "Attention Visualization in Transformers",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-14T00:37:08.777Z",
+    "order": 18,
+    "description": "Extract and visualize self-attention patterns from transformer models, showing what different heads learn with interactive heatmaps.",
+    "tags": [
+      "llm",
+      "transformers",
+      "attention",
+      "visualization",
+      "pytorch"
+    ],
+    "body": "\n## Why bother\n\nIf you built microGPT, you already wrote the matrix multiply + softmax that produces attention weights. Those weights aren't opaque. Extract them. Plot them. Read what each head learned.\n\nThree reasons to do this:\n\n- **Sanity** — confirm the model is learning structure, not noise\n- **Debugging** — masking and positional encoding bugs are invisible in the loss curve\n- **Intuition** — heads decompose the sequence into parallel streams of position, syntax, and meaning\n\n> [!note]\n> A"
+  },
+  {
     "slug": "2026-02-14-threejs-rendering-techniques-that-hold-up",
     "file": "2026-02-14-threejs-rendering-techniques-that-hold-up.md",
     "title": "Three.js Rendering Techniques - Patterns for Stable Real-World Performance",
@@ -454,23 +590,6 @@
     "body": "\n## Why Compute Shaders in the Browser Matter\n\nWebGL gave us pixel shaders and vertex shaders, but no general-purpose compute. If you wanted to run a parallel reduction, sort an array, or process an image kernel without rendering a quad, you were hacking around the graphics pipeline. WebGPU fixes this with first-class compute shaders: you dispatch work to the GPU, read results back, and never touch a framebuffer.\n\nThis matters because real applications -- physics simulations, ML inference, audio"
   },
   {
-    "slug": "2026-03-01-lora-fine-tuning-single-gpu",
-    "file": "2026-03-01-lora-fine-tuning-single-gpu.md",
-    "title": "LoRA Fine-Tuning on a Single GPU",
-    "date": "2026-03-01",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 8,
-    "description": "Adapt foundation models on consumer hardware using LoRA, covering dataset prep, PEFT training, VRAM management, and adapter merging.",
-    "tags": [
-      "llm",
-      "fine-tuning",
-      "lora",
-      "peft",
-      "pytorch"
-    ],
-    "body": "\n## Why Fine-Tune at All\n\nPrompting gets you 80% of the way. The remaining 20% — consistent output format, domain-specific terminology, reliable tone — often requires the model to internalize patterns that prompt engineering alone cannot reliably enforce. Fine-tuning encodes those patterns into the weights.\n\nFull fine-tuning of a 7B model requires 56GB+ of VRAM just for optimizer states. That rules out most consumer hardware. LoRA sidesteps this by freezing the original weights and training smal"
-  },
-  {
     "slug": "2026-03-01-procedural-geometry-with-sdfs",
     "file": "2026-03-01-procedural-geometry-with-sdfs.md",
     "title": "Procedural Geometry with Signed Distance Functions",
@@ -522,74 +641,6 @@
     "body": "\n## Why Point Cloud Processing Matters\n\nEvery 3D capture pipeline -- photogrammetry, LiDAR, gaussian splatting -- produces point clouds as an intermediate or final representation. Raw clouds are noisy, misaligned between scans, and far too dense for downstream consumption. If you cannot clean and register point clouds efficiently, nothing downstream works: meshing fails, splatting trains on garbage, and real-time viewers choke on millions of redundant points.\n\nThe goal is a repeatable pipeline t"
   },
   {
-    "slug": "2026-03-01-neural-tts-consumer-hardware",
-    "file": "2026-03-01-neural-tts-consumer-hardware.md",
-    "title": "Neural Text-to-Speech on Consumer Hardware",
-    "date": "2026-03-01",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 12,
-    "description": "Run neural TTS locally with streaming inference, voice cloning, and quality-latency trade-offs using Coqui TTS and Piper.",
-    "tags": [
-      "tts",
-      "speech-synthesis",
-      "neural-audio",
-      "voice-cloning",
-      "inference"
-    ],
-    "body": "\n## Why Local TTS\n\nCloud TTS APIs are convenient until they are not. Latency spikes, per-character billing, and the inability to clone custom voices without uploading audio to a third party all push the same direction: run it yourself.\n\nModern neural TTS has crossed the quality threshold where a single consumer GPU -- or even a capable CPU -- can produce natural speech in real time. Pick a model, serve it behind a local HTTP endpoint, and integrate it into any pipeline that needs voice output.\n\n"
-  },
-  {
-    "slug": "2026-03-01-noise-functions-procedural-terrain",
-    "file": "2026-03-01-noise-functions-procedural-terrain.md",
-    "title": "Noise Functions and Procedural Terrain",
-    "date": "2026-03-01",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 13,
-    "description": "Generate procedural terrain using layered noise functions, FBM, and domain warping, with an interactive Three.js heightmap demo.",
-    "tags": [
-      "graphics",
-      "procedural-generation",
-      "noise",
-      "terrain",
-      "threejs"
-    ],
-    "body": "\n## Why Noise\n\nRandom numbers alone produce static. Feed `Math.random()` into a heightmap and you get jagged nonsense with no spatial coherence. Noise functions solve this by generating smooth, continuous pseudo-randomness that varies gradually across space. That smoothness is what makes mountains look like mountains instead of white noise.\n\nKen Perlin introduced the original gradient noise algorithm in 1983 for the film Tron. Simplex noise followed in 2001, fixing some dimensional scaling issue"
-  },
-  {
-    "slug": "2026-03-01-marching-cubes-isosurface-extraction",
-    "file": "2026-03-01-marching-cubes-isosurface-extraction.md",
-    "title": "Marching Cubes — Isosurface Extraction from Scalar Fields",
-    "date": "2026-03-01",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 14,
-    "description": "Extract meshes from scalar fields using marching cubes, with lookup tables, normal estimation, and an interactive metaball demo.",
-    "tags": [
-      "graphics",
-      "marching-cubes",
-      "isosurface",
-      "mesh-generation",
-      "threejs"
-    ],
-    "body": "\n## Why Marching Cubes\n\nThe previous post on SDFs showed how to describe geometry as math. But if you want to feed that geometry into a standard mesh pipeline -- physics engines, vertex shaders, exporters -- you need actual triangles. Marching cubes is the bridge: it takes a scalar field (any function that returns a value at a point in space) and extracts a triangle mesh along a chosen threshold. It has been the workhorse isosurface algorithm since Lorensen and Cline published it in 1987, and it"
-  },
-  {
-    "slug": "2026-03-01-particle-systems-gpu-simulation",
-    "file": "2026-03-01-particle-systems-gpu-simulation.md",
-    "title": "Particle Systems on the GPU",
-    "date": "2026-03-01",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 15,
-    "description": "Build high-count particle systems with instanced rendering, integration schemes, and GPU-friendly update patterns in Three.js.",
-    "tags": [
-      "graphics",
-      "particles",
-      "gpu-simulation",
-      "instancing",
-      "threejs"
-    ],
-    "body": "\n## Why Particles Still Matter\n\nParticle systems are one of the oldest tricks in real-time graphics, and they remain one of the most useful. Fire, smoke, rain, starfields, debris, magic effects -- the technique generalizes to anything that involves many small, independently moving elements. The hard part has always been count. A few hundred particles are trivial. Ten thousand start to hurt. A hundred thousand require you to think carefully about where data lives and how it moves.\n\nThe GPU is bui"
-  },
-  {
     "slug": "2026-03-01-pbr-physics-based-shading",
     "file": "2026-03-01-pbr-physics-based-shading.md",
     "title": "PBR Materials — Physics-Based Shading in Three.js",
@@ -605,56 +656,5 @@
       "threejs"
     ],
     "body": "\n## Why PBR\n\nTraditional shading models -- Phong, Blinn-Phong -- let you push numbers around until a material \"looks right.\" PBR (Physically-Based Rendering) replaces that guesswork with constraints derived from actual physics: energy conservation, microfacet statistics, and Fresnel reflectance. The result is materials that respond correctly to any lighting environment without per-scene hand-tuning. Every major engine (Unreal, Unity, Godot, Three.js) adopted the metalness-roughness workflow for "
-  },
-  {
-    "slug": "2026-03-01-fourier-transforms-visualized",
-    "file": "2026-03-01-fourier-transforms-visualized.md",
-    "title": "Fourier Transforms Visualized",
-    "date": "2026-03-01",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 17,
-    "description": "Understand DFT and FFT through interactive epicycle animations, frequency decomposition, and practical signal processing patterns.",
-    "tags": [
-      "math",
-      "fourier-transform",
-      "signal-processing",
-      "visualization",
-      "dft"
-    ],
-    "body": "\n## Why Fourier Transforms Deserve a Visual Intuition\n\nThe Discrete Fourier Transform is one of the most useful algorithms in computing, yet most explanations jump straight to the summation formula and lose people at the complex exponential. The core idea is simple: any periodic signal can be decomposed into a sum of sine and cosine waves at different frequencies. The DFT tells you which frequencies are present and how strong each one is. The inverse DFT reconstructs the original signal from tho"
-  },
-  {
-    "slug": "2026-03-01-attention-visualization-transformers",
-    "file": "2026-03-01-attention-visualization-transformers.md",
-    "title": "Attention Visualization in Transformers",
-    "date": "2026-03-01",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 18,
-    "description": "Extract and visualize self-attention patterns from transformer models, showing what different heads learn with interactive heatmaps.",
-    "tags": [
-      "llm",
-      "transformers",
-      "attention",
-      "visualization",
-      "pytorch"
-    ],
-    "body": "\n## Why Visualize Attention\n\nIf you followed the microGPT build in an earlier post, you implemented multi-head self-attention as a matrix multiply followed by softmax. The weights that softmax produces are the attention pattern -- a probability distribution over positions for every query token. These patterns are not opaque. You can extract them, plot them, and learn what each head specializes in.\n\nThis matters for three reasons. First, visualization confirms your model is learning structure rat"
-  },
-  {
-    "slug": "2026-03-01-embedding-spaces-in-3d",
-    "file": "2026-03-01-embedding-spaces-in-3d.md",
-    "title": "Embedding Spaces in 3D",
-    "date": "2026-03-01",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 19,
-    "description": "Visualize high-dimensional embeddings using PCA, t-SNE, and UMAP, with an interactive 3D scatter plot of word clusters.",
-    "tags": [
-      "llm",
-      "embeddings",
-      "dimensionality-reduction",
-      "umap",
-      "visualization"
-    ],
-    "body": "\n## Why Stare at Embedding Spaces\n\nEvery token your model processes lives as a point in a high-dimensional vector space. That space has structure -- words with similar meaning cluster together, analogies form parallelograms, and entire semantic categories occupy distinct neighborhoods. But 768 dimensions is hard to reason about. Projecting those vectors down to 2D or 3D makes that structure visible and debuggable.\n\nThis matters in practice. When your semantic search returns irrelevant results, v"
   }
 ]

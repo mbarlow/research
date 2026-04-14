@@ -6,36 +6,30 @@ description: Understand DFT and FFT through interactive epicycle animations, fre
 tags: [math, fourier-transform, signal-processing, visualization, dft]
 ---
 
-## Why Fourier Transforms Deserve a Visual Intuition
+## Why visualize it
 
-The Discrete Fourier Transform is one of the most useful algorithms in computing, yet most explanations jump straight to the summation formula and lose people at the complex exponential. The core idea is simple: any periodic signal can be decomposed into a sum of sine and cosine waves at different frequencies. The DFT tells you which frequencies are present and how strong each one is. The inverse DFT reconstructs the original signal from those frequencies.
+The DFT is one of the most useful algorithms in computing. Most explanations jump to the summation and lose people at the complex exponential.
 
-This matters practically because it is the foundation of audio analysis (spectrum analyzers, equalizers), image compression (JPEG operates on DCT, a real-valued cousin), signal filtering (remove noise by zeroing frequency bins), and telecommunications (OFDM modulation in WiFi and LTE). Understanding it visually -- watching rotating circles compose a square wave -- makes the math click in a way that staring at summation notation never will.
+The core idea is simple: any periodic signal decomposes into sine and cosine waves. The DFT tells you which frequencies are there, and how strong. The inverse DFT puts the signal back together.
+
+It's the foundation of audio analysis, image compression (JPEG = DCT), filtering (zero out a frequency bin), and modulation (OFDM in WiFi/LTE).
+
+Watching rotating circles compose a square wave makes the math click. Summation notation does not.
 
 > [!note]
-> This post covers the one-dimensional DFT. The 2D case (used in image processing) applies the same transform along rows and columns independently.
+> 1D DFT here. The 2D version (image processing) applies the same transform along rows and columns independently.
 
-## Post Plan (Feature Map)
+## The formula
 
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Build geometric intuition for Fourier series | Interactive scene (epicycles) | Rotating circles make the decomposition tangible |
-| Present the DFT formula precisely | Code blocks + math notation | Copy-paste-ready implementations |
-| Explain FFT (Cooley-Tukey) | Mermaid diagram + code | Show the divide-and-conquer structure |
-| Cover windowing and spectral leakage | Callout + table | Common pitfall with a concrete fix |
-| Demonstrate practical applications | Steps block + chat | End-to-end audio analysis walkthrough |
-
-## The DFT Formula
-
-The Discrete Fourier Transform converts N time-domain samples into N frequency-domain coefficients. For a sequence x[0], x[1], ..., x[N-1]:
+N time samples → N frequency coefficients.
 
 ```
 X[k] = sum(n=0 to N-1) x[n] * e^(-j * 2*pi * k * n / N)
 ```
 
-Each output X[k] is a complex number encoding the amplitude and phase of frequency bin k. The magnitude |X[k]| gives the strength of that frequency; the angle gives the phase offset.
+Each X[k] is complex. Magnitude = strength of frequency k. Angle = phase.
 
-In code, a naive DFT is straightforward:
+Naive DFT in code:
 
 ```javascript
 function dft(signal) {
@@ -54,22 +48,22 @@ function dft(signal) {
 }
 ```
 
-This runs in O(N^2) time. For N = 1024, that is about a million multiplications. For real-time audio at 44100 Hz with a 4096-sample window, you need the FFT.
+O(N²). For real-time audio at 44100 Hz with a 4096 window, you need the FFT.
 
 > [!tip]
-> The output of the DFT is symmetric for real-valued input. Only the first N/2 + 1 bins contain unique information. The rest are complex conjugates.
+> For real input, the DFT output is conjugate symmetric. Only the first N/2+1 bins carry unique information.
 
-## Epicycles: Seeing Fourier Series in Action
+## Epicycles
 
-The visualization below shows a Fourier series approximation of a square wave using epicycles. Each rotating circle corresponds to one harmonic (odd harmonics: n=1, 3, 5, 7, ...). The radius of each circle is 1/n, and it rotates at frequency n. The tip of the last circle traces the approximated waveform on the right side.
+Square wave approximation via epicycles. Each rotating circle = one harmonic. Radius 1/n, frequency n. The tip of the last circle traces the waveform.
 
 <div data-scene="fourier-epicycles.js" style="width:100%;height:420px;"></div>
 
-This is how a square wave is built from sine waves. With 10 harmonics, you can see the Gibbs phenomenon -- the small overshoot near the discontinuities that never fully disappears no matter how many terms you add.
+This is how a square wave is built. With 10 harmonics you can see the Gibbs phenomenon — the small overshoot near discontinuities that never fully disappears.
 
-## From DFT to FFT: The Cooley-Tukey Algorithm
+## DFT → FFT (Cooley-Tukey)
 
-The Fast Fourier Transform reduces the O(N^2) DFT to O(N log N) by exploiting symmetry in the complex exponentials. The radix-2 Cooley-Tukey algorithm splits the input into even-indexed and odd-indexed subsequences, computes the DFT of each recursively, and combines them using "butterfly" operations.
+Radix-2 splits the input into even and odd indices, recursively transforms each, combines with butterflies. O(N²) → O(N log N).
 
 ```mermaid
 flowchart TD
@@ -83,7 +77,7 @@ flowchart TD
     G --> H["Output: X[0..7]"]
 ```
 
-The twiddle factor W_N^k = e^(-j * 2*pi*k/N) is the key. Because W_N^(k+N/2) = -W_N^k, you can reuse the same multiplications for the top and bottom halves of the output.
+The trick: `W_N^(k+N/2) = -W_N^k`. Same multiplications cover both halves.
 
 ```python
 import numpy as np
@@ -107,13 +101,14 @@ print("Magnitudes:", [round(m, 3) for m in magnitudes])
 ```
 
 > [!warning]
-> The radix-2 FFT requires the input length to be a power of 2. In practice, you zero-pad your signal to the next power of 2. Libraries like numpy.fft handle this automatically, but if you roll your own, pad first.
+> Radix-2 needs power-of-2 input length. Zero-pad to the next power of 2. `numpy.fft` handles this automatically. If you roll your own, pad first.
 
-## Frequency Domain vs Time Domain
+## Time vs frequency
 
-The time domain shows amplitude over time. The frequency domain shows amplitude (and phase) over frequency. The DFT is the bridge between them, and it is lossless -- you can always go back via the inverse DFT.
+Time domain — what is the signal doing right now?
+Frequency domain — what frequencies are in this signal?
 
-A practical way to think about it: the time domain answers "what is the signal doing right now?" while the frequency domain answers "what frequencies are present in this signal?"
+The DFT is the bridge. Lossless. Inverse goes back.
 
 ```javascript
 // Compute magnitude spectrum from FFT result
@@ -130,24 +125,24 @@ function magnitudeSpectrum(fftResult, sampleRate) {
   return spectrum;
 }
 
-// Example: 44100 Hz sample rate, 1024-sample window
-// Bin 0 = DC (0 Hz), Bin 512 = Nyquist (22050 Hz)
-// Frequency resolution = sampleRate / N = 44100 / 1024 ~ 43 Hz per bin
+// 44100 Hz sample rate, 1024-sample window
+// Bin 0 = DC, Bin 512 = Nyquist (22050 Hz)
+// Resolution = sampleRate / N = 44100 / 1024 ~ 43 Hz per bin
 ```
 
-## Windowing and Spectral Leakage
+## Windowing
 
-When you take a finite chunk of a signal and apply the DFT, you are implicitly assuming the signal repeats. If it does not line up cleanly at the boundaries, you get spectral leakage: energy from a single frequency smears across neighboring bins.
+Take a finite chunk of a signal and apply the DFT. You're implicitly assuming it repeats. If it doesn't line up at the boundaries, you get **spectral leakage** — energy from one frequency smears across neighbors.
 
-The fix is windowing. You multiply the signal by a window function that tapers smoothly to zero at the edges before applying the DFT.
+Fix: multiply by a window function that tapers to zero at the edges before the DFT.
 
-| Window | Sidelobe Level | Main Lobe Width | Best For |
+| Window | Sidelobe | Main lobe | Best for |
 |---|---|---|---|
-| Rectangular (none) | -13 dB | Narrowest | Signals already periodic in the frame |
-| Hann | -31 dB | Moderate | General-purpose audio analysis |
-| Hamming | -42 dB | Moderate | Speech processing |
-| Blackman | -58 dB | Wide | High dynamic range measurement |
-| Kaiser (beta=8) | -60 dB | Adjustable | Configurable trade-off |
+| Rectangular (none) | -13 dB | Narrowest | Already periodic in frame |
+| Hann | -31 dB | Moderate | General audio |
+| Hamming | -42 dB | Moderate | Speech |
+| Blackman | -58 dB | Wide | High dynamic range |
+| Kaiser (β=8) | -60 dB | Adjustable | Tunable tradeoff |
 
 ```javascript
 function hannWindow(signal) {
@@ -162,38 +157,36 @@ function hannWindow(signal) {
 ```
 
 > [!tip]
-> Always apply a window before computing the FFT of a real-world signal. The Hann window is a safe default. Skip the window only when you know the signal is exactly periodic within your frame.
+> Always window real-world signals before FFT. Hann is a safe default. Skip the window only when the signal is exactly periodic in your frame.
 
-## Practical Applications
+## Where it shows up
 
-The FFT shows up everywhere once you know what to look for:
+**Audio spectrum analysis.** Overlapping frames (2048 samples, 50% overlap) → Hann window → FFT → magnitude. Every equalizer.
 
-**Audio spectrum analysis.** Split audio into overlapping frames (e.g., 2048 samples with 50% overlap), apply a Hann window, compute the FFT, and plot the magnitude spectrum. This is what every equalizer and spectrum visualizer does.
+**JPEG.** DCT (real-valued cousin of DFT) on 8×8 blocks. High-frequency coefficients quantized harder because the eye is less sensitive.
 
-**JPEG compression.** JPEG applies the DCT (Discrete Cosine Transform, a real-valued relative of the DFT) to 8x8 pixel blocks. High-frequency coefficients are quantized aggressively because the human eye is less sensitive to high-frequency detail.
+**Filtering.** Kill 60 Hz hum: FFT, zero bins near 60 Hz and harmonics, inverse FFT. Conceptually simple. Watch the windowing and overlap-add.
 
-**Signal filtering.** To remove a 60 Hz power line hum: compute the FFT, zero out bins near 60 Hz and its harmonics, compute the inverse FFT. This is conceptually simple but requires care with windowing and overlap-add to avoid artifacts.
+**Convolution.** Time-domain convolution = frequency-domain multiplication. For long FIR filters, FFT-based convolution via overlap-add is orders of magnitude faster.
 
-**Convolution.** Convolution in the time domain is multiplication in the frequency domain. For long filters (FIR with thousands of taps), FFT-based convolution via overlap-add is orders of magnitude faster than direct convolution.
-
-## Conversation: Common Questions
+## Common questions
 
 ```chat
-user: Why do I see a mirror image in my FFT output? The spectrum looks symmetric.
-assistant: For real-valued input, the DFT output is conjugate symmetric. X[k] = conj(X[N-k]). The second half is redundant. Only plot bins 0 through N/2 for the meaningful spectrum. This is why libraries often provide an rfft function that returns only the unique bins.
+user: Why does my FFT output look mirrored?
+assistant: For real input the DFT is conjugate symmetric — `X[k] = conj(X[N-k])`. Second half is redundant. Plot bins 0 through N/2. Or use `rfft`, which only returns the unique bins.
 
-user: What is the relationship between the FFT bin index and actual frequency in Hz?
-assistant: Frequency in Hz = (bin_index * sample_rate) / N. For a 44100 Hz signal with a 1024-sample FFT, each bin spans about 43 Hz. Bin 0 is DC (0 Hz), bin 512 is the Nyquist frequency (22050 Hz). If you need finer frequency resolution, use a longer FFT window.
+user: How do I convert FFT bin index to Hz?
+assistant: `freq = (bin * sample_rate) / N`. At 44100 Hz with 1024-sample FFT, each bin spans ~43 Hz. Bin 0 = DC. Bin 512 = Nyquist. Want finer resolution? Longer window.
 
-user: My FFT shows energy spread across many bins when I know the signal is a pure tone. What is wrong?
-assistant: That is spectral leakage. Your signal's frequency does not land exactly on a bin center, and the rectangular window's sidelobes spread energy to neighboring bins. Apply a Hann or Blackman window before the FFT. The main lobe will be wider (lower frequency resolution) but the sidelobes drop dramatically, giving you a cleaner peak.
+user: My FFT shows energy across many bins for what I know is a pure tone.
+assistant: Spectral leakage. The frequency doesn't land on a bin center. Rectangular window's sidelobes spread energy. Apply Hann or Blackman. Main lobe gets wider but sidelobes drop. Cleaner peak.
 ```
 
-## Hands-on: Build a Browser Audio Spectrum Analyzer
+## Build a browser spectrum analyzer
 
 ````steps
-### Step 1: Capture audio input with the Web Audio API
-Use `getUserMedia` to access the microphone, then connect it to an `AnalyserNode`. The analyser provides FFT data directly.
+### Step 1: Capture audio via Web Audio API
+`getUserMedia` for the mic, connect to an `AnalyserNode`.
 
 ```javascript
 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -204,8 +197,7 @@ analyser.fftSize = 2048; // 1024 unique frequency bins
 source.connect(analyser);
 ```
 
-### Step 2: Read frequency data each frame
-The `AnalyserNode` gives you magnitude data in a `Uint8Array` scaled 0-255, or as float dB values.
+### Step 2: Read frequency data per frame
 
 ```javascript
 const freqData = new Uint8Array(analyser.frequencyBinCount);
@@ -216,8 +208,7 @@ function readSpectrum() {
 }
 ```
 
-### Step 3: Map bins to canvas and draw bars
-Each bin maps to a frequency: `freq = bin * sampleRate / fftSize`. Draw vertical bars proportional to the magnitude.
+### Step 3: Map bins to canvas, draw bars
 
 ```javascript
 function drawSpectrum(ctx, data, width, height) {
@@ -233,8 +224,7 @@ function drawSpectrum(ctx, data, width, height) {
 }
 ```
 
-### Step 4: Animate with requestAnimationFrame
-Tie it together in a render loop. The result is a real-time frequency visualizer running entirely in the browser.
+### Step 4: Animate
 
 ```javascript
 const canvas = document.getElementById('spectrum');
@@ -248,9 +238,11 @@ animate();
 ```
 ````
 
-## The Fourier Transform as a Change of Basis
+## DFT as change of basis
 
-One way to think about the DFT mathematically: it is a change of basis. Your N samples live in an N-dimensional vector space. The standard basis is time-domain samples (1 at time n, 0 elsewhere). The Fourier basis vectors are complex exponentials at each frequency. The DFT matrix F multiplies your signal vector to express it in the frequency basis. The inverse DFT matrix F^(-1) converts back. The fact that these basis vectors are orthogonal is what makes the transform invertible and lossless.
+N samples live in an N-dim vector space. The standard basis is time-domain samples (1 at time n, 0 elsewhere). The Fourier basis is complex exponentials at each frequency.
+
+The DFT matrix F multiplies your signal vector to express it in the Fourier basis. F⁻¹ converts back. Orthogonal basis = invertible, lossless.
 
 ```python
 import numpy as np
@@ -273,9 +265,13 @@ print("Spectrum:", np.round(spectrum, 3))
 # Reconstruct: signal = (1/N) * F_conj_transpose @ spectrum
 ```
 
-## Wrap-Up
+## The summary
 
-The Fourier transform converts signals between time and frequency representations. The DFT does this for discrete, finite signals in O(N^2). The FFT (Cooley-Tukey) exploits symmetry to bring this down to O(N log N), making real-time audio analysis, image compression, and signal filtering practical. Windowing prevents spectral leakage when your signal is not perfectly periodic in the analysis frame. The epicycle visualization captures the core idea geometrically: complex signals are just sums of rotating circles at different frequencies and amplitudes. Once you see that, the summation formula stops being abstract and starts being obvious.
+Time ↔ frequency. The DFT is the bridge.
+
+DFT in O(N²). FFT in O(N log N). Window before transforming real-world signals. Watch for leakage.
+
+The epicycle picture is the whole intuition: complex signals are sums of rotating circles. Once you see that, the formula stops being abstract.
 
 ## Generation Metadata
 

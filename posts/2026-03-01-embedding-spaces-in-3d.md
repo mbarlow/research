@@ -6,35 +6,28 @@ description: Visualize high-dimensional embeddings using PCA, t-SNE, and UMAP, w
 tags: [llm, embeddings, dimensionality-reduction, umap, visualization]
 ---
 
-## Why Stare at Embedding Spaces
+## The geometry of meaning
 
-Every token your model processes lives as a point in a high-dimensional vector space. That space has structure -- words with similar meaning cluster together, analogies form parallelograms, and entire semantic categories occupy distinct neighborhoods. But 768 dimensions is hard to reason about. Projecting those vectors down to 2D or 3D makes that structure visible and debuggable.
+Every token your model touches lives as a point in a high-dimensional vector space. That space has structure — synonyms cluster, analogies form parallelograms, semantic categories occupy distinct regions.
 
-This matters in practice. When your semantic search returns irrelevant results, visualizing the embedding space shows you whether the query vector landed in the wrong neighborhood or whether the neighborhood itself is poorly formed. When your clustering pipeline produces garbage clusters, a 3D scatter plot tells you whether the problem is the embeddings or the clustering algorithm. The visualization is the diagnostic tool.
+768 dimensions is unreadable. 3 isn't.
+
+Project, plot, debug.
+
+When semantic search returns garbage, the visualization tells you whether the query landed in the wrong neighborhood or whether the neighborhood itself is poorly formed. The plot is the diagnostic.
 
 > [!note]
-> This post works with dense vector embeddings from transformer models (the kind you get from Ollama, sentence-transformers, or OpenAI). Sparse embeddings (TF-IDF, BM25) are a different representation with different projection behavior.
+> This post uses dense embeddings (Ollama, sentence-transformers, OpenAI). Sparse embeddings (TF-IDF, BM25) are a different problem.
 
-## Post Plan (Feature Map)
+## What an embedding is
 
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain what embeddings are and why they matter | Prose + callouts | Ground the reader before implementation |
-| Walk through dimensionality reduction methods | Prose + Python code + Mermaid diagram | Compare PCA, t-SNE, UMAP with runnable examples |
-| Extract embeddings from a local model | Python code blocks | Copy-paste pipeline with Ollama |
-| Project and visualize in 3D | Python code + interactive scene | Show the output, then let the reader explore it |
-| Debug common issues | Chat transcript | Address real confusion points |
-| End-to-end reproduction path | Steps block | Hands-on walkthrough |
+A learned dense vector representation of a discrete input — a word, a sentence, an image patch, a code snippet. Fixed length, typically 384–4096 dims. Semantic similarity = geometric proximity.
 
-## What Embeddings Actually Are
+Three properties:
 
-An embedding is a learned dense vector representation of a discrete input -- a word, a sentence, an image patch, a code snippet. The model maps the input to a fixed-length float array (typically 384 to 4096 dimensions) such that semantic similarity corresponds to geometric proximity.
-
-The key properties:
-
-- **Dense**: Every dimension carries signal. Unlike one-hot or bag-of-words vectors, there are no zeros by design.
-- **Learned**: The positions are not hand-coded. They emerge from training on large corpora. The model learns that "cat" and "dog" should be near each other because they appear in similar contexts.
-- **Geometric**: Relationships become spatial. The vector from "king" to "queen" is approximately the same as the vector from "man" to "woman". Cosine similarity between two embeddings measures how semantically related they are.
+- **Dense** — every dim carries signal, no zeros by design
+- **Learned** — positions emerge from training, not hand-coded
+- **Geometric** — relationships become spatial. `king - queen ≈ man - woman`. Cosine similarity ≈ semantic similarity.
 
 ```python
 import requests
@@ -63,18 +56,18 @@ print(f"cat-dog:    {cosine_sim(v_cat, v_dog):.4f}")     # ~0.78
 print(f"cat-france: {cosine_sim(v_cat, v_france):.4f}")   # ~0.35
 ```
 
-The numbers confirm intuition: "cat" is much closer to "dog" than to "france" in embedding space.
+cat is closer to dog than france. Confirmed.
 
 > [!tip]
-> `nomic-embed-text` is a good default embedding model for Ollama. It produces 768-dimensional vectors, runs fast on CPU, and handles both short queries and longer passages. Pull it with `ollama pull nomic-embed-text`.
+> `nomic-embed-text` is the default. 768 dims, fast on CPU, handles short queries and long passages. `ollama pull nomic-embed-text`.
 
-## Dimensionality Reduction: PCA, t-SNE, UMAP
+## Three reducers
 
-768 dimensions cannot be plotted directly. Dimensionality reduction algorithms project high-dimensional data to 2D or 3D while preserving as much structure as possible. Each algorithm makes different tradeoffs.
+768 dims won't plot. Reduce. Each algorithm trades differently.
 
-### PCA (Principal Component Analysis)
+### PCA
 
-PCA finds the orthogonal directions of maximum variance and projects onto them. It is linear, deterministic, and fast. The downside: it preserves global variance but can miss nonlinear cluster structure.
+Linear, deterministic, fast. Finds orthogonal directions of maximum variance and projects onto them.
 
 ```python
 from sklearn.decomposition import PCA
@@ -87,11 +80,11 @@ projected_pca = pca.fit_transform(embeddings)
 print(f"Explained variance: {pca.explained_variance_ratio_.sum():.2%}")
 ```
 
-PCA is the right first pass. If your clusters are already linearly separable in the top 3 principal components, you are done. If not, you need a nonlinear method.
+First pass. If clusters separate in the top 3 components, you're done. If not, go nonlinear.
 
-### t-SNE (t-distributed Stochastic Neighbor Embedding)
+### t-SNE
 
-t-SNE models pairwise similarities as probability distributions and minimizes the KL divergence between the high-dimensional and low-dimensional distributions. It excels at preserving local neighborhood structure -- nearby points stay nearby.
+Models pairwise similarities as probability distributions, minimizes KL divergence. Preserves local neighborhoods. Distorts global geometry.
 
 ```python
 from sklearn.manifold import TSNE
@@ -106,11 +99,11 @@ tsne = TSNE(
 projected_tsne = tsne.fit_transform(embeddings)
 ```
 
-The tradeoffs: t-SNE is non-deterministic (results change across runs), slow on large datasets (O(N^2) by default), and does not preserve global distances. Two clusters that appear far apart in a t-SNE plot may not actually be far apart in the original space. Perplexity is the critical hyperparameter -- too low and you get noise, too high and you lose cluster definition.
+Tradeoffs: non-deterministic, O(N²), and inter-cluster distances are not meaningful. Perplexity is the critical knob — too low = noise, too high = mush.
 
-### UMAP (Uniform Manifold Approximation and Projection)
+### UMAP
 
-UMAP constructs a topological representation of the high-dimensional data (a weighted k-neighbor graph) and optimizes a low-dimensional layout that preserves that topology. It is faster than t-SNE, preserves more global structure, and scales well.
+Builds a topological representation (k-NN graph), optimizes a low-dim layout that preserves it. Faster than t-SNE. Preserves more global structure. Default choice.
 
 ```python
 import umap
@@ -125,7 +118,7 @@ reducer = umap.UMAP(
 projected_umap = reducer.fit_transform(embeddings)
 ```
 
-UMAP is the default choice for most embedding visualization tasks. `n_neighbors` controls the balance between local and global structure (higher values preserve more global relationships). `min_dist` controls visual compactness.
+`n_neighbors` = local vs global tradeoff. `min_dist` = visual compactness.
 
 ```mermaid
 flowchart LR
@@ -140,11 +133,11 @@ flowchart LR
 ```
 
 > [!warning]
-> Do not over-interpret distances in t-SNE or UMAP plots. These algorithms distort global geometry to preserve local neighborhoods. The relative positions of clusters can be meaningful in UMAP but are essentially arbitrary in t-SNE. Use cosine similarity on the original vectors for quantitative comparisons.
+> Don't over-read distances in t-SNE/UMAP plots. These algorithms distort global geometry to preserve local neighborhoods. UMAP's inter-cluster spacing is *more* meaningful than t-SNE's. For quantitative work, use cosine similarity on the original vectors.
 
-## Extracting and Projecting Embeddings: Full Pipeline
+## End-to-end pipeline
 
-Here is a complete pipeline that extracts embeddings from Ollama for a set of words, reduces to 3D with UMAP, and exports the result for visualization.
+Extract embeddings from Ollama, reduce to 3D with UMAP, export for the visualization.
 
 ```python
 import json
@@ -228,31 +221,30 @@ with open("embedding_coords.json", "w") as f:
 print(f"Exported {len(output)} points to embedding_coords.json")
 ```
 
-Running this produces a JSON file with 3D coordinates that you can feed directly into a Three.js scene. The interactive visualization below uses pre-computed positions following this exact method (with gaussian scatter around cluster centers for demonstration).
+The output JSON drops directly into a Three.js scene.
 
-## Cosine Similarity and Nearest Neighbors
+## Cosine and nearest neighbors
 
-Cosine similarity is the standard metric for comparing embeddings. It measures the angle between two vectors, ignoring magnitude:
+Cosine measures the angle between vectors. Magnitude is ignored.
 
 $$\text{cos\_sim}(\mathbf{a}, \mathbf{b}) = \frac{\mathbf{a} \cdot \mathbf{b}}{|\mathbf{a}||\mathbf{b}|}$$
 
-Values range from -1 (opposite) to 1 (identical). For normalized embeddings, cosine similarity equals the dot product.
+Range: [-1, 1]. For unit vectors, cosine = dot product.
 
-Nearest-neighbor search over embeddings is the foundation of semantic search, retrieval-augmented generation (RAG), and clustering. In practice you use approximate nearest neighbors (ANN) libraries for speed:
+NN search over embeddings is the foundation of semantic search, RAG, and clustering. Use FAISS in practice.
 
 ```python
 import faiss
 import numpy as np
 
-# Build a FAISS index for fast cosine similarity search
-# Normalize embeddings first (FAISS IndexFlatIP = inner product = cosine for unit vectors)
+# Normalize embeddings (FAISS IndexFlatIP = inner product = cosine for unit vectors)
 norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
 normalized = (embeddings / norms).astype(np.float32)
 
 index = faiss.IndexFlatIP(normalized.shape[1])
 index.add(normalized)
 
-# Query: find 5 nearest neighbors for "sushi"
+# Query: 5 nearest neighbors for "sushi"
 query = get_embeddings_batch(["sushi"])
 query_norm = (query / np.linalg.norm(query, axis=1, keepdims=True)).astype(np.float32)
 
@@ -266,72 +258,67 @@ for rank, (dist, idx) in enumerate(zip(distances[0], indices[0])):
 # 5. salmon       (similarity: 0.7108)
 ```
 
-## Practical Applications
+## What this unlocks
 
-**Semantic search**: Embed your document corpus, embed the user query, return the nearest neighbors. This is the core of RAG pipelines.
-
-**Clustering**: Run HDBSCAN or k-means on the embedding space to discover topic groups without manual labeling.
-
-**Anomaly detection**: Points that are far from all cluster centers in embedding space are semantic outliers -- useful for content moderation, fraud detection, or data quality checks.
-
-**Deduplication**: Near-duplicate documents have cosine similarity above ~0.95. A single pass through a FAISS index flags them efficiently.
+- **Semantic search** — embed corpus, embed query, return NNs. The core of RAG.
+- **Clustering** — HDBSCAN or k-means over embeddings. No manual labels.
+- **Anomaly detection** — points far from any cluster are semantic outliers
+- **Deduplication** — cosine > ~0.95 = near-duplicate. One FAISS pass flags them.
 
 > [!note]
-> The quality of all downstream tasks depends entirely on embedding quality. A better embedding model (larger, domain-specific, or fine-tuned) matters more than a fancier reduction or clustering algorithm. Start with the embeddings.
+> Quality downstream depends entirely on embedding quality. Better model > fancier reduction or clustering algorithm. Start with the embeddings.
 
-## Interactive: 3D Embedding Scatter Plot
+## Interactive: 3D scatter
 
-The scene below renders ~88 word embeddings across four semantic clusters (animals, colors, countries, food). Each cluster gets a distinct color. Faint lines connect nearest neighbors within each cluster. The camera orbits slowly so you can see the 3D separation.
+88 word embeddings across four semantic clusters. Each cluster colored. Faint lines connect intra-cluster nearest neighbors. Camera orbits.
 
 <div data-scene="embedding-scatter.js" style="width:100%;height:420px;"></div>
 
-In a real pipeline the positions would come from UMAP output on actual embedding vectors. Here they are simulated with gaussian scatter around pre-assigned cluster centers -- but the spatial structure mirrors what you see with real embeddings: tight intra-cluster grouping, clear inter-cluster separation, and a few edge cases (words like "apple" that could plausibly belong to multiple clusters) sitting between groups.
+In a real pipeline these are UMAP outputs. Here they're gaussian scatter around pre-assigned cluster centers — but the spatial pattern matches what you see with real embeddings: tight intra-cluster grouping, clear inter-cluster gaps, and edge cases (apple) that sit between groups.
 
-## Conversation: Common Embedding Questions
+## Common questions
 
 ```chat
-user: How do I choose between PCA, t-SNE, and UMAP for visualization?
-assistant: Start with PCA as a sanity check -- it is fast and deterministic. If the clusters are not visible in the first 3 principal components, switch to UMAP. Use t-SNE only if you specifically need to optimize for local neighborhood preservation and do not care about global layout. UMAP is the default choice for most use cases because it balances local and global structure, runs faster than t-SNE, and produces more stable results across runs.
+user: How do I choose between PCA, t-SNE, and UMAP?
+assistant: PCA first — fast, deterministic, sanity check. If clusters don't appear in top 3 components, switch to UMAP. Use t-SNE only if you specifically want local neighborhood preservation and don't care about global layout. UMAP is the default for everything else.
 
-user: My UMAP projection shows one big blob instead of distinct clusters. What is wrong?
-assistant: Three common causes. First, the embedding model may not separate those concepts well -- try a different or larger model. Second, your n_neighbors parameter may be too high, which over-smooths the topology. Lower it to 5-10 for tighter clusters. Third, your min_dist may be too high. Drop it to 0.05 to let clusters compress. Also check that you are using metric="cosine" since embedding similarity is angular, not Euclidean.
+user: My UMAP shows one big blob, not distinct clusters. Why?
+assistant: Three causes. (1) Embedding model doesn't separate those concepts — try a bigger or domain-specific model. (2) `n_neighbors` too high — drop to 5–10. (3) `min_dist` too high — drop to 0.05. And use `metric="cosine"` since embedding similarity is angular.
 
-user: Can I use the 3D projected coordinates for downstream tasks like classification?
-assistant: No. Dimensionality reduction is lossy and the projected coordinates do not preserve the quantitative relationships of the original space. Use the full-dimensional embeddings for classification, search, and clustering. The 3D projection is a diagnostic and communication tool only -- it shows you qualitative structure but should not feed into a pipeline.
+user: Can I use the 3D projected coordinates for downstream classification?
+assistant: No. Reduction is lossy. The projection doesn't preserve quantitative relationships. Use the full-dim embeddings for classification, search, clustering. The 3D plot is a diagnostic and communication tool only.
 ```
 
-## Hands-On: Extract, Project, Visualize
+## Hands-on
 
 ````steps
 ### Step 1: Pull an embedding model
-Install nomic-embed-text via Ollama. This 137M-parameter model produces 768-dimensional embeddings and runs well on CPU.
+nomic-embed-text. 137M params, 768-dim, runs on CPU.
 
 ```bash
 ollama pull nomic-embed-text
-# Verify it works
 curl http://localhost:11434/api/embed \
   -d '{"model": "nomic-embed-text", "input": "hello world"}'
 ```
 
-### Step 2: Install Python dependencies
-Set up a virtual environment with umap-learn, scikit-learn, faiss-cpu, and matplotlib for static plots.
+### Step 2: Install Python deps
 
 ```bash
 uv venv .venv && source .venv/bin/activate
 uv pip install numpy requests umap-learn scikit-learn faiss-cpu matplotlib
 ```
 
-### Step 3: Run the extraction and projection pipeline
-Copy the full pipeline script from above into `embed_project.py` and run it. It fetches embeddings for ~88 words, projects to 3D with UMAP, and exports coordinates to JSON.
+### Step 3: Run the pipeline
+Drop the script into `embed_project.py`. Run it.
 
 ```bash
 uv run python embed_project.py
-# Output: Embedding matrix: (88, 768)
-# Output: Exported 88 points to embedding_coords.json
+# Embedding matrix: (88, 768)
+# Exported 88 points to embedding_coords.json
 ```
 
-### Step 4: Visualize with matplotlib (static) or Three.js (interactive)
-For a quick static check, plot the exported coordinates with matplotlib. For an interactive version, load the JSON into a Three.js scene following the pattern in the embedded visualization above.
+### Step 4: Visualize
+Quick check: matplotlib. Interactive: load JSON into Three.js.
 
 ```python
 import json
@@ -357,9 +344,15 @@ plt.show()
 ```
 ````
 
-## Wrap-Up
+## The summary
 
-Embeddings compress semantic meaning into geometry. PCA gives you a fast linear baseline, t-SNE optimizes local neighborhoods at the cost of global fidelity, and UMAP strikes the best balance for most visualization tasks. The practical workflow is straightforward: extract embeddings from your model, project to 3D with UMAP, and render the result as an interactive scatter plot. The visualization itself is a diagnostic tool -- it shows you whether your embedding model captures the distinctions you care about, whether your clusters are well-separated, and where the edge cases live. From there, the same embeddings power semantic search, clustering, anomaly detection, and deduplication without any changes to the vectors themselves. The embedding is the foundation; the projection is just how you inspect it.
+Embeddings turn meaning into geometry.
+
+PCA — fast linear baseline. t-SNE — local neighborhoods at the cost of global fidelity. UMAP — best balance for most cases.
+
+Extract. Project. Plot. The visualization is a diagnostic — does your model capture the distinctions you care about? Are clusters well-separated? Where are the edge cases?
+
+The same vectors then power search, clustering, and dedup. The embedding is the foundation. The projection is just how you inspect it.
 
 ## Generation Metadata
 

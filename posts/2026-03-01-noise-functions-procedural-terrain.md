@@ -6,30 +6,20 @@ description: Generate procedural terrain using layered noise functions, FBM, and
 tags: [graphics, procedural-generation, noise, terrain, threejs]
 ---
 
-## Why Noise
+## Why noise
 
-Random numbers alone produce static. Feed `Math.random()` into a heightmap and you get jagged nonsense with no spatial coherence. Noise functions solve this by generating smooth, continuous pseudo-randomness that varies gradually across space. That smoothness is what makes mountains look like mountains instead of white noise.
+Random numbers alone produce static. Feed `Math.random()` into a heightmap and you get jagged nonsense.
 
-Ken Perlin introduced the original gradient noise algorithm in 1983 for the film Tron. Simplex noise followed in 2001, fixing some dimensional scaling issues. Both share the same core idea: interpolate pseudo-random gradients on a lattice to produce values that are continuous, repeatable, and deterministic for any input coordinate.
+Noise functions generate smooth, continuous pseudo-randomness that varies gradually across space. That smoothness is what makes mountains look like mountains.
+
+Perlin noise dropped in 1983 (for Tron). Simplex followed in 2001, fixing dimensional scaling issues. Both share the same idea: interpolate pseudo-random gradients on a lattice. Continuous. Repeatable. Deterministic for any input.
 
 > [!note]
-> Every noise function discussed here is deterministic. The same input coordinates always produce the same output. This means you can regenerate identical terrain without storing any heightmap data -- only the parameters.
+> Every noise function here is deterministic. Same input = same output. Regenerate identical terrain from parameters alone. No heightmap storage needed.
 
-## Post Plan (Feature Map)
+## Gradient noise from scratch
 
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Motivate noise over raw randomness | Opening section + callout | Set up the core problem before diving into math |
-| Explain the noise algorithm | Code blocks + diagram | Show the lattice-gradient pipeline step by step |
-| Build FBM from noise layers | Code + math notation | Make octave stacking concrete and copy-pasteable |
-| Demonstrate domain warping | Code + interactive demo | Warping is where terrain gets interesting |
-| Provide terrain implementation | Three.js scene embed | Let the reader see it running, not just read about it |
-| Handle practical questions | Chat transcript | Address the issues that trip people up |
-| Guide the full build process | Steps block | Turn concepts into a working heightmap renderer |
-
-## Gradient Noise from Scratch
-
-The algorithm works in four stages: locate the lattice cell, compute gradient vectors at each corner, dot those gradients with offset vectors, and interpolate.
+Four stages: locate the lattice cell, hash gradients at corners, dot with offset vectors, interpolate.
 
 ```mermaid
 graph LR
@@ -40,7 +30,7 @@ graph LR
     E --> F[Output: smooth value in -1..1]
 ```
 
-Here is a minimal 2D gradient noise implementation using integer hashing. No permutation table, no external dependencies.
+Minimal 2D gradient noise. Integer hash. No permutation table. No deps.
 
 ```javascript
 function hash2(ix, iy) {
@@ -85,31 +75,29 @@ function noise2D(x, y) {
 }
 ```
 
-The `hash2` function replaces the classic 256-entry permutation table. It takes integer lattice coordinates and produces a pseudo-random integer. The `grad2` function maps that integer to one of eight gradient directions. The quintic `fade` curve ensures the second derivative is continuous at lattice boundaries, which eliminates visible grid artifacts that a linear interpolation would produce.
+`hash2` replaces the classic 256-entry permutation table. `grad2` maps the integer to one of 8 gradient directions. The quintic `fade` keeps the second derivative continuous at lattice boundaries — eliminates the visible grid artifacts that linear interpolation produces.
 
 > [!tip]
-> The quintic fade function `6t^5 - 15t^4 + 10t^3` is the key to artifact-free noise. Perlin's original used a cubic `3t^2 - 2t^3`, which has a continuous first derivative but a discontinuous second derivative. The quintic version fixes that, making the noise smooth enough for normal mapping and lighting.
+> The quintic `6t⁵ - 15t⁴ + 10t³` is the key to artifact-free noise. Perlin's original cubic `3t² - 2t³` has a discontinuous second derivative — bad for normal mapping and lighting.
 
 <div data-scene="noise-terrain.js" style="width:100%;height:420px;"></div>
 
-## Fractal Brownian Motion (FBM)
+## FBM — fractal Brownian motion
 
-A single noise call produces smooth hills but nothing that looks like real terrain. Natural landscapes have detail at every scale: mountain ranges, ridgelines, boulders, pebbles. FBM captures this by summing multiple noise evaluations at increasing frequencies and decreasing amplitudes.
+A single noise call gives smooth hills. Real terrain has detail at every scale: ranges, ridges, boulders, pebbles.
 
-The three parameters that control FBM:
+FBM stacks noise at increasing frequencies and decreasing amplitudes.
 
-- **Octaves**: how many noise layers to stack. Each adds detail at a finer scale. 4-8 is typical.
-- **Lacunarity**: the frequency multiplier between octaves. Usually 2.0 (each octave doubles the frequency).
-- **Persistence** (gain): the amplitude multiplier between octaves. Usually 0.5 (each octave contributes half as much).
+Three knobs:
 
-The formula:
+- **Octaves** — how many layers. Each adds finer detail. 4–8 typical.
+- **Lacunarity** — frequency multiplier between octaves. Usually 2.0.
+- **Persistence** (gain) — amplitude multiplier between octaves. Usually 0.5.
 
 ```
 FBM(p) = sum over i=0..octaves-1 of:
     persistence^i * noise(p * lacunarity^i)
 ```
-
-In code:
 
 ```javascript
 function fbm(x, y, octaves, lacunarity, persistence) {
@@ -129,14 +117,16 @@ function fbm(x, y, octaves, lacunarity, persistence) {
 }
 ```
 
-Dividing by `maxAmp` normalizes the result so it stays within a predictable range regardless of octave count. Without this, adding more octaves shifts your height distribution and breaks any downstream color mapping.
+Normalize by `maxAmp`. Without it, more octaves shifts the height distribution and breaks downstream color mapping.
 
 > [!warning]
-> Each octave doubles your noise evaluations. Going from 4 to 8 octaves doubles your terrain generation cost. For real-time animation on a 128x128 grid, 6 octaves is a reasonable upper bound on the CPU. Beyond that, move the computation to a GPU shader.
+> Each octave doubles your noise evaluations. 4 → 8 octaves doubles cost. Real-time on a 128×128 grid? 6 octaves CPU. Beyond that, GPU.
 
-## Domain Warping
+## Domain warping
 
-FBM produces convincing terrain, but it tends toward uniformity -- every region has roughly the same character. Domain warping fixes this by feeding noise back into itself. Instead of evaluating `fbm(x, y)`, you evaluate `fbm(x + fbm(...), y + fbm(...))`. The result is terrain with swirls, ridges, and organic asymmetry.
+FBM looks convincing but uniform. Every region has the same character.
+
+Domain warping: feed noise back into itself. Instead of `fbm(x, y)`, evaluate `fbm(x + fbm(...), y + fbm(...))`. Result: swirls, ridges, organic asymmetry.
 
 ```javascript
 function warpedFBM(x, y, time) {
@@ -147,11 +137,13 @@ function warpedFBM(x, y, time) {
 }
 ```
 
-The offset constants (5.2, 1.3, 1.7, 9.2) prevent the warp noise from correlating with the base noise. Without them, the warp and the terrain share the same features and the effect collapses. The `warpStrength` controls how much distortion to apply -- 0.3-0.6 gives subtle organic character, above 1.0 things start looking psychedelic.
+The offset constants (5.2, 1.3, 1.7, 9.2) decorrelate the warp from the base noise. Without them the warp and terrain share features and the effect collapses.
 
-Adding `time` to the warp coordinates animates the terrain slowly, creating a drifting landscape effect without any vertex buffer rebuilds.
+`warpStrength` 0.3–0.6 = subtle organic. >1.0 = psychedelic.
 
-## The FBM Pipeline
+Adding `time` to warp coordinates animates the terrain without rebuilding any vertex buffer.
+
+## The pipeline
 
 ```mermaid
 graph TD
@@ -170,24 +162,24 @@ graph TD
     I --> K[Color mapping by height]
 ```
 
-## Conversation: Practical Noise Questions
+## Practical questions
 
 ```chat
-user: My terrain has visible grid lines at certain angles. What causes this?
-assistant: You are likely using linear interpolation instead of the quintic fade curve. Linear lerp produces C0 continuity (values match at lattice boundaries but derivatives do not), which shows up as subtle creases along grid lines. Switch to the quintic fade: t * t * t * (t * (t * 6 - 15) + 10). This gives C2 continuity and eliminates the artifacts.
+user: Terrain has visible grid lines at certain angles. Why?
+assistant: Linear interpolation instead of quintic fade. Linear gives C0 continuity — values match at lattice boundaries but derivatives don't. Subtle creases along grid lines. Switch to `t * t * t * (t * (t * 6 - 15) + 10)`. C2 continuity. Artifacts gone.
 
-user: How do I control the ratio of mountains to flat plains?
-assistant: Apply a power curve after FBM evaluation. Something like h = Math.pow(Math.abs(h), 1.5) * Math.sign(h) pushes low values closer to zero while preserving peaks. You can also use a redistribution step: clamp, remap, or apply a custom curve. Another option is ridged noise, where you take abs(noise) and invert it, which naturally creates sharp ridges separated by flat valleys.
+user: How do I control mountain-vs-plain ratio?
+assistant: Apply a power curve after FBM. `h = Math.pow(Math.abs(h), 1.5) * Math.sign(h)` pushes lows to zero, preserves peaks. Or use a remap. Or ridged noise — `1 - abs(noise)` — for sharp ridges separated by flat valleys.
 
-user: Can I tile the noise so opposite edges of the terrain match seamlessly?
-assistant: Yes. Evaluate the noise on the surface of a higher-dimensional torus. For 2D tiling, sample 4D noise at coordinates (cos(2*pi*x/w), sin(2*pi*x/w), cos(2*pi*y/h), sin(2*pi*y/h)). The circular mapping guarantees that x=0 matches x=w and y=0 matches y=h. You need a 4D noise function, but the same hash-and-gradient approach extends directly.
+user: Can I tile noise so opposite edges match?
+assistant: Yes. Sample 4D noise on a torus surface. For 2D tiling: `(cos(2π·x/w), sin(2π·x/w), cos(2π·y/h), sin(2π·y/h))`. Circular mapping guarantees x=0 matches x=w. Need a 4D noise function — same hash-and-gradient approach extends.
 ```
 
-## Building the Terrain
+## Build the terrain
 
 ````steps
-### Step 1: Set up the plane geometry
-Start with a PlaneGeometry with enough subdivisions to capture detail. 128x128 gives 16,641 vertices -- enough for smooth terrain at interactive frame rates.
+### Step 1: Plane geometry
+128×128 = 16,641 vertices. Smooth at interactive rates.
 
 ```javascript
 const segments = 128;
@@ -196,8 +188,8 @@ const geometry = new THREE.PlaneGeometry(planeSize, planeSize, segments, segment
 geometry.rotateX(-Math.PI / 2); // lay flat on XZ plane
 ```
 
-### Step 2: Displace vertices with FBM
-Walk every vertex, compute its noise value from the XZ position, and write the result into the Y component. Track the maximum amplitude so you can control the overall height scale.
+### Step 2: Displace by FBM
+Walk every vertex. Sample noise from XZ. Write to Y.
 
 ```javascript
 const posAttr = geometry.attributes.position;
@@ -214,8 +206,8 @@ posAttr.needsUpdate = true;
 geometry.computeVertexNormals();
 ```
 
-### Step 3: Color vertices by height
-Map each vertex height to a color. Use discrete biome bands: deep water, shallows, grass, rock, snow. Interpolate within each band for smooth transitions.
+### Step 3: Color by height
+Discrete biome bands. Smooth transitions within each band.
 
 ```javascript
 const colors = new Float32Array(posAttr.count * 3);
@@ -238,8 +230,8 @@ for (let i = 0; i < posAttr.count; i++) {
 }
 ```
 
-### Step 4: Animate with time offset
-In the render loop, pass elapsed time into the noise evaluation. Offset the X coordinate by time to create a scrolling effect, or offset the warp coordinates for a drifting look. Recompute normals each frame.
+### Step 4: Animate
+Pass elapsed time into the noise. Offset X for scrolling, or warp coords for drifting. Recompute normals.
 
 ```javascript
 const clock = new THREE.Clock();
@@ -261,20 +253,20 @@ function animate() {
 ```
 ````
 
-## Height-to-Color Mapping Reference
+## Height → color reference
 
-| Height Band | Normalized Range | Color | Terrain Type |
+| Band | Range | Color | Terrain |
 |---|---|---|---|
-| Deep water | 0.0 -- 0.15 | Dark blue | Ocean floor |
-| Shallow water | 0.15 -- 0.30 | Medium blue | Coastal water |
-| Shore / lowlands | 0.30 -- 0.45 | Blue-green | Beaches, marshes |
-| Grasslands | 0.45 -- 0.65 | Green | Fertile plains, forests |
-| Mountain rock | 0.65 -- 0.80 | Gray-brown | Exposed rock, high altitude |
-| Snow | 0.80 -- 1.0 | White | Alpine peaks, glaciers |
+| Deep water | 0.00–0.15 | Dark blue | Ocean floor |
+| Shallow water | 0.15–0.30 | Medium blue | Coastal |
+| Shore / lowlands | 0.30–0.45 | Blue-green | Beaches, marshes |
+| Grasslands | 0.45–0.65 | Green | Plains, forests |
+| Mountain rock | 0.65–0.80 | Gray-brown | Exposed rock |
+| Snow | 0.80–1.00 | White | Alpine peaks |
 
-## GPU Noise: GLSL Version
+## GPU version
 
-For real-time applications where CPU-side vertex updates become a bottleneck, move the noise to a vertex shader. The same algorithm translates directly to GLSL:
+When CPU vertex updates choke, move noise to a shader. Same algorithm.
 
 ```glsl
 // Hash without sin -- avoids precision issues on mobile GPUs
@@ -314,13 +306,15 @@ float fbm(vec2 p, int octaves) {
 ```
 
 > [!tip]
-> When porting noise to GLSL, avoid `sin`-based hash functions. They produce visible banding on some mobile GPUs due to reduced `sin` precision. The `fract`/`dot` approach above is cheaper and more portable.
+> Avoid `sin`-based hashes in GLSL. Reduced sin precision on mobile causes visible banding. The `fract`/`dot` approach above is cheaper and more portable.
 
-## Wrap-Up
+## The summary
 
-Noise functions are the foundation of procedural content generation. The pipeline is always the same: start with a coherent noise primitive, layer it with FBM for multi-scale detail, and optionally warp the domain for organic variation. The math is simple -- hashing, dot products, interpolation -- but the results scale from terrain to clouds to textures to cave systems.
+Coherent noise primitive. FBM for multi-scale detail. Domain warp for organic variation.
 
-The interactive demo above runs the full pipeline on the CPU: hash-based gradient noise, six-octave FBM with domain warping, per-vertex color mapping, and per-frame normal recomputation. For production, move the noise to a vertex or compute shader and use the CPU only for LOD decisions and culling. The concepts transfer directly.
+Hashing. Dot products. Interpolation. The math is simple. The output scales from terrain to clouds to textures to caves.
+
+For production: noise on the GPU. CPU for LOD and culling. The concepts transfer.
 
 ## Generation Metadata
 
