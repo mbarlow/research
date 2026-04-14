@@ -10,6 +10,7 @@ import { initSteps } from './components/steps.js';
 import { setSearchData, initSearch, closeSearch } from './search.js';
 import { initHotkeys, setHotkeyPosts } from './hotkeys.js';
 import { initMedia, initLightbox } from './media.js';
+import { bust } from './version.js';
 
 let postsIndex = [];
 
@@ -66,7 +67,7 @@ function getTimeAttrValue(post, overrideDate) {
 
 async function loadIndex() {
   try {
-    const res = await fetch('content.json');
+    const res = await fetch(bust('content.json'));
     postsIndex = await res.json();
   } catch {
     postsIndex = [];
@@ -171,7 +172,7 @@ async function showPost({ slug }) {
   content.innerHTML = '<div class="loading">Loading...</div>';
 
   try {
-    const res = await fetch(`posts/${post.file}`);
+    const res = await fetch(bust(`posts/${post.file}`));
     const md = await res.text();
     const { meta, body } = parseFrontmatter(md);
     const html = renderMarkdown(body);

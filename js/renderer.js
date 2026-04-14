@@ -3,6 +3,7 @@
 
 import { marked } from 'marked';
 import { getPalette, subscribePalette } from './palette.js';
+import { bust } from './version.js';
 
 // Parse YAML-like frontmatter from markdown
 export function parseFrontmatter(text) {
@@ -128,14 +129,15 @@ const renderer = {
     }
 
     const ext = href.split('.').pop().toLowerCase();
+    const busted = bust(href);
     if (['mp4', 'webm', 'ogg'].includes(ext)) {
-      return `<div${sizeClass}><video controls preload="none" data-lazy-video="${href}">
-        <source src="${href}" type="video/${ext}">
+      return `<div${sizeClass}><video controls preload="none" data-lazy-video="${busted}">
+        <source src="${busted}" type="video/${ext}">
       </video>${title ? `<figcaption>${title}</figcaption>` : ''}</div>`;
     }
 
     const caption = title ? `<figcaption>${title}</figcaption>` : '';
-    return `<figure${sizeClass}><img src="${href}" alt="${cleanAlt}" loading="lazy" data-lightbox>${caption}</figure>`;
+    return `<figure${sizeClass}><img src="${busted}" alt="${cleanAlt}" loading="lazy" data-lightbox>${caption}</figure>`;
   },
 
   // code(code, infostring, escaped)
@@ -218,7 +220,7 @@ export async function enhance(container) {
     const src = el.getAttribute('data-scene');
     try {
       el.classList.add('scene-container');
-      const module = await import(`../scenes/${src}`);
+      const module = await import(bust(`../scenes/${src}`));
       if (!module.init) continue;
 
       let currentCleanup = null;

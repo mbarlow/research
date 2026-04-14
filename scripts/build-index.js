@@ -121,6 +121,33 @@ async function build() {
   const version = { tag, sha, builtAt: now };
   await writeFile(join(process.cwd(), 'version.json'), JSON.stringify(version, null, 2));
   console.log(`Built version.json (${tag || 'no-tag'} ${sha})`);
+
+  // Stamp cache-busting ?v=<sha> into index.html for CSS + top-level JS.
+  // Also write a <meta name="site-version"> tag so runtime code (markdown
+  // image renderer, fetch() calls) can bust their own asset URLs.
+  if (sha) {
+    const htmlPath = join(process.cwd(), 'index.html');
+    let html = await readFile(htmlPath, 'utf-8');
+
+    // Strip any existing ?v= from local asset refs so this is idempotent
+    html = html.replace(/(href="(?:css|js)\/[^"?]+)\?v=[^"]*/g, '$1');
+    html = html.replace(/(src="(?:js|scenes)\/[^"?]+)\?v=[^"]*/g, '$1');
+
+    // Add fresh ?v=<sha> to CSS <link> and <script src> pointing at local paths
+    html = html.replace(/(href=")(css\/[^"?]+)(")/g, `$1$2?v=${sha}$3`);
+    html = html.replace(/(src=")(js\/[^"?]+)(")/g, `$1$2?v=${sha}$3`);
+
+    // Inject/update <meta name="site-version"> and <meta name="site-built-at">
+    const metaTags = `<meta name="site-version" content="${sha}">\n  <meta name="site-built-at" content="${now}">`;
+    if (html.includes('name="site-version"')) {
+      html = html.replace(/<meta name="site-version"[^>]*>\s*<meta name="site-built-at"[^>]*>/, metaTags);
+    } else {
+      html = html.replace(/(<title>[^<]*<\/title>)/, `$1\n  ${metaTags}`);
+    }
+
+    await writeFile(htmlPath, html);
+    console.log(`Stamped index.html with ?v=${sha}`);
+  }
 }
 
 function escapeXml(str) {
