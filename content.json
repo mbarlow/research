@@ -1,26 +1,10 @@
 [
   {
-    "slug": "2026-02-14-karpathys-microgpt-from-scratch",
-    "file": "2026-02-14-karpathys-microgpt-from-scratch.md",
-    "title": "microGPT from Scratch - Building a Transformer from First Principles",
-    "date": "2026-02-14",
-    "timestamp": "2026-04-14T21:16:53.647Z",
-    "order": 1,
-    "description": "Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.",
-    "tags": [
-      "llm",
-      "transformers",
-      "microgpt",
-      "pytorch"
-    ],
-    "body": "\n## Why build it small\n\nKarpathy's microGPT teaches by implementation. You don't read about a transformer. You build one end to end.\n\nA 6B parameter model is a black box. A 4-layer, 4-head, 256-dim model fits in your head. That's the point.\n\nReference: [karpathy.ai/microgpt.html](https://karpathy.ai/microgpt.html)\n\n> [!note]\n> Build notebook, not benchmark report. The goal is understanding.\n\n## The four layers\n\nA tiny GPT stack:\n\n1. Data — tokenize, batch\n2. Model — embeddings, attention, MLP, r"
-  },
-  {
     "slug": "2026-04-14-session-persistence-bsm-csm-vt",
     "file": "2026-04-14-session-persistence-bsm-csm-vt.md",
     "title": "Save the Session — bsm, csm, vt for LLM Work Across Projects",
     "date": "2026-04-14",
-    "timestamp": "2026-04-14T21:04:31.538Z",
+    "timestamp": "2026-04-14T22:40:35.429Z",
     "order": 42,
     "description": "Three small skills for persisting work session state when you juggle multiple LLM-assisted projects — byobu layouts, Chrome debug tabs, and graceful VT escapes when the compositor dies.",
     "tags": [
@@ -34,6 +18,22 @@
       "skills"
     ],
     "body": "\n## The problem\n\nWorking with LLMs across several projects multiplies context.\n\nEach project wants its own terminal layout, its own running dev servers, its own open browser tabs, its own Claude Code session. A laptop reboot, a compositor crash, or a screenlock freeze shouldn't burn twenty minutes of re-assembly.\n\nThe state is recoverable. The trick is writing it down before you lose it.\n\n```\nCurrent windows     → JSON\nCurrent tabs        → JSON\nCurrent TTY         → one command away\n```\n\nThree "
+  },
+  {
+    "slug": "2026-02-14-karpathys-microgpt-from-scratch",
+    "file": "2026-02-14-karpathys-microgpt-from-scratch.md",
+    "title": "microGPT from Scratch - Building a Transformer from First Principles",
+    "date": "2026-02-14",
+    "timestamp": "2026-04-14T22:40:35.429Z",
+    "order": 1,
+    "description": "Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.",
+    "tags": [
+      "llm",
+      "transformers",
+      "microgpt",
+      "pytorch"
+    ],
+    "body": "\n## Why build it small\n\nKarpathy's microGPT teaches by implementation. You don't read about a transformer. You build one end to end.\n\nA 6B parameter model is a black box. A 4-layer, 4-head, 256-dim model fits in your head. That's the point.\n\nReference: [karpathy.ai/microgpt.html](https://karpathy.ai/microgpt.html)\n\n> [!note]\n> Build notebook, not benchmark report. The goal is understanding.\n\n## The four layers\n\nA tiny GPT stack:\n\n1. Data — tokenize, batch\n2. Model — embeddings, attention, MLP, r"
   },
   {
     "slug": "2026-04-14-chrome-extensions-own-your-tools",

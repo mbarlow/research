@@ -4,20 +4,20 @@
   <link href="https://mbarlow.github.io/research" rel="alternate"/>
   <link href="https://mbarlow.github.io/research/feed.xml" rel="self"/>
   <id>https://mbarlow.github.io/research/</id>
-  <updated>2026-04-14T22:38:44.238Z</updated>
-  <entry>
-    <title>microGPT from Scratch - Building a Transformer from First Principles</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-karpathys-microgpt-from-scratch" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-02-14-karpathys-microgpt-from-scratch</id>
-    <updated>2026-04-14T21:16:53.647Z</updated>
-    <summary>Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.</summary>
-  </entry>
+  <updated>2026-04-14T22:40:35.460Z</updated>
   <entry>
     <title>Save the Session — bsm, csm, vt for LLM Work Across Projects</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-04-14-session-persistence-bsm-csm-vt" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-04-14-session-persistence-bsm-csm-vt</id>
-    <updated>2026-04-14T21:04:31.538Z</updated>
+    <updated>2026-04-14T22:40:35.429Z</updated>
     <summary>Three small skills for persisting work session state when you juggle multiple LLM-assisted projects — byobu layouts, Chrome debug tabs, and graceful VT escapes when the compositor dies.</summary>
+  </entry>
+  <entry>
+    <title>microGPT from Scratch - Building a Transformer from First Principles</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-karpathys-microgpt-from-scratch" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-karpathys-microgpt-from-scratch</id>
+    <updated>2026-04-14T22:40:35.429Z</updated>
+    <summary>Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.</summary>
   </entry>
   <entry>
     <title>Own Your Tools — Three Chrome Extensions, No Store Required</title>
