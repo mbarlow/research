@@ -467,22 +467,32 @@ figcaption {
     --nav-height: 56px;
   }
 
-  /* Nav — hide version string on very narrow devices; shrink spacing */
-  .nav-inner { padding: 0 1rem; }
-  .nav-brand { gap: 0.5rem; }
+  /* Nav — shrink spacing; cap nav-inner; drop version below 480px */
+  .nav-inner { padding: 0 0.75rem; }
+  .nav-brand { gap: 0.5rem; min-width: 0; flex: 1 1 auto; }
   .nav-logo {
     grid-template-columns: 10px 10px;
     grid-template-rows: 10px 10px;
   }
-  .nav-title { font-size: 1rem; }
+  .nav-title { font-size: 1rem; flex-shrink: 0; }
   .nav-version {
     font-size: 0.6rem;
     padding-left: 0.5rem;
-    max-width: 40vw;
+    max-width: 35vw;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
   }
-  .nav-btn { width: 44px; height: 44px; } /* touch target */
+  .nav-actions { flex-shrink: 0; gap: 0; }
+  .nav-btn { width: 40px; height: 40px; } /* touch target, tight */
+
+  /* Article body + paragraphs — break long URLs / identifiers so
+     prose never pushes horizontal scroll */
+  .article-body { overflow-wrap: anywhere; }
+  .article-body p,
+  .article-body li { overflow-wrap: anywhere; word-break: break-word; }
+  .article-body a { overflow-wrap: anywhere; }
+  .article-body code { overflow-wrap: anywhere; word-break: break-all; }
 
   /* Article title — kept display, but line-height looser and size down */
   .article-title {
@@ -558,7 +568,22 @@ figcaption {
   .scene-container {
     min-height: 300px;
     margin: 1rem 0;
+    max-width: 100%;
     contain-intrinsic-size: 1px 300px;
+  }
+
+  /* Kill any wide-image escape hatch on mobile — stay inside the column */
+  .media-wide {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* Narrow mobile — hide version string entirely at <= 480px */
+  @media (max-width: 480px) {
+    .nav-version { display: none; }
+    .nav-logo { grid-template-columns: 9px 9px; grid-template-rows: 9px 9px; }
+    .nav-btn { width: 36px; height: 36px; }
+    .nav-inner { padding: 0 0.5rem; }
   }
 
   /* Images — never overflow, cap height */
