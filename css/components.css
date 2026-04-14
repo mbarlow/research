@@ -134,6 +134,14 @@ nav {
   padding-left: 2.5rem;
 }
 
+.post-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+
 .post-card-date {
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
@@ -141,7 +149,57 @@ nav {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 0.6rem;
+}
+
+.post-card-share {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 0;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+  padding: 0;
+}
+
+.post-card-share:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.post-card-share.copied {
+  color: #0a0a0a;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.post-card-share.copied::after {
+  content: "COPIED";
+  position: absolute;
+  right: calc(100% + 0.5rem);
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  pointer-events: none;
+  white-space: nowrap;
+  animation: shareCopiedFade 1.4s ease-out forwards;
+}
+
+@keyframes shareCopiedFade {
+  0%   { opacity: 0; transform: translateY(4px); }
+  15%  { opacity: 1; transform: translateY(0); }
+  70%  { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 .post-card-title {

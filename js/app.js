@@ -80,13 +80,63 @@ async function loadIndex() {
 function renderPostCard(post) {
   const tags = renderTagList(post.tags);
   const dateTime = formatPostDateTime(post);
-  return `<div class="post-card" onclick="location.hash='#/post/${post.slug}'">
-    <div class="post-card-date">${dateTime}</div>
+  return `<div class="post-card" data-slug="${post.slug}" onclick="if(!event.target.closest('.post-card-share'))location.hash='#/post/${post.slug}'">
+    <div class="post-card-head">
+      <div class="post-card-date">${dateTime}</div>
+      <button class="post-card-share" type="button" title="Copy share text" aria-label="Copy share text">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+          <polyline points="16 6 12 2 8 6"/>
+          <line x1="12" y1="2" x2="12" y2="15"/>
+        </svg>
+      </button>
+    </div>
     <h2 class="post-card-title">${post.title}</h2>
     ${post.description ? `<p class="post-card-desc">${post.description}</p>` : ''}
     ${tags ? `<div class="post-card-tags">${tags}</div>` : ''}
   </div>`;
 }
+
+function buildShareText(post) {
+  const base = `${window.location.origin}${window.location.pathname.replace(/\/$/, '')}`;
+  const url = `${base}/#/post/${post.slug}`;
+  const lines = [post.title];
+  if (post.description) lines.push('', post.description);
+  lines.push('', url);
+  return lines.join('\n');
+}
+
+async function copyShareText(btn, slug) {
+  const post = postsIndex.find(p => p.slug === slug);
+  if (!post) return;
+  const text = buildShareText(post);
+  try {
+    await navigator.clipboard.writeText(text);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1400);
+  } catch {
+    // Fallback for non-secure contexts
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch {}
+    document.body.removeChild(ta);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 1400);
+  }
+}
+
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.post-card-share');
+  if (!btn) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const card = btn.closest('.post-card');
+  if (card) copyShareText(btn, card.dataset.slug);
+});
 
 // Route: Home
 async function showHome() {
