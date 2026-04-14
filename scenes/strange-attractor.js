@@ -40,24 +40,16 @@ const ATTRACTORS = {
 
 const ATTRACTOR_KEYS = Object.keys(ATTRACTORS);
 
-// Palette: warm to cool
-const PALETTE = [
-  new THREE.Color(0xff6040), // coral
-  new THREE.Color(0xffaa20), // amber
-  new THREE.Color(0x40ff90), // mint
-  new THREE.Color(0x20aaff), // sky
-  new THREE.Color(0xcc60ff), // violet
-  new THREE.Color(0xff4080), // pink
-];
-
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
+  const PALETTE = palette.as.three.hues;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setClearColor(0x0a0e1a, 1);
+  renderer.setClearColor(hex.bg, 1);
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);

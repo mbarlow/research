@@ -3,7 +3,8 @@
 
 import * as THREE from 'three';
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
@@ -12,7 +13,7 @@ export function init(canvas, container) {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x04060e);
+  scene.background = new THREE.Color(hex.bg);
 
   const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 200);
   camera.position.set(0, 8, 14);

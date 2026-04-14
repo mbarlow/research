@@ -151,7 +151,7 @@ export async function init(canvas, container) {
     // Add grid at the lowest Y of the splat data for ground reference
     const gridY = bounds ? bounds.centroid.y - bounds.extent.y * 0.6 : 0;
     const gridSize = Math.max(10, Math.ceil(maxExtent * 3));
-    gridHelper = new THREE.GridHelper(gridSize, gridSize, 0x444466, 0x222244);
+    gridHelper = new THREE.GridHelper(gridSize, gridSize, hex.border, hex.borderSubtle);
     gridHelper.position.y = gridY;
     viewer.threeScene.add(gridHelper);
 

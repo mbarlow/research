@@ -52,7 +52,8 @@ function geodesicDist(u1, v1, u2, v2) {
   return Math.sqrt((R * du) ** 2 + (r * dv) ** 2);
 }
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
@@ -61,21 +62,21 @@ export function init(canvas, container) {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x080810);
+  scene.background = new THREE.Color(hex.bg);
 
   const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 50);
   camera.position.set(0, 3, 6);
 
   // Lights
-  scene.add(new THREE.AmbientLight(0x334455, 0.6));
-  const dirLight = new THREE.DirectionalLight(0xffeedd, 0.8);
+  scene.add(new THREE.AmbientLight(hex.border, 0.6));
+  const dirLight = new THREE.DirectionalLight(hex.text, 0.8);
   dirLight.position.set(3, 5, 4);
   scene.add(dirLight);
 
   // Torus wireframe
   const torusGeo = new THREE.TorusGeometry(R, r, 32, 64);
   const torusMat = new THREE.MeshStandardMaterial({
-    color: 0x334455,
+    color: hex.border,
     wireframe: true,
     transparent: true,
     opacity: 0.15,
@@ -85,7 +86,7 @@ export function init(canvas, container) {
 
   // Solid torus (very transparent) for depth
   const torusSolidMat = new THREE.MeshStandardMaterial({
-    color: 0x1a1a2e,
+    color: hex.elevated,
     transparent: true,
     opacity: 0.3,
     roughness: 0.8,

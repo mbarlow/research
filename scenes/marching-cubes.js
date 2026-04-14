@@ -419,40 +419,41 @@ function computeNormals(positions) {
 }
 
 // ─── Scene entry point ──────────────────────────────────────────────────────
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setClearColor(0x0a0e1a, 1);
+  renderer.setClearColor(hex.bg, 1);
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(0x0a0e1a, 6, 18);
+  scene.fog = new THREE.Fog(hex.bg, 6, 18);
 
   const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
   camera.position.set(0, 2, 6);
 
   // Lighting
-  const ambient = new THREE.AmbientLight(0xffffff, 0.35);
+  const ambient = new THREE.AmbientLight(hex.text, 0.35);
   scene.add(ambient);
 
-  const key = new THREE.DirectionalLight(0xffffff, 1.2);
+  const key = new THREE.DirectionalLight(hex.text, 1.2);
   key.position.set(4, 5, 3);
   scene.add(key);
 
-  const fill = new THREE.DirectionalLight(0x6688cc, 0.6);
+  const fill = new THREE.DirectionalLight(hex.hues[4], 0.6);
   fill.position.set(-3, 2, -2);
   scene.add(fill);
 
-  const rim = new THREE.PointLight(0xff6644, 0.8, 12);
+  const rim = new THREE.PointLight(hex.accent, 0.8, 12);
   rim.position.set(0, -2, 4);
   scene.add(rim);
 
   // Isosurface mesh
   const material = new THREE.MeshStandardMaterial({
-    color: 0x44aaff,
+    color: hex.hues[4],
     metalness: 0.3,
     roughness: 0.35,
     side: THREE.DoubleSide,

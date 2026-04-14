@@ -87,13 +87,15 @@ float map(vec3 p) {
   return d;
 }
 
-// Color from position
-vec3 palette(float t) {
-  vec3 a = vec3(0.1, 0.15, 0.3);
-  vec3 b = vec3(0.2, 0.3, 0.4);
-  vec3 c = vec3(0.5, 0.7, 1.0);
-  vec3 d = vec3(0.15, 0.35, 0.55);
-  return a + b * cos(6.28318 * (c * t + d));
+// Color from position — palette-driven
+uniform vec3 uPalA;
+uniform vec3 uPalB;
+uniform vec3 uPalC;
+uniform vec3 uBg;
+uniform vec3 uSpec;
+
+vec3 cellPalette(float t) {
+  return uPalA + uPalB * cos(6.28318 * (uPalC * t + uPalA));
 }
 
 vec3 calcNormal(vec3 p) {
@@ -142,7 +144,7 @@ void main() {
     t += d;
   }
 
-  vec3 col = vec3(0.01, 0.02, 0.04);
+  vec3 col = uBg;
 
   if (hit) {
     vec3 n = calcNormal(p);
@@ -155,7 +157,7 @@ void main() {
     float logr = log(max(r, 0.001));
     float cellId = floor(logr / 0.7) * 7.0 + floor(theta / (6.28318 / 7.0));
 
-    vec3 baseCol = palette(cellId * 0.15 + uTime * 0.02);
+    vec3 baseCol = cellPalette(cellId * 0.15 + uTime * 0.02);
 
     // Lighting
     vec3 lightDir = normalize(vec3(0.5, 0.8, 0.3));
@@ -163,11 +165,11 @@ void main() {
     float spec = pow(max(dot(reflect(-lightDir, n), -rd), 0.0), 16.0) * 0.3;
     float ambient = 0.15;
 
-    col = baseCol * (ambient + diff * ao) + vec3(0.4, 0.6, 0.9) * spec * ao;
+    col = baseCol * (ambient + diff * ao) + uSpec * spec * ao;
 
     // Fog
     float fog = 1.0 - exp(-t * 0.12);
-    col = mix(col, vec3(0.01, 0.02, 0.04), fog);
+    col = mix(col, uBg, fog);
   }
 
   // Vignette
@@ -181,7 +183,8 @@ void main() {
 }
 `;
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
@@ -191,9 +194,15 @@ export function init(canvas, container) {
   const scene = new THREE.Scene();
   const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
+  const v3 = (c) => new THREE.Vector3(c.r, c.g, c.b);
   const uniforms = {
     uTime: { value: 0 },
     uResolution: { value: new THREE.Vector2(width, height) },
+    uPalA: { value: v3(palette.hues[4]) },  // teal base
+    uPalB: { value: v3(palette.hues[2]) },  // amber amplitude
+    uPalC: { value: new THREE.Vector3(0.5, 0.7, 1.0) },
+    uBg:   { value: v3(palette.bg) },
+    uSpec: { value: v3(palette.text) },
   };
 
   const material = new THREE.ShaderMaterial({

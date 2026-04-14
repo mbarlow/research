@@ -3,7 +3,8 @@
 
 import * as THREE from 'three';
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
@@ -14,8 +15,8 @@ export function init(canvas, container) {
   renderer.toneMappingExposure = 1.0;
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0a0e17);
-  scene.fog = new THREE.Fog(0x0a0e17, 12, 22);
+  scene.background = new THREE.Color(hex.bg);
+  scene.fog = new THREE.Fog(hex.bg, 12, 22);
 
   const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
   camera.position.set(0, 3.5, 10);
@@ -23,38 +24,38 @@ export function init(canvas, container) {
   // --- Procedural environment lighting ---
   // Multiple colored point lights from different directions simulate environment IBL
 
-  const ambient = new THREE.AmbientLight(0x1a1a2e, 0.3);
+  const ambient = new THREE.AmbientLight(hex.elevated, 0.3);
   scene.add(ambient);
 
   // Hemisphere light for sky/ground gradient
-  const hemi = new THREE.HemisphereLight(0x6688cc, 0x223322, 0.6);
+  const hemi = new THREE.HemisphereLight(hex.hues[4], hex.hues[3], 0.6);
   scene.add(hemi);
 
   // Key light (warm)
-  const keyLight = new THREE.DirectionalLight(0xffeedd, 1.2);
+  const keyLight = new THREE.DirectionalLight(hex.text, 1.2);
   keyLight.position.set(5, 6, 4);
   scene.add(keyLight);
 
   // Fill light (cool blue)
-  const fillLight = new THREE.DirectionalLight(0x6688cc, 0.5);
+  const fillLight = new THREE.DirectionalLight(hex.hues[4], 0.5);
   fillLight.position.set(-5, 3, -2);
   scene.add(fillLight);
 
   // Rim light (strong accent)
-  const rimLight = new THREE.PointLight(0xff8844, 0.8, 20);
+  const rimLight = new THREE.PointLight(hex.accent, 0.8, 20);
   rimLight.position.set(-3, 5, -5);
   scene.add(rimLight);
 
   // Bottom bounce (subtle warm)
-  const bounceLight = new THREE.PointLight(0x443322, 0.4, 15);
+  const bounceLight = new THREE.PointLight(hex.elevated, 0.4, 15);
   bounceLight.position.set(0, -3, 2);
   scene.add(bounceLight);
 
   // Additional environment fill points
   const envPoints = [
-    { color: 0x5577aa, intensity: 0.3, pos: [6, 1, -3] },
-    { color: 0x8866aa, intensity: 0.25, pos: [-6, 4, 3] },
-    { color: 0xaabb99, intensity: 0.2, pos: [0, 6, 0] },
+    { color: hex.hues[4], intensity: 0.3, pos: [6, 1, -3] },
+    { color: hex.hues[5], intensity: 0.25, pos: [-6, 4, 3] },
+    { color: hex.hues[3], intensity: 0.2, pos: [0, 6, 0] },
   ];
 
   envPoints.forEach(({ color, intensity, pos }) => {
@@ -78,7 +79,7 @@ export function init(canvas, container) {
       const roughness = row / (gridSize - 1);
 
       const mat = new THREE.MeshStandardMaterial({
-        color: 0xcc9966,
+        color: hex.hues[2],
         metalness,
         roughness,
         envMapIntensity: 1.0,
@@ -97,7 +98,7 @@ export function init(canvas, container) {
   // --- Ground plane ---
   const groundGeo = new THREE.PlaneGeometry(20, 20);
   const groundMat = new THREE.MeshStandardMaterial({
-    color: 0x111822,
+    color: hex.elevated,
     metalness: 0.0,
     roughness: 0.9,
   });
@@ -139,7 +140,7 @@ export function init(canvas, container) {
   labelData.push(roughLabel);
 
   // --- Subtle grid lines on ground ---
-  const gridHelper = new THREE.GridHelper(16, 24, 0x1a2233, 0x141c28);
+  const gridHelper = new THREE.GridHelper(16, 24, hex.border, hex.borderSubtle);
   gridHelper.position.y = -2.59;
   scene.add(gridHelper);
 

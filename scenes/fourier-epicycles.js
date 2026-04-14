@@ -4,7 +4,8 @@
 
 import * as THREE from 'three';
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 

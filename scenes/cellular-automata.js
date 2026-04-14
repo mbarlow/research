@@ -47,36 +47,37 @@ function stepGrid(current, next) {
   }
 }
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setClearColor(0x0a0e1a, 1);
+  renderer.setClearColor(hex.bg, 1);
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(0x0a0e1a, 15, 45);
+  scene.fog = new THREE.Fog(hex.bg, 15, 45);
 
   const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
   camera.position.set(0, 25, 30);
 
   // Lighting
-  scene.add(new THREE.AmbientLight(0xffffff, 0.3));
+  scene.add(new THREE.AmbientLight(hex.text, 0.3));
 
-  const key = new THREE.DirectionalLight(0xffffff, 1.0);
+  const key = new THREE.DirectionalLight(hex.text, 1.0);
   key.position.set(5, 10, 5);
   scene.add(key);
 
-  const fill = new THREE.DirectionalLight(0x4488cc, 0.5);
+  const fill = new THREE.DirectionalLight(hex.hues[4], 0.5);
   fill.position.set(-5, 5, -5);
   scene.add(fill);
 
   // Instanced mesh for alive cells
   const cellGeo = new THREE.BoxGeometry(0.85, 0.85, 0.85);
   const cellMat = new THREE.MeshStandardMaterial({
-    color: 0x44aaff,
+    color: hex.hues[4],
     metalness: 0.4,
     roughness: 0.3,
     transparent: true,

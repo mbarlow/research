@@ -57,6 +57,12 @@ varying vec3 vWorldPos;
 varying vec3 vNormal;
 uniform vec3 uCameraPos;
 uniform float uTime;
+uniform vec3 uDeepColor;
+uniform vec3 uShallowColor;
+uniform vec3 uSkyLow;
+uniform vec3 uSkyHigh;
+uniform vec3 uSpecColor;
+uniform vec3 uSssColor;
 
 void main() {
   vec3 N = normalize(vNormal);
@@ -70,15 +76,13 @@ void main() {
   fresnel = 0.04 + 0.96 * fresnel;
 
   // Deep water color
-  vec3 deepColor = vec3(0.01, 0.05, 0.12);
-  vec3 shallowColor = vec3(0.02, 0.15, 0.2);
   float depth = smoothstep(-2.0, 1.0, vWorldPos.y);
-  vec3 waterColor = mix(deepColor, shallowColor, depth);
+  vec3 waterColor = mix(uDeepColor, uShallowColor, depth);
 
   // Sky reflection (gradient)
   vec3 R = reflect(-V, N);
   float skyGrad = R.y * 0.5 + 0.5;
-  vec3 skyColor = mix(vec3(0.15, 0.25, 0.4), vec3(0.5, 0.65, 0.85), skyGrad);
+  vec3 skyColor = mix(uSkyLow, uSkyHigh, skyGrad);
 
   // Specular
   vec3 H = normalize(L + V);
@@ -86,17 +90,16 @@ void main() {
 
   // Subsurface scattering approximation
   float sss = pow(max(dot(V, -L + N * 0.3), 0.0), 3.0) * 0.2;
-  vec3 sssColor = vec3(0.0, 0.3, 0.2);
 
   // Combine
   vec3 col = mix(waterColor, skyColor, fresnel);
-  col += vec3(1.0, 0.95, 0.8) * spec * 1.5;
-  col += sssColor * sss;
+  col += uSpecColor * spec * 1.5;
+  col += uSssColor * sss;
 
   // Fog
   float dist = length(vWorldPos.xz);
   float fog = 1.0 - exp(-dist * 0.04);
-  vec3 fogColor = vec3(0.4, 0.55, 0.7);
+  vec3 fogColor = uSkyLow;
   col = mix(col, fogColor, fog * 0.6);
 
   // Tone mapping
@@ -172,7 +175,8 @@ function generateWaves(windSpeed, windDir) {
   return waves;
 }
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
@@ -192,6 +196,7 @@ export function init(canvas, container) {
   const oceanGeo = new THREE.PlaneGeometry(40, 40, GRID_RES, GRID_RES);
   oceanGeo.rotateX(-Math.PI / 2);
 
+  const v3 = (c) => new THREE.Vector3(c.r, c.g, c.b);
   const waveUniforms = {
     uTime: { value: 0 },
     uCameraPos: { value: new THREE.Vector3() },
@@ -200,6 +205,12 @@ export function init(canvas, container) {
     uWaveAmp: { value: waves.amps.slice() },
     uWavePhase: { value: waves.phases.slice() },
     uWaveSteep: { value: waves.steeps.slice() },
+    uDeepColor:    { value: v3(palette.shade(palette.hues[4], -0.35)) },
+    uShallowColor: { value: v3(palette.hues[4]) },
+    uSkyLow:       { value: v3(palette.elevated) },
+    uSkyHigh:      { value: v3(palette.shade(palette.text, -0.05)) },
+    uSpecColor:    { value: v3(palette.text) },
+    uSssColor:     { value: v3(palette.hues[3]) },  // forest green sss
   };
 
   for (let i = 0; i < NUM_WAVES; i++) {

@@ -54,22 +54,20 @@ precision highp float;
 varying vec2 vUv;
 
 uniform sampler2D uState;
+uniform vec3 uCol1;
+uniform vec3 uCol2;
+uniform vec3 uCol3;
+uniform vec3 uCol4;
 
 void main() {
   vec2 state = texture2D(uState, vUv).rg;
   float a = state.r;
   float b = state.g;
 
-  // Color mapping based on chemical B concentration
-  vec3 col1 = vec3(0.02, 0.04, 0.08);   // background (low B)
-  vec3 col2 = vec3(0.1, 0.3, 0.6);      // transition
-  vec3 col3 = vec3(0.3, 0.8, 0.9);      // active zone
-  vec3 col4 = vec3(0.95, 0.95, 0.9);    // peak B
-
   float t = smoothstep(0.0, 0.3, b);
-  vec3 col = mix(col1, col2, smoothstep(0.0, 0.1, b));
-  col = mix(col, col3, smoothstep(0.1, 0.2, b));
-  col = mix(col, col4, smoothstep(0.2, 0.4, b));
+  vec3 col = mix(uCol1, uCol2, smoothstep(0.0, 0.1, b));
+  col = mix(col, uCol3, smoothstep(0.1, 0.2, b));
+  col = mix(col, uCol4, smoothstep(0.2, 0.4, b));
 
   // Subtle highlight from chemical A depletion
   col *= 0.7 + 0.3 * (1.0 - a);
@@ -78,7 +76,8 @@ void main() {
 }
 `;
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
@@ -163,8 +162,13 @@ export function init(canvas, container) {
   });
 
   // Display material
+  const v3 = (c) => new THREE.Vector3(c.r, c.g, c.b);
   const displayUniforms = {
     uState: { value: rtA.texture },
+    uCol1: { value: v3(palette.bg) },
+    uCol2: { value: v3(palette.hues[4]) },   // teal (transition)
+    uCol3: { value: v3(palette.accent) },    // orange (active)
+    uCol4: { value: v3(palette.text) },      // cream (peak)
   };
 
   const displayMaterial = new THREE.ShaderMaterial({

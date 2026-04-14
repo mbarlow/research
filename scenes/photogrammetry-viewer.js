@@ -35,19 +35,19 @@ export async function init(canvas, container) {
   camera.position.set(0, 1, 3);
 
   // Lighting
-  const hemiLight = new THREE.HemisphereLight(0xc8d8e8, 0x444422, 1.0);
+  const hemiLight = new THREE.HemisphereLight(hex.text, hex.border, 1.0);
   scene.add(hemiLight);
 
-  const dirLight1 = new THREE.DirectionalLight(0xffffff, 0.8);
+  const dirLight1 = new THREE.DirectionalLight(hex.text, 0.8);
   dirLight1.position.set(3, 5, 4);
   scene.add(dirLight1);
 
-  const dirLight2 = new THREE.DirectionalLight(0xddeeff, 0.4);
+  const dirLight2 = new THREE.DirectionalLight(hex.text, 0.4);
   dirLight2.position.set(-2, 3, -3);
   scene.add(dirLight2);
 
   // Grid
-  const gridHelper = new THREE.GridHelper(4, 20, 0x444466, 0x222244);
+  const gridHelper = new THREE.GridHelper(4, 20, hex.border, hex.borderSubtle);
   scene.add(gridHelper);
 
   // Orbit controls

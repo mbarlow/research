@@ -11,7 +11,7 @@ const SHAPES = [
     baseFreq: 220,
     ratios: [1.0, 1.58, 2.0, 2.24, 2.92, 3.16],
     decays: [2.0, 1.5, 1.2, 1.0, 0.8, 0.6],
-    color: 0xcc6644,
+    color: hex.accent,
   },
   {
     name: 'Sphere',
@@ -19,7 +19,7 @@ const SHAPES = [
     baseFreq: 330,
     ratios: [1.0, 1.47, 2.09, 2.56, 3.14],
     decays: [2.5, 2.0, 1.5, 1.2, 0.9],
-    color: 0x44aa88,
+    color: hex.hues[3],
   },
   {
     name: 'Cylinder',
@@ -27,7 +27,7 @@ const SHAPES = [
     baseFreq: 180,
     ratios: [1.0, 2.76, 5.40, 8.93, 13.34],
     decays: [3.0, 2.0, 1.2, 0.8, 0.5],
-    color: 0x6688cc,
+    color: hex.hues[4],
   },
   {
     name: 'Torus',
@@ -35,7 +35,7 @@ const SHAPES = [
     baseFreq: 260,
     ratios: [1.0, 1.73, 2.83, 3.46, 4.58],
     decays: [2.2, 1.8, 1.3, 1.0, 0.7],
-    color: 0xcc44aa,
+    color: hex.hues[1],
   },
   {
     name: 'Cone',
@@ -43,7 +43,7 @@ const SHAPES = [
     baseFreq: 150,
     ratios: [1.0, 1.34, 1.83, 2.0, 2.56],
     decays: [1.8, 1.5, 1.2, 1.0, 0.8],
-    color: 0xaaaa44,
+    color: hex.hues[2],
   },
 ];
 
@@ -93,7 +93,8 @@ function strikeSound(audioCtx, baseFreq, ratios, decays) {
   noiseSrc.start(now);
 }
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
@@ -102,7 +103,7 @@ export function init(canvas, container) {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0a0a12);
+  scene.background = new THREE.Color(hex.bg);
 
   const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 50);
   camera.position.set(0, 2, 7);
@@ -114,18 +115,18 @@ export function init(canvas, container) {
   controls.maxPolarAngle = Math.PI * 0.7;
 
   // Lights
-  const ambient = new THREE.AmbientLight(0x334455, 0.8);
+  const ambient = new THREE.AmbientLight(hex.border, 0.8);
   scene.add(ambient);
-  const dirLight = new THREE.DirectionalLight(0xffeedd, 1.2);
+  const dirLight = new THREE.DirectionalLight(hex.text, 1.2);
   dirLight.position.set(3, 5, 4);
   scene.add(dirLight);
-  const rimLight = new THREE.DirectionalLight(0x4466aa, 0.5);
+  const rimLight = new THREE.DirectionalLight(hex.hues[4], 0.5);
   rimLight.position.set(-3, 2, -3);
   scene.add(rimLight);
 
   // Floor
   const floorGeo = new THREE.PlaneGeometry(20, 20);
-  const floorMat = new THREE.MeshStandardMaterial({ color: 0x111118, roughness: 0.9, metalness: 0.0 });
+  const floorMat = new THREE.MeshStandardMaterial({ color: hex.elevated, roughness: 0.9, metalness: 0.0 });
   const floor = new THREE.Mesh(floorGeo, floorMat);
   floor.rotation.x = -Math.PI / 2;
   floor.position.y = -1.2;

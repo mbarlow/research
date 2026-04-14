@@ -114,23 +114,22 @@ const DISPLAY_FRAG = `
 precision highp float;
 varying vec2 vUv;
 uniform sampler2D uTrail;
+uniform vec3 uC1;
+uniform vec3 uC2;
+uniform vec3 uC3;
+uniform vec3 uC4;
 
 void main() {
   float val = texture2D(uTrail, vUv).r;
-  vec3 c1 = vec3(0.01, 0.01, 0.03);
-  vec3 c2 = vec3(0.04, 0.15, 0.25);
-  vec3 c3 = vec3(0.15, 0.55, 0.45);
-  vec3 c4 = vec3(0.85, 0.9, 0.7);
-
-  vec3 col = mix(c1, c2, smoothstep(0.0, 0.05, val));
-  col = mix(col, c3, smoothstep(0.05, 0.2, val));
-  col = mix(col, c4, smoothstep(0.2, 0.5, val));
-
+  vec3 col = mix(uC1, uC2, smoothstep(0.0, 0.05, val));
+  col = mix(col, uC3, smoothstep(0.05, 0.2, val));
+  col = mix(col, uC4, smoothstep(0.2, 0.5, val));
   gl_FragColor = vec4(col, 1.0);
 }
 `;
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
@@ -257,7 +256,14 @@ export function init(canvas, container) {
   diffuseScene.add(new THREE.Mesh(quadGeo, diffuseMat));
 
   // Display material
-  const displayUniforms = { uTrail: { value: trailA.texture } };
+  const v3 = (c) => new THREE.Vector3(c.r, c.g, c.b);
+  const displayUniforms = {
+    uTrail: { value: trailA.texture },
+    uC1: { value: v3(palette.bg) },
+    uC2: { value: v3(palette.hues[4]) },    // teal (dim trail)
+    uC3: { value: v3(palette.accent) },     // orange (active)
+    uC4: { value: v3(palette.text) },       // cream (hot)
+  };
   const displayMat = new THREE.ShaderMaterial({
     vertexShader: FULLSCREEN_VERT,
     fragmentShader: DISPLAY_FRAG,

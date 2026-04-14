@@ -18,6 +18,12 @@ varying vec2 vUv;
 uniform float uTime;
 uniform vec2 uResolution;
 uniform float uPower;
+uniform vec3 uBg;
+uniform vec3 uCol1;
+uniform vec3 uCol2;
+uniform vec3 uCol3;
+uniform vec3 uCol4;
+uniform vec3 uSpec;
 
 // Mandelbulb distance estimator
 // Based on the triplex algebra formulation
@@ -80,17 +86,12 @@ vec3 calcNormal(vec3 pos, float power) {
   ));
 }
 
-// Orbit trap coloring
+// Orbit trap coloring (palette-driven)
 vec3 getColor(float iterations, vec3 pos) {
   float t = iterations / 12.0;
-  vec3 col1 = vec3(0.05, 0.1, 0.25);   // deep blue
-  vec3 col2 = vec3(0.3, 0.5, 0.9);     // mid blue
-  vec3 col3 = vec3(0.9, 0.6, 0.2);     // gold
-  vec3 col4 = vec3(0.95, 0.95, 0.95);  // near white
-
-  vec3 col = mix(col1, col2, smoothstep(0.0, 0.3, t));
-  col = mix(col, col3, smoothstep(0.3, 0.6, t));
-  col = mix(col, col4, smoothstep(0.6, 1.0, t));
+  vec3 col = mix(uCol1, uCol2, smoothstep(0.0, 0.3, t));
+  col = mix(col, uCol3, smoothstep(0.3, 0.6, t));
+  col = mix(col, uCol4, smoothstep(0.6, 1.0, t));
 
   // Add position-based variation
   col += 0.1 * cos(3.0 * pos.x + vec3(0.0, 1.0, 2.0));
@@ -148,7 +149,7 @@ void main() {
     t += hit.x;
   }
 
-  vec3 col = vec3(0.02, 0.03, 0.06); // background
+  vec3 col = uBg; // background
 
   if (found) {
     vec3 pos = ro + rd * t;
@@ -163,11 +164,11 @@ void main() {
 
     vec3 baseColor = getColor(hit.y, pos);
     col = baseColor * (0.15 + 0.85 * diff * shadow) * ao;
-    col += vec3(0.8, 0.9, 1.0) * spec * 0.3 * shadow;
+    col += uSpec * spec * 0.3 * shadow;
 
     // Fog
     float fog = exp(-0.15 * t * t);
-    col = mix(vec3(0.02, 0.03, 0.06), col, fog);
+    col = mix(uBg, col, fog);
   }
 
   // Gamma correction
@@ -176,9 +177,10 @@ void main() {
 }
 `;
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
+  const v3 = (c) => new THREE.Vector3(c.r, c.g, c.b);
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true });
   renderer.setSize(width, height);
@@ -191,6 +193,12 @@ export function init(canvas, container) {
     uTime: { value: 0 },
     uResolution: { value: new THREE.Vector2(width * Math.min(window.devicePixelRatio, 1.5), height * Math.min(window.devicePixelRatio, 1.5)) },
     uPower: { value: 8.0 },
+    uBg:   { value: v3(palette.bg) },
+    uCol1: { value: v3(palette.elevated) },
+    uCol2: { value: v3(palette.hues[4]) },     // teal
+    uCol3: { value: v3(palette.accent) },      // orange hot
+    uCol4: { value: v3(palette.text) },        // cream peak
+    uSpec: { value: v3(palette.text) },
   };
 
   const material = new THREE.ShaderMaterial({

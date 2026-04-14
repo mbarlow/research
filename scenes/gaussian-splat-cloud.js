@@ -12,7 +12,8 @@ function gaussianRandom() {
   return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
 }
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
@@ -28,8 +29,8 @@ export function init(canvas, container) {
   const positions = new Float32Array(pointsCount * 3);
   const colors = new Float32Array(pointsCount * 3);
 
-  const colorA = new THREE.Color(0x7ed8ff);
-  const colorB = new THREE.Color(0xd8a3ff);
+  const colorA = new THREE.Color(hex.hues[4]);
+  const colorB = new THREE.Color(hex.hues[5]);
   const tmp = new THREE.Color();
 
   for (let i = 0; i < pointsCount; i++) {

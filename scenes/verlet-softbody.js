@@ -157,16 +157,17 @@ function buildJelly(ox, oy, oz, size, res) {
   return { particles, constraints, res };
 }
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
+  const hex = palette.as.hex;
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0a0a14);
+  scene.background = new THREE.Color(hex.bg);
 
   const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 50);
   camera.position.set(0, 2, 8);
@@ -177,15 +178,15 @@ export function init(canvas, container) {
   controls.target.set(0, 0, 0);
 
   // Lights
-  scene.add(new THREE.AmbientLight(0x334455, 0.5));
-  const dirLight = new THREE.DirectionalLight(0xffeedd, 0.8);
+  scene.add(new THREE.AmbientLight(hex.hues[4], 0.5));
+  const dirLight = new THREE.DirectionalLight(hex.text, 0.8);
   dirLight.position.set(3, 5, 4);
   scene.add(dirLight);
 
   // Floor
   const floorGeo = new THREE.PlaneGeometry(20, 20, 20, 20);
   const floorMat = new THREE.MeshStandardMaterial({
-    color: 0x181820,
+    color: hex.elevated,
     roughness: 0.9,
     wireframe: false,
   });
@@ -205,7 +206,7 @@ export function init(canvas, container) {
   const cloth = buildCloth(-1.5, 2.5, 0, 3, 3, 18, 18);
   const clothGeo = new THREE.PlaneGeometry(3, 3, 18, 18);
   const clothMat = new THREE.MeshStandardMaterial({
-    color: 0x4488cc,
+    color: hex.hues[4],
     side: THREE.DoubleSide,
     roughness: 0.7,
     metalness: 0.1,
@@ -218,7 +219,7 @@ export function init(canvas, container) {
   const ropeCurve = new THREE.CatmullRomCurve3(rope.particles.map(p => p.pos.clone()));
   let ropeGeo = new THREE.TubeGeometry(ropeCurve, 28, 0.04, 6, false);
   const ropeMat = new THREE.MeshStandardMaterial({
-    color: 0xcc8844,
+    color: hex.accent,
     roughness: 0.6,
     metalness: 0.3,
   });
@@ -232,7 +233,7 @@ export function init(canvas, container) {
   jellyGeo.setAttribute('position', new THREE.BufferAttribute(jellyPositions, 3));
 
   const jellyMat = new THREE.PointsMaterial({
-    color: 0x44cc88,
+    color: hex.hues[3],
     size: 0.1,
     transparent: true,
     opacity: 0.8,
@@ -245,7 +246,7 @@ export function init(canvas, container) {
   const jellyLineGeo = new THREE.BufferGeometry();
   jellyLineGeo.setAttribute('position', new THREE.BufferAttribute(jellyLinePositions, 3));
   const jellyLineMat = new THREE.LineBasicMaterial({
-    color: 0x44cc88,
+    color: hex.hues[3],
     transparent: true,
     opacity: 0.15,
   });

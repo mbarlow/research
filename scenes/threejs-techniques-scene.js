@@ -3,35 +3,39 @@
 
 import * as THREE from 'three';
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
+  const hex = palette.as.hex;
+  const accentHSL = {};
+  new THREE.Color(hex.accent).getHSL(accentHSL);
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(hex.bg, 1);
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(0x0f1220, 6, 20);
+  scene.fog = new THREE.Fog(hex.bg, 6, 20);
 
   const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
   camera.position.set(0, 2.4, 8);
 
-  const ambient = new THREE.AmbientLight(0xffffff, 0.45);
+  const ambient = new THREE.AmbientLight(hex.text, 0.45);
   scene.add(ambient);
 
-  const key = new THREE.DirectionalLight(0xffffff, 1.0);
+  const key = new THREE.DirectionalLight(hex.text, 1.0);
   key.position.set(3, 4, 2);
   scene.add(key);
 
-  const fill = new THREE.DirectionalLight(0x88aaff, 0.5);
+  const fill = new THREE.DirectionalLight(palette.as.hex.hues[4], 0.5);
   fill.position.set(-4, 2, -2);
   scene.add(fill);
 
   const count = 520;
   const geometry = new THREE.BoxGeometry(0.18, 0.18, 0.18);
   const material = new THREE.MeshStandardMaterial({
-    color: 0x8fb7ff,
+    color: hex.accent,
     metalness: 0.15,
     roughness: 0.45,
   });
@@ -54,13 +58,13 @@ export function init(canvas, container) {
     dummy.updateMatrix();
     instanced.setMatrixAt(i, dummy.matrix);
 
-    color.setHSL(0.58 + (i / count) * 0.08, 0.7, 0.62);
+    color.setHSL(accentHSL.h + (i / count) * 0.1 - 0.03, 0.65, 0.55 + (i / count) * 0.15);
     instanced.setColorAt(i, color);
   }
 
   scene.add(instanced);
 
-  const grid = new THREE.GridHelper(14, 20, 0x334466, 0x223344);
+  const grid = new THREE.GridHelper(14, 20, hex.border, hex.borderSubtle);
   grid.position.y = -2.1;
   scene.add(grid);
 

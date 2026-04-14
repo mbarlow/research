@@ -102,7 +102,8 @@ function heightColor(h, color) {
   }
 }
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
@@ -111,21 +112,21 @@ export function init(canvas, container) {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0a0e17);
-  scene.fog = new THREE.Fog(0x0a0e17, 12, 28);
+  scene.background = new THREE.Color(hex.bg);
+  scene.fog = new THREE.Fog(hex.bg, 12, 28);
 
   const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
   camera.position.set(0, 6, 10);
 
   // Lighting
-  const ambient = new THREE.AmbientLight(0x334466, 0.6);
+  const ambient = new THREE.AmbientLight(hex.border, 0.6);
   scene.add(ambient);
 
-  const sun = new THREE.DirectionalLight(0xffeedd, 1.2);
+  const sun = new THREE.DirectionalLight(hex.text, 1.2);
   sun.position.set(4, 8, 3);
   scene.add(sun);
 
-  const fill = new THREE.DirectionalLight(0x6688bb, 0.4);
+  const fill = new THREE.DirectionalLight(hex.hues[4], 0.4);
   fill.position.set(-3, 4, -2);
   scene.add(fill);
 
@@ -182,7 +183,7 @@ export function init(canvas, container) {
   updateTerrain(0);
 
   // Grid helper
-  const grid = new THREE.GridHelper(planeSize, 16, 0x1a2233, 0x151b28);
+  const grid = new THREE.GridHelper(planeSize, 16, hex.border, hex.borderSubtle);
   grid.position.y = -0.05;
   scene.add(grid);
 

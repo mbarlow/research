@@ -3,7 +3,8 @@
 
 import * as THREE from 'three';
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
@@ -12,7 +13,7 @@ export function init(canvas, container) {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x08090f);
+  scene.background = new THREE.Color(hex.bg);
 
   const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 200);
   camera.position.set(0, 6, 18);
@@ -25,7 +26,7 @@ export function init(canvas, container) {
     {
       name: 'Animals',
       center: [-5, 2, -3],
-      color: new THREE.Color(0x4fc3f7),  // light blue
+      color: new THREE.Color(hex.hues[4]),  // light blue
       words: [
         'cat', 'dog', 'fish', 'bird', 'horse', 'snake', 'whale', 'eagle',
         'rabbit', 'tiger', 'lion', 'bear', 'shark', 'wolf', 'deer', 'fox',
@@ -35,7 +36,7 @@ export function init(canvas, container) {
     {
       name: 'Colors',
       center: [5, 3, -2],
-      color: new THREE.Color(0xf06292),  // pink
+      color: new THREE.Color(hex.hues[1]),  // pink
       words: [
         'red', 'blue', 'green', 'yellow', 'purple', 'orange', 'white',
         'black', 'pink', 'cyan', 'magenta', 'teal', 'crimson', 'gold',
@@ -45,7 +46,7 @@ export function init(canvas, container) {
     {
       name: 'Countries',
       center: [-4, -3, 4],
-      color: new THREE.Color(0xaed581),  // light green
+      color: new THREE.Color(hex.hues[3]),  // light green
       words: [
         'france', 'japan', 'brazil', 'canada', 'germany', 'india', 'mexico',
         'egypt', 'italy', 'china', 'australia', 'kenya', 'sweden', 'chile',
@@ -56,7 +57,7 @@ export function init(canvas, container) {
     {
       name: 'Food',
       center: [5, -2, 3],
-      color: new THREE.Color(0xffb74d),  // orange
+      color: new THREE.Color(hex.hues[2]),  // orange
       words: [
         'pizza', 'rice', 'bread', 'apple', 'cheese', 'pasta', 'sushi',
         'steak', 'soup', 'taco', 'curry', 'salad', 'butter', 'noodles',

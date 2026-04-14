@@ -159,32 +159,33 @@ const PRESETS = [
   },
 ];
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setClearColor(0x0a0e1a, 1);
+  renderer.setClearColor(hex.bg, 1);
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x0a0e1a, 0.08);
+  scene.fog = new THREE.FogExp2(hex.bg, 0.08);
 
   const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
   camera.position.set(0, 3, 8);
 
   // Lighting
-  const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+  const ambient = new THREE.AmbientLight(hex.text, 0.5);
   scene.add(ambient);
 
-  const key = new THREE.DirectionalLight(0xffffff, 0.8);
+  const key = new THREE.DirectionalLight(hex.text, 0.8);
   key.position.set(3, 5, 4);
   scene.add(key);
 
   // Ground plane
   const groundGeo = new THREE.PlaneGeometry(20, 20);
-  const groundMat = new THREE.MeshStandardMaterial({ color: 0x1a1a2e, roughness: 0.9 });
+  const groundMat = new THREE.MeshStandardMaterial({ color: hex.elevated, roughness: 0.9 });
   const ground = new THREE.Mesh(groundGeo, groundMat);
   ground.rotation.x = -Math.PI / 2;
   ground.position.y = -0.01;

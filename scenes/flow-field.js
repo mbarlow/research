@@ -84,14 +84,15 @@ function curlNoise(x, y, z, t) {
   ];
 }
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setClearColor(0x0a0e1a, 1);
+  renderer.setClearColor(hex.bg, 1);
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
@@ -130,11 +131,17 @@ export function init(canvas, container) {
     }
   }
 
-  // Color palette: position-based hue gradient
+  // Color palette: position-based blend between accent and teal
+  const _pA = palette.as.three.accent;
+  const _pB = palette.as.three.hues[4];
+  const _pC = palette.as.three.hues[2];
   function colorParticle(i) {
-    const hue = ((px[i] + BOUNDS) / (BOUNDS * 2) * 0.4 + 0.45 +
-                 (py[i] + BOUNDS) / (BOUNDS * 2) * 0.15) % 1.0;
-    const color = new THREE.Color().setHSL(hue, 0.75, 0.55);
+    const tx = (px[i] + BOUNDS) / (BOUNDS * 2);
+    const ty = (py[i] + BOUNDS) / (BOUNDS * 2);
+    const color = new THREE.Color();
+    if (tx < 0.5) color.copy(_pA).lerp(_pC, tx * 2);
+    else color.copy(_pC).lerp(_pB, (tx - 0.5) * 2);
+    color.offsetHSL(0, 0, (ty - 0.5) * 0.1);
 
     for (let t = 0; t < TRAIL_LENGTH; t++) {
       const vidx = i * TRAIL_LENGTH + t;

@@ -39,7 +39,8 @@ function generateColumn(time) {
   return data;
 }
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
 
@@ -48,8 +49,8 @@ export function init(canvas, container) {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x050510);
-  scene.fog = new THREE.FogExp2(0x050510, 0.04);
+  scene.background = new THREE.Color(hex.bg);
+  scene.fog = new THREE.FogExp2(hex.bg, 0.04);
 
   const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
 
@@ -76,11 +77,11 @@ export function init(canvas, container) {
   scene.add(terrain);
 
   // Lights
-  scene.add(new THREE.AmbientLight(0x223344, 0.4));
-  const dirLight = new THREE.DirectionalLight(0xffeedd, 0.6);
+  scene.add(new THREE.AmbientLight(hex.border, 0.4));
+  const dirLight = new THREE.DirectionalLight(hex.text, 0.6);
   dirLight.position.set(2, 5, 3);
   scene.add(dirLight);
-  const pointLight = new THREE.PointLight(0x4488ff, 1.0, 15);
+  const pointLight = new THREE.PointLight(hex.hues[4], 1.0, 15);
   pointLight.position.set(0, 3, 0);
   scene.add(pointLight);
 
