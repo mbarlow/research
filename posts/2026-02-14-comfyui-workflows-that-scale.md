@@ -6,23 +6,16 @@ description: Design versioned ComfyUI graphs that scale from one-off experiments
 tags: [comfyui, diffusion, image-generation, workflow-engineering]
 ---
 
-## Why ComfyUI Matters
+## Why the graph matters
 
-ComfyUI is powerful because it externalizes the image generation graph. You can inspect every stage, swap components quickly, and encode workflow intent directly in nodes instead of hidden defaults.
+ComfyUI externalizes the generation pipeline. Every stage is a node. Every decision is visible.
+
+That visibility is the leverage. You stop guessing what your defaults are. You start versioning them.
 
 > [!note]
-> The goal here is repeatability. A beautiful one-off image is less valuable than a workflow that stays stable under iteration.
+> A pretty one-off image is worth less than a workflow you can re-run tomorrow and get the same answer.
 
-## Post Plan (Feature Map)
-
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain graph architecture | Mermaid workflow graph | Make pipeline branches explicit |
-| Show concrete node setup | JSON/code blocks | Bridge UI graph to config |
-| Operationalize iteration | Steps block | Enforce reproducible process |
-| Improve debugging | Chat transcript + callouts | Handle common quality failures |
-
-## Workflow Skeleton
+## The skeleton
 
 ```mermaid
 graph LR
@@ -35,7 +28,13 @@ graph LR
     H[ControlNet / IPAdapter Optional] --> C
 ```
 
-## Versioned Workflow Snippet
+Three inputs. One sampler. One decode. Conditioning attaches at the sampler.
+
+Everything else is a variation on this.
+
+## Version the graph, not the image
+
+Treat the workflow as code. Save it. Tag it. Diff it.
 
 ```json
 {
@@ -54,61 +53,67 @@ graph LR
 ```
 
 > [!tip]
-> Keep a locked baseline workflow file and branch from it per experiment. Never edit your baseline directly.
+> Lock a baseline. Branch from it. Never edit the baseline directly.
 
-## Conversation: Debugging Image Quality
+## Debugging is variable isolation
 
 ```chat
-user: My outputs are sharp but composition is unstable. What should I check first?
-assistant: Freeze seed, keep sampler constant, and reduce variable count. If too many nodes change together, you cannot attribute quality shifts.
+user: Outputs are sharp but composition is unstable. Where do I start?
+assistant: Freeze the seed. Freeze the sampler. Change one thing. If you mutate three variables at once, you cannot attribute the result.
 
-user: Why do characters mutate across a batch?
-assistant: Usually prompt drift and weak identity control. Add stronger reference conditioning (IPAdapter/ControlNet) and narrow prompt entropy.
+user: Characters mutate across a batch. Why?
+assistant: Prompt entropy is too high and identity isn't anchored. Shorten the prompt. Add IPAdapter or ControlNet for reference conditioning.
 
-user: How do I avoid overcooked high-contrast images?
-assistant: Lower CFG, reduce aggressive post-processing nodes, and check if LoRA weights are stacked too heavily.
+user: Outputs are overcooked — high contrast, crunchy.
+assistant: Drop CFG. Pull back stacked LoRA weights. Remove aggressive post-process nodes one at a time.
 ```
 
-## A Repeatable Workflow Practice
+The pattern is the same every time: **isolate the variable**.
+
+## The iteration loop
 
 ````steps
-### Step 1: Lock a baseline graph
-Pick one model, one sampler, one resolution, and one seed. Save as `baseline.json`.
+### Step 1: Lock a baseline
+One model. One sampler. One resolution. One seed. Save as `baseline.json`.
 
-### Step 2: Run single-variable experiments
-Change only one variable at a time (steps, CFG, denoise, LoRA weight) and log outcome notes.
+### Step 2: Change one variable
+Steps, CFG, denoise, LoRA weight — pick one. Log the result.
 
-### Step 3: Promote only proven improvements
-If a change improves quality on multiple prompts, merge it into a new baseline and version it.
+### Step 3: Promote what proves out
+If a change helps across multiple prompts, merge it into a new baseline. Bump the version.
 
-### Step 4: Build reusable subgraphs
-Extract common chunks (upscaling pass, face detail pass, style stack) into composable templates.
+### Step 4: Extract subgraphs
+Upscaling, face detail, style stacks — turn repeated chunks into reusable templates.
 ````
 
-## Prompt Template Pattern
+## Prompt structure
 
 ```text
-[subject], [camera/framing], [lighting], [style cues], [material detail], [background]
+[subject], [framing], [lighting], [style], [material], [background]
 
-Negative prompt:
+Negative:
 lowres, extra fingers, malformed anatomy, text artifacts, oversaturated highlights
 ```
 
-## Failure Taxonomy
+Slots, not sentences. Easier to swap. Easier to A/B.
 
-| Failure Mode | Typical Cause | Quick Test |
+## Failure → cause → test
+
+| Failure | Likely cause | First test |
 |---|---|---|
-| Muddy detail | Too few steps or weak model | Increase steps by +6 and compare |
-| Harsh artifacts | CFG too high | Drop CFG by 1.0 |
-| Identity drift | Prompt entropy | Shorten prompt + add reference |
-| Inconsistent style | Mixed LoRAs | Disable all but one LoRA |
+| Muddy detail | Steps too low, weak model | +6 steps |
+| Harsh artifacts | CFG too high | -1.0 CFG |
+| Identity drift | Prompt entropy | Shorten + add reference |
+| Inconsistent style | Stacked LoRAs fighting | Disable all but one |
 
 > [!warning]
-> Avoid "node hoarding". More nodes often add ambiguity faster than quality.
+> Node hoarding adds ambiguity faster than it adds quality. If you can't explain why a node is there, delete it.
 
-## Wrap-Up
+## The summary
 
-The best ComfyUI workflows are versioned systems: baseline, controlled experiments, promotion rules, and reusable subgraphs. Treat image generation as an engineering loop and quality becomes predictable.
+Baseline. One-variable experiments. Promote what works. Extract what repeats.
+
+Treat image generation like an engineering loop and quality stops being luck.
 
 ## Generation Metadata
 

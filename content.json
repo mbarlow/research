@@ -1,83 +1,116 @@
 [
   {
-    "slug": "2026-03-04-verlet-softbody-physics",
-    "file": "2026-03-04-verlet-softbody-physics.md",
-    "title": "Verlet Integration Softbody Physics — Jelly, Cloth, and Rope",
-    "date": "2026-03-04",
-    "timestamp": "2026-03-05T23:50:44.784Z",
-    "order": 36,
-    "description": "Build a softbody physics engine using Verlet integration and distance constraints, simulating jelly cubes, cloth sheets, and swinging ropes in real time.",
+    "slug": "2026-02-14-comfyui-workflows-that-scale",
+    "file": "2026-02-14-comfyui-workflows-that-scale.md",
+    "title": "ComfyUI Workflows - From Experiments to Repeatable Pipelines",
+    "date": "2026-02-14",
+    "timestamp": "2026-04-14T00:20:45.904Z",
+    "order": 4,
+    "description": "Design versioned ComfyUI graphs that scale from one-off experiments to repeatable production image workflows.",
     "tags": [
-      "physics",
-      "simulation",
-      "verlet",
-      "softbody",
-      "threejs",
-      "creative-coding"
+      "comfyui",
+      "diffusion",
+      "image-generation",
+      "workflow-engineering"
     ],
-    "body": "\n## Why Verlet Integration\n\nMost physics simulations store position and velocity. Euler integration updates them: `v += a*dt; x += v*dt`. It's simple but fragile — constraints (fixed distances between particles) require velocity corrections that fight the integrator and cause jitter. Verlet integration sidesteps this by storing position and previous position. Velocity is implicit: `v = x_current - x_previous`. The update is:\n\n```\nx_new = 2 * x_current - x_previous + acceleration * dt^2\n```\n\nWhy "
+    "body": "\n## Why the graph matters\n\nComfyUI externalizes the generation pipeline. Every stage is a node. Every decision is visible.\n\nThat visibility is the leverage. You stop guessing what your defaults are. You start versioning them.\n\n> [!note]\n> A pretty one-off image is worth less than a workflow you can re-run tomorrow and get the same answer.\n\n## The skeleton\n\n```mermaid\ngraph LR\n    A[Prompt + Negative Prompt] --> B[CLIP Text Encode]\n    B --> C[KSampler]\n    D[Model Loader] --> C\n    E[VAE Loader]"
   },
   {
-    "slug": "2026-03-04-impossible-geometry-shader-tricks",
-    "file": "2026-03-04-impossible-geometry-shader-tricks.md",
-    "title": "Impossible Geometry — Shader Tricks That Lie About Depth",
+    "slug": "2026-03-04-physarum-slime-mold-simulation",
+    "file": "2026-03-04-physarum-slime-mold-simulation.md",
+    "title": "Physarum Simulation — Slime Mold Intelligence on the GPU",
     "date": "2026-03-04",
-    "timestamp": "2026-03-05T23:29:49.047Z",
-    "order": 35,
-    "description": "Render Penrose triangles, Escher staircases, and impossible objects using fragment shaders that manipulate depth to create geometries that cannot exist in 3D.",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 27,
+    "description": "Simulate Physarum polycephalum's emergent network behavior using GPU ping-pong framebuffers, where 40,000 simple agents create stunning organic transport networks.",
+    "tags": [
+      "simulation",
+      "agent-based",
+      "physarum",
+      "emergent-behavior",
+      "glsl",
+      "generative-art"
+    ],
+    "body": "\n## Why Physarum\n\nPhysarum polycephalum is a slime mold that solves optimization problems without a brain. Place food sources on a petri dish and Physarum will grow a transport network between them that closely approximates the shortest spanning tree. In 2010, researchers recreated the Tokyo rail network by placing oat flakes at the locations of major stations — the slime mold independently converged on a layout strikingly similar to the actual rail system. No central planning, no global knowled"
+  },
+  {
+    "slug": "2026-03-04-non-euclidean-rendering",
+    "file": "2026-03-04-non-euclidean-rendering.md",
+    "title": "Non-Euclidean Rendering — Curved Space in the Browser",
+    "date": "2026-03-04",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 28,
+    "description": "Ray march through hyperbolic and spherical geometries where parallel lines diverge, rooms are bigger on the inside, and straight lines curve.",
     "tags": [
       "graphics",
       "ray-marching",
-      "illusions",
+      "non-euclidean",
+      "hyperbolic-geometry",
       "glsl",
-      "creative-coding",
       "math"
     ],
-    "body": "\n## Why Impossible Geometry\n\nIn 1958, Lionel and Roger Penrose published \"Impossible Objects: A Special Type of Visual Illusion,\" introducing the Penrose triangle and Penrose stairs. M.C. Escher immediately recognized the potential and created Waterfall and Ascending and Descending — images of structures that look perfectly solid but cannot exist in three dimensions. The objects exploit a flaw in our visual system: we unconsciously resolve 2D projections into 3D interpretations, and these partic"
+    "body": "\n## Why Non-Euclidean Geometry\n\nFor over two thousand years, Euclid's fifth postulate — that through any point not on a line, exactly one parallel line exists — was assumed to be a necessary truth about space. In the 19th century, Gauss, Bolyai, and Lobachevsky independently proved it wasn't. You can build consistent geometries where infinitely many parallel lines pass through a point (hyperbolic space) or where no parallel lines exist at all (spherical space). These aren't mathematical curiosit"
   },
   {
-    "slug": "2026-03-04-audio-spectrogram-terrain",
-    "file": "2026-03-04-audio-spectrogram-terrain.md",
-    "title": "Audio Spectrogram Terrain — Fly Through Sound",
+    "slug": "2026-03-04-music-from-geometry-modal-analysis",
+    "file": "2026-03-04-music-from-geometry-modal-analysis.md",
+    "title": "Music From Geometry — Modal Analysis and Shape Acoustics",
     "date": "2026-03-04",
-    "timestamp": "2026-03-05T23:24:54.932Z",
-    "order": 34,
-    "description": "Transform audio spectrograms into 3D terrain and fly through the landscape of sound, where frequency is width, time is depth, and amplitude is height.",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 29,
+    "description": "Synthesize sound from 3D shapes by computing their resonant frequencies, turning geometry into musical instruments using modal analysis.",
     "tags": [
       "audio",
-      "visualization",
+      "physics",
+      "simulation",
       "web-audio",
       "threejs",
-      "terrain",
-      "creative-coding"
+      "math"
     ],
-    "body": "\n## Why Spectrogram Terrain\n\nA spectrogram is a 2D image: time on one axis, frequency on the other, brightness showing amplitude. It's the standard way to visualize audio — every audio editor, every speech recognition paper, every birdsong field guide uses spectrograms. But a spectrogram is also a heightmap. Map amplitude to elevation and the spectrogram becomes a 3D terrain you can fly through.\n\nThe mapping is natural: bass frequencies form broad, rolling hills. Treble frequencies create sharp,"
+    "body": "\n## Why Modal Analysis\n\nIn 1966, mathematician Mark Kac asked \"Can one hear the shape of a drum?\" — whether the resonant frequencies of a vibrating membrane uniquely determine its geometry. The answer turned out to be no (counterexamples were found in 1992), but the question revealed something profound: geometry and sound are deeply linked. Every rigid body has a set of resonant frequencies — modes — determined by its shape, material, and boundary conditions. Strike a bell and you hear its geome"
   },
   {
-    "slug": "2026-03-04-boids-on-curved-manifolds",
-    "file": "2026-03-04-boids-on-curved-manifolds.md",
-    "title": "Boids on Curved Manifolds — Flocking on a Torus",
+    "slug": "2026-03-04-llm-guided-evolutionary-art",
+    "file": "2026-03-04-llm-guided-evolutionary-art.md",
+    "title": "LLM-Guided Evolutionary Art — Language as Fitness Function",
     "date": "2026-03-04",
-    "timestamp": "2026-03-05T23:23:41.463Z",
-    "order": 33,
-    "description": "Simulate Reynolds' flocking algorithm on curved surfaces where topology wraps, twists, and changes the meaning of \"nearby\" — boids on a torus, sphere, and Klein bottle.",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 30,
+    "description": "Evolve visual art using genetic algorithms where a local LLM judges fitness, replacing mathematical objectives with natural language like \"more crystalline\" or \"more ominous.\"",
     "tags": [
-      "simulation",
-      "boids",
-      "flocking",
-      "topology",
-      "threejs",
-      "math",
-      "creative-coding"
+      "generative-art",
+      "genetic-algorithms",
+      "llm",
+      "evolution",
+      "creative-coding",
+      "ai"
     ],
-    "body": "\n## Why Boids on Manifolds\n\nCraig Reynolds' 1987 boids algorithm demonstrated that complex flocking behavior emerges from three simple rules: separation (don't crowd), alignment (match neighbors' heading), and cohesion (steer toward the group). But Reynolds' original implementation lived in flat Euclidean space — an infinite plane where distance is straightforward and there's no boundary to worry about. What happens when you put boids on a curved surface?\n\nOn a torus, \"nearby\" wraps around both "
+    "body": "\n## Why Evolutionary Art\n\nIn 1994, Karl Sims demonstrated that genetic algorithms could evolve stunning visual art. His system bred mathematical expressions — trees of arithmetic operators and functions — selecting survivors based on aesthetic preference. The results were alien and beautiful, but the bottleneck was always the fitness function: either a human sat clicking \"better/worse\" for hours (interactive evolution), or you defined some mathematical proxy for beauty (color entropy, fractal di"
+  },
+  {
+    "slug": "2026-03-04-wave-function-collapse-visualized",
+    "file": "2026-03-04-wave-function-collapse-visualized.md",
+    "title": "Wave Function Collapse — Constraint Propagation Visualized",
+    "date": "2026-03-04",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 31,
+    "description": "Visualize the Wave Function Collapse algorithm step by step, watching entropy collapse and constraints propagate to generate coherent tile patterns from local rules.",
+    "tags": [
+      "procedural-generation",
+      "algorithms",
+      "constraint-satisfaction",
+      "visualization",
+      "generative-art",
+      "threejs"
+    ],
+    "body": "\n## Why Wave Function Collapse\n\nIn 2016, Maxim Gumin released Wave Function Collapse (WFC) — an algorithm that generates globally coherent patterns from purely local constraints. Give it a set of tiles with rules about which tiles can be adjacent, and it fills an entire grid with a valid arrangement. The name borrows from quantum mechanics: each cell starts in a \"superposition\" of all possible tiles, and the algorithm progressively \"collapses\" cells to specific values while propagating constrain"
   },
   {
     "slug": "2026-03-04-fourier-ocean-waves",
     "file": "2026-03-04-fourier-ocean-waves.md",
     "title": "Fourier Ocean Waves — Tessendorf's FFT Water Simulation",
     "date": "2026-03-04",
-    "timestamp": "2026-03-05T08:53:32.360Z",
+    "timestamp": "2026-04-13T23:10:54.867Z",
     "order": 32,
     "description": "Implement Jerry Tessendorf's FFT-based ocean simulation, the same technique used in film VFX at Pixar and Weta, running in real time with Three.js.",
     "tags": [
@@ -92,120 +125,172 @@
     "body": "\n## Why Fourier Ocean Waves\n\nIn 2001, Jerry Tessendorf published \"Simulating Ocean Water,\" a paper that became the definitive technique for ocean rendering in film VFX. The insight: ocean waves are a superposition of sinusoidal components with amplitudes drawn from well-studied statistical distributions. Rather than simulating fluid dynamics (expensive, hard to control), you synthesize the height field directly in the frequency domain and transform it to spatial domain with an inverse FFT. The r"
   },
   {
-    "slug": "2026-03-04-wave-function-collapse-visualized",
-    "file": "2026-03-04-wave-function-collapse-visualized.md",
-    "title": "Wave Function Collapse — Constraint Propagation Visualized",
+    "slug": "2026-03-04-boids-on-curved-manifolds",
+    "file": "2026-03-04-boids-on-curved-manifolds.md",
+    "title": "Boids on Curved Manifolds — Flocking on a Torus",
     "date": "2026-03-04",
-    "timestamp": "2026-03-05T03:59:44.166Z",
-    "order": 31,
-    "description": "Visualize the Wave Function Collapse algorithm step by step, watching entropy collapse and constraints propagate to generate coherent tile patterns from local rules.",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 33,
+    "description": "Simulate Reynolds' flocking algorithm on curved surfaces where topology wraps, twists, and changes the meaning of \"nearby\" — boids on a torus, sphere, and Klein bottle.",
     "tags": [
-      "procedural-generation",
-      "algorithms",
-      "constraint-satisfaction",
-      "visualization",
-      "generative-art",
-      "threejs"
+      "simulation",
+      "boids",
+      "flocking",
+      "topology",
+      "threejs",
+      "math",
+      "creative-coding"
     ],
-    "body": "\n## Why Wave Function Collapse\n\nIn 2016, Maxim Gumin released Wave Function Collapse (WFC) — an algorithm that generates globally coherent patterns from purely local constraints. Give it a set of tiles with rules about which tiles can be adjacent, and it fills an entire grid with a valid arrangement. The name borrows from quantum mechanics: each cell starts in a \"superposition\" of all possible tiles, and the algorithm progressively \"collapses\" cells to specific values while propagating constrain"
+    "body": "\n## Why Boids on Manifolds\n\nCraig Reynolds' 1987 boids algorithm demonstrated that complex flocking behavior emerges from three simple rules: separation (don't crowd), alignment (match neighbors' heading), and cohesion (steer toward the group). But Reynolds' original implementation lived in flat Euclidean space — an infinite plane where distance is straightforward and there's no boundary to worry about. What happens when you put boids on a curved surface?\n\nOn a torus, \"nearby\" wraps around both "
   },
   {
-    "slug": "2026-03-04-llm-guided-evolutionary-art",
-    "file": "2026-03-04-llm-guided-evolutionary-art.md",
-    "title": "LLM-Guided Evolutionary Art — Language as Fitness Function",
+    "slug": "2026-03-04-audio-spectrogram-terrain",
+    "file": "2026-03-04-audio-spectrogram-terrain.md",
+    "title": "Audio Spectrogram Terrain — Fly Through Sound",
     "date": "2026-03-04",
-    "timestamp": "2026-03-05T03:57:03.731Z",
-    "order": 30,
-    "description": "Evolve visual art using genetic algorithms where a local LLM judges fitness, replacing mathematical objectives with natural language like \"more crystalline\" or \"more ominous.\"",
-    "tags": [
-      "generative-art",
-      "genetic-algorithms",
-      "llm",
-      "evolution",
-      "creative-coding",
-      "ai"
-    ],
-    "body": "\n## Why Evolutionary Art\n\nIn 1994, Karl Sims demonstrated that genetic algorithms could evolve stunning visual art. His system bred mathematical expressions — trees of arithmetic operators and functions — selecting survivors based on aesthetic preference. The results were alien and beautiful, but the bottleneck was always the fitness function: either a human sat clicking \"better/worse\" for hours (interactive evolution), or you defined some mathematical proxy for beauty (color entropy, fractal di"
-  },
-  {
-    "slug": "2026-03-04-music-from-geometry-modal-analysis",
-    "file": "2026-03-04-music-from-geometry-modal-analysis.md",
-    "title": "Music From Geometry — Modal Analysis and Shape Acoustics",
-    "date": "2026-03-04",
-    "timestamp": "2026-03-05T03:53:43.908Z",
-    "order": 29,
-    "description": "Synthesize sound from 3D shapes by computing their resonant frequencies, turning geometry into musical instruments using modal analysis.",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 34,
+    "description": "Transform audio spectrograms into 3D terrain and fly through the landscape of sound, where frequency is width, time is depth, and amplitude is height.",
     "tags": [
       "audio",
-      "physics",
-      "simulation",
+      "visualization",
       "web-audio",
       "threejs",
-      "math"
+      "terrain",
+      "creative-coding"
     ],
-    "body": "\n## Why Modal Analysis\n\nIn 1966, mathematician Mark Kac asked \"Can one hear the shape of a drum?\" — whether the resonant frequencies of a vibrating membrane uniquely determine its geometry. The answer turned out to be no (counterexamples were found in 1992), but the question revealed something profound: geometry and sound are deeply linked. Every rigid body has a set of resonant frequencies — modes — determined by its shape, material, and boundary conditions. Strike a bell and you hear its geome"
+    "body": "\n## Why Spectrogram Terrain\n\nA spectrogram is a 2D image: time on one axis, frequency on the other, brightness showing amplitude. It's the standard way to visualize audio — every audio editor, every speech recognition paper, every birdsong field guide uses spectrograms. But a spectrogram is also a heightmap. Map amplitude to elevation and the spectrogram becomes a 3D terrain you can fly through.\n\nThe mapping is natural: bass frequencies form broad, rolling hills. Treble frequencies create sharp,"
   },
   {
-    "slug": "2026-03-04-non-euclidean-rendering",
-    "file": "2026-03-04-non-euclidean-rendering.md",
-    "title": "Non-Euclidean Rendering — Curved Space in the Browser",
+    "slug": "2026-03-04-impossible-geometry-shader-tricks",
+    "file": "2026-03-04-impossible-geometry-shader-tricks.md",
+    "title": "Impossible Geometry — Shader Tricks That Lie About Depth",
     "date": "2026-03-04",
-    "timestamp": "2026-03-05T03:41:18.898Z",
-    "order": 28,
-    "description": "Ray march through hyperbolic and spherical geometries where parallel lines diverge, rooms are bigger on the inside, and straight lines curve.",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 35,
+    "description": "Render Penrose triangles, Escher staircases, and impossible objects using fragment shaders that manipulate depth to create geometries that cannot exist in 3D.",
     "tags": [
       "graphics",
       "ray-marching",
-      "non-euclidean",
-      "hyperbolic-geometry",
+      "illusions",
       "glsl",
+      "creative-coding",
       "math"
     ],
-    "body": "\n## Why Non-Euclidean Geometry\n\nFor over two thousand years, Euclid's fifth postulate — that through any point not on a line, exactly one parallel line exists — was assumed to be a necessary truth about space. In the 19th century, Gauss, Bolyai, and Lobachevsky independently proved it wasn't. You can build consistent geometries where infinitely many parallel lines pass through a point (hyperbolic space) or where no parallel lines exist at all (spherical space). These aren't mathematical curiosit"
+    "body": "\n## Why Impossible Geometry\n\nIn 1958, Lionel and Roger Penrose published \"Impossible Objects: A Special Type of Visual Illusion,\" introducing the Penrose triangle and Penrose stairs. M.C. Escher immediately recognized the potential and created Waterfall and Ascending and Descending — images of structures that look perfectly solid but cannot exist in three dimensions. The objects exploit a flaw in our visual system: we unconsciously resolve 2D projections into 3D interpretations, and these partic"
   },
   {
-    "slug": "2026-03-04-physarum-slime-mold-simulation",
-    "file": "2026-03-04-physarum-slime-mold-simulation.md",
-    "title": "Physarum Simulation — Slime Mold Intelligence on the GPU",
+    "slug": "2026-03-04-verlet-softbody-physics",
+    "file": "2026-03-04-verlet-softbody-physics.md",
+    "title": "Verlet Integration Softbody Physics — Jelly, Cloth, and Rope",
     "date": "2026-03-04",
-    "timestamp": "2026-03-05T03:39:07.961Z",
-    "order": 27,
-    "description": "Simulate Physarum polycephalum's emergent network behavior using GPU ping-pong framebuffers, where 40,000 simple agents create stunning organic transport networks.",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 36,
+    "description": "Build a softbody physics engine using Verlet integration and distance constraints, simulating jelly cubes, cloth sheets, and swinging ropes in real time.",
     "tags": [
+      "physics",
       "simulation",
-      "agent-based",
-      "physarum",
-      "emergent-behavior",
+      "verlet",
+      "softbody",
+      "threejs",
+      "creative-coding"
+    ],
+    "body": "\n## Why Verlet Integration\n\nMost physics simulations store position and velocity. Euler integration updates them: `v += a*dt; x += v*dt`. It's simple but fragile — constraints (fixed distances between particles) require velocity corrections that fight the integrator and cause jitter. Verlet integration sidesteps this by storing position and previous position. Velocity is implicit: `v = x_current - x_previous`. The update is:\n\n```\nx_new = 2 * x_current - x_previous + acceleration * dt^2\n```\n\nWhy "
+  },
+  {
+    "slug": "2026-03-02-mandelbulb-3d-fractals",
+    "file": "2026-03-02-mandelbulb-3d-fractals.md",
+    "title": "Mandelbulb — 3D Fractals via Ray Marching",
+    "date": "2026-03-02",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 20,
+    "description": "Render the Mandelbulb fractal in real time using ray marching, triplex algebra, and distance estimation, with an interactive GLSL viewer.",
+    "tags": [
+      "graphics",
+      "fractal",
+      "mandelbulb",
+      "ray-marching",
       "glsl",
       "generative-art"
     ],
-    "body": "\n## Why Physarum\n\nPhysarum polycephalum is a slime mold that solves optimization problems without a brain. Place food sources on a petri dish and Physarum will grow a transport network between them that closely approximates the shortest spanning tree. In 2010, researchers recreated the Tokyo rail network by placing oat flakes at the locations of major stations — the slime mold independently converged on a layout strikingly similar to the actual rail system. No central planning, no global knowled"
+    "body": "\n## Why Mandelbulbs\n\nThe Mandelbrot set lives in 2D. For decades people tried to extend it into three dimensions, but complex numbers only have two components and quaternion fractals looked like lumpy potatoes. In 2009, Daniel White and Paul Nylander found a workaround: instead of extending complex algebra, they used spherical coordinates to define an n-th power operation on 3D points. The result -- the Mandelbulb -- is a genuine 3D fractal with infinite surface detail, bulbous protrusions, and "
   },
   {
-    "slug": "2026-03-02-flow-fields-curl-noise",
-    "file": "2026-03-02-flow-fields-curl-noise.md",
-    "title": "Flow Fields — Curl Noise and Particle Advection",
+    "slug": "2026-03-02-reaction-diffusion-turing-patterns",
+    "file": "2026-03-02-reaction-diffusion-turing-patterns.md",
+    "title": "Reaction-Diffusion — Turing Patterns on the GPU",
     "date": "2026-03-02",
-    "timestamp": "2026-03-02T05:48:17.506Z",
-    "order": 26,
-    "description": "Build flow field visualizations using curl noise for divergence-free vector fields, with thousands of advected particles in Three.js.",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 21,
+    "description": "Simulate the Gray-Scott reaction-diffusion model using GPU ping-pong framebuffers to generate Turing patterns in real time.",
     "tags": [
       "graphics",
-      "flow-field",
-      "curl-noise",
-      "particles",
+      "reaction-diffusion",
+      "simulation",
+      "turing-patterns",
+      "glsl",
+      "generative-art"
+    ],
+    "body": "\n## Why Reaction-Diffusion\n\nIn 1952, Alan Turing published \"The Chemical Basis of Morphogenesis,\" proposing that simple chemical reactions combined with diffusion could explain biological pattern formation -- spots on a leopard, stripes on a zebrafish, ridges on a fingerprint. The math is elegant: two chemicals interact and spread at different rates, and the imbalance between their diffusion speeds creates stable spatial patterns from uniform initial conditions. No template, no blueprint. Patter"
+  },
+  {
+    "slug": "2026-03-02-l-systems-procedural-plants",
+    "file": "2026-03-02-l-systems-procedural-plants.md",
+    "title": "L-Systems — Procedural Plants from String Rewriting",
+    "date": "2026-03-02",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 22,
+    "description": "Generate procedural trees and plants using Lindenmayer systems, turtle interpretation, and 3D branching rules with interactive Three.js rendering.",
+    "tags": [
+      "graphics",
+      "l-systems",
       "procedural-generation",
       "generative-art",
       "threejs"
     ],
-    "body": "\n## Why Flow Fields\n\nA flow field is a vector field that tells particles where to move. At every point in space, a vector specifies the direction and magnitude of flow. Drop particles into the field and let them follow the vectors -- the result is organic, fluid motion that produces some of the most visually striking generative art in the medium.\n\nThe technique appears everywhere: data visualization (wind maps, ocean currents), generative art (Tyler Hobbs' work, Matt DesLauriers' sketches), VFX "
+    "body": "\n## Why L-Systems\n\nIn 1968, biologist Aristid Lindenmayer invented a formal grammar to model the growth of algae. The system was simple: start with a string of symbols, apply rewriting rules to each symbol in parallel, repeat. The result was a grammar that could describe branching, recursive growth -- exactly the process that produces trees, ferns, flowers, and vascular networks.\n\nThe connection to computer graphics came later, when Przemyslaw Prusinkiewicz realized that if you interpret L-Syste"
+  },
+  {
+    "slug": "2026-03-02-voronoi-diagrams-procedural-textures",
+    "file": "2026-03-02-voronoi-diagrams-procedural-textures.md",
+    "title": "Voronoi Diagrams — Cell-Based Procedural Textures",
+    "date": "2026-03-02",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 23,
+    "description": "Generate Voronoi patterns on the GPU using distance fields, with applications to procedural textures, organic patterns, and terrain generation.",
+    "tags": [
+      "graphics",
+      "voronoi",
+      "procedural-generation",
+      "glsl",
+      "generative-art"
+    ],
+    "body": "\n## Why Voronoi\n\nA Voronoi diagram partitions space into regions based on proximity to a set of seed points. Each region contains all points closer to its seed than to any other. The result is a cellular pattern that appears constantly in nature: mud cracks, giraffe spots, dragonfly wings, soap bubbles, crystal grain boundaries, and turtle shells.\n\nFor procedural generation, Voronoi is indispensable. It gives you cellular textures without painting them, organic partitioning without manual placem"
+  },
+  {
+    "slug": "2026-03-02-cellular-automata-emergent-complexity",
+    "file": "2026-03-02-cellular-automata-emergent-complexity.md",
+    "title": "Cellular Automata — Emergent Complexity from Simple Rules",
+    "date": "2026-03-02",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 24,
+    "description": "Explore cellular automata from Conway's Game of Life to 3D visualization, showing how simple local rules produce complex emergent behavior.",
+    "tags": [
+      "simulation",
+      "cellular-automata",
+      "game-of-life",
+      "emergence",
+      "generative-art",
+      "threejs"
+    ],
+    "body": "\n## Why Cellular Automata\n\nA cellular automaton is a grid of cells, each in one of a finite number of states, updated simultaneously according to rules that depend only on nearby neighbors. No global coordination, no central plan. Yet from this minimal setup, complex behavior emerges: self-replicating patterns, gliders that travel across the grid, Turing-complete computation, and structures that look unsettlingly biological.\n\nJohn Conway's Game of Life (1970) is the most famous example, but the "
   },
   {
     "slug": "2026-03-02-strange-attractors-chaotic-systems",
     "file": "2026-03-02-strange-attractors-chaotic-systems.md",
     "title": "Strange Attractors — Visualizing Chaotic Systems",
     "date": "2026-03-02",
-    "timestamp": "2026-03-02T05:46:35.416Z",
+    "timestamp": "2026-04-13T23:10:54.867Z",
     "order": 25,
     "description": "Simulate and render strange attractors (Lorenz, Rössler, Aizawa) as particle traces in 3D, exploring deterministic chaos and sensitive dependence.",
     "tags": [
@@ -220,99 +305,149 @@
     "body": "\n## Why Strange Attractors\n\nDeterministic chaos is one of the most counterintuitive ideas in mathematics: systems governed by exact, deterministic equations that nonetheless produce behavior indistinguishable from randomness. Strange attractors are the geometric signatures of these systems -- sets in phase space that trajectories spiral toward but never repeat exactly. They have fractal structure, infinite detail, and a haunting aesthetic that has made them icons of both mathematics and generati"
   },
   {
-    "slug": "2026-03-02-cellular-automata-emergent-complexity",
-    "file": "2026-03-02-cellular-automata-emergent-complexity.md",
-    "title": "Cellular Automata — Emergent Complexity from Simple Rules",
+    "slug": "2026-03-02-flow-fields-curl-noise",
+    "file": "2026-03-02-flow-fields-curl-noise.md",
+    "title": "Flow Fields — Curl Noise and Particle Advection",
     "date": "2026-03-02",
-    "timestamp": "2026-03-02T05:45:04.968Z",
-    "order": 24,
-    "description": "Explore cellular automata from Conway's Game of Life to 3D visualization, showing how simple local rules produce complex emergent behavior.",
-    "tags": [
-      "simulation",
-      "cellular-automata",
-      "game-of-life",
-      "emergence",
-      "generative-art",
-      "threejs"
-    ],
-    "body": "\n## Why Cellular Automata\n\nA cellular automaton is a grid of cells, each in one of a finite number of states, updated simultaneously according to rules that depend only on nearby neighbors. No global coordination, no central plan. Yet from this minimal setup, complex behavior emerges: self-replicating patterns, gliders that travel across the grid, Turing-complete computation, and structures that look unsettlingly biological.\n\nJohn Conway's Game of Life (1970) is the most famous example, but the "
-  },
-  {
-    "slug": "2026-03-02-voronoi-diagrams-procedural-textures",
-    "file": "2026-03-02-voronoi-diagrams-procedural-textures.md",
-    "title": "Voronoi Diagrams — Cell-Based Procedural Textures",
-    "date": "2026-03-02",
-    "timestamp": "2026-03-02T05:43:32.331Z",
-    "order": 23,
-    "description": "Generate Voronoi patterns on the GPU using distance fields, with applications to procedural textures, organic patterns, and terrain generation.",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 26,
+    "description": "Build flow field visualizations using curl noise for divergence-free vector fields, with thousands of advected particles in Three.js.",
     "tags": [
       "graphics",
-      "voronoi",
-      "procedural-generation",
-      "glsl",
-      "generative-art"
-    ],
-    "body": "\n## Why Voronoi\n\nA Voronoi diagram partitions space into regions based on proximity to a set of seed points. Each region contains all points closer to its seed than to any other. The result is a cellular pattern that appears constantly in nature: mud cracks, giraffe spots, dragonfly wings, soap bubbles, crystal grain boundaries, and turtle shells.\n\nFor procedural generation, Voronoi is indispensable. It gives you cellular textures without painting them, organic partitioning without manual placem"
-  },
-  {
-    "slug": "2026-03-02-l-systems-procedural-plants",
-    "file": "2026-03-02-l-systems-procedural-plants.md",
-    "title": "L-Systems — Procedural Plants from String Rewriting",
-    "date": "2026-03-02",
-    "timestamp": "2026-03-02T05:42:18.466Z",
-    "order": 22,
-    "description": "Generate procedural trees and plants using Lindenmayer systems, turtle interpretation, and 3D branching rules with interactive Three.js rendering.",
-    "tags": [
-      "graphics",
-      "l-systems",
+      "flow-field",
+      "curl-noise",
+      "particles",
       "procedural-generation",
       "generative-art",
       "threejs"
     ],
-    "body": "\n## Why L-Systems\n\nIn 1968, biologist Aristid Lindenmayer invented a formal grammar to model the growth of algae. The system was simple: start with a string of symbols, apply rewriting rules to each symbol in parallel, repeat. The result was a grammar that could describe branching, recursive growth -- exactly the process that produces trees, ferns, flowers, and vascular networks.\n\nThe connection to computer graphics came later, when Przemyslaw Prusinkiewicz realized that if you interpret L-Syste"
+    "body": "\n## Why Flow Fields\n\nA flow field is a vector field that tells particles where to move. At every point in space, a vector specifies the direction and magnitude of flow. Drop particles into the field and let them follow the vectors -- the result is organic, fluid motion that produces some of the most visually striking generative art in the medium.\n\nThe technique appears everywhere: data visualization (wind maps, ocean currents), generative art (Tyler Hobbs' work, Matt DesLauriers' sketches), VFX "
   },
   {
-    "slug": "2026-03-02-reaction-diffusion-turing-patterns",
-    "file": "2026-03-02-reaction-diffusion-turing-patterns.md",
-    "title": "Reaction-Diffusion — Turing Patterns on the GPU",
-    "date": "2026-03-02",
-    "timestamp": "2026-03-02T05:40:48.300Z",
-    "order": 21,
-    "description": "Simulate the Gray-Scott reaction-diffusion model using GPU ping-pong framebuffers to generate Turing patterns in real time.",
+    "slug": "2026-03-01-webgpu-compute-shaders",
+    "file": "2026-03-01-webgpu-compute-shaders.md",
+    "title": "WebGPU Compute Shaders — Parallel Processing in the Browser",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 7,
+    "description": "Set up WebGPU compute pipelines with WGSL, manage buffers, size workgroups, and run parallel operations entirely in the browser.",
     "tags": [
-      "graphics",
-      "reaction-diffusion",
-      "simulation",
-      "turing-patterns",
-      "glsl",
-      "generative-art"
+      "webgpu",
+      "compute-shaders",
+      "wgsl",
+      "gpu-programming",
+      "browser"
     ],
-    "body": "\n## Why Reaction-Diffusion\n\nIn 1952, Alan Turing published \"The Chemical Basis of Morphogenesis,\" proposing that simple chemical reactions combined with diffusion could explain biological pattern formation -- spots on a leopard, stripes on a zebrafish, ridges on a fingerprint. The math is elegant: two chemicals interact and spread at different rates, and the imbalance between their diffusion speeds creates stable spatial patterns from uniform initial conditions. No template, no blueprint. Patter"
+    "body": "\n## Why Compute Shaders in the Browser Matter\n\nWebGL gave us pixel shaders and vertex shaders, but no general-purpose compute. If you wanted to run a parallel reduction, sort an array, or process an image kernel without rendering a quad, you were hacking around the graphics pipeline. WebGPU fixes this with first-class compute shaders: you dispatch work to the GPU, read results back, and never touch a framebuffer.\n\nThis matters because real applications -- physics simulations, ML inference, audio"
   },
   {
-    "slug": "2026-03-02-mandelbulb-3d-fractals",
-    "file": "2026-03-02-mandelbulb-3d-fractals.md",
-    "title": "Mandelbulb — 3D Fractals via Ray Marching",
-    "date": "2026-03-02",
-    "timestamp": "2026-03-02T05:39:10.029Z",
-    "order": 20,
-    "description": "Render the Mandelbulb fractal in real time using ray marching, triplex algebra, and distance estimation, with an interactive GLSL viewer.",
+    "slug": "2026-03-01-lora-fine-tuning-single-gpu",
+    "file": "2026-03-01-lora-fine-tuning-single-gpu.md",
+    "title": "LoRA Fine-Tuning on a Single GPU",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 8,
+    "description": "Adapt foundation models on consumer hardware using LoRA, covering dataset prep, PEFT training, VRAM management, and adapter merging.",
+    "tags": [
+      "llm",
+      "fine-tuning",
+      "lora",
+      "peft",
+      "pytorch"
+    ],
+    "body": "\n## Why Fine-Tune at All\n\nPrompting gets you 80% of the way. The remaining 20% — consistent output format, domain-specific terminology, reliable tone — often requires the model to internalize patterns that prompt engineering alone cannot reliably enforce. Fine-tuning encodes those patterns into the weights.\n\nFull fine-tuning of a 7B model requires 56GB+ of VRAM just for optimizer states. That rules out most consumer hardware. LoRA sidesteps this by freezing the original weights and training smal"
+  },
+  {
+    "slug": "2026-03-01-procedural-geometry-with-sdfs",
+    "file": "2026-03-01-procedural-geometry-with-sdfs.md",
+    "title": "Procedural Geometry with Signed Distance Functions",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 9,
+    "description": "Build real-time procedural scenes using SDF primitives, CSG operations, and ray marching in GLSL, with Three.js integration.",
     "tags": [
       "graphics",
-      "fractal",
-      "mandelbulb",
+      "sdf",
       "ray-marching",
       "glsl",
-      "generative-art"
+      "procedural-generation"
     ],
-    "body": "\n## Why Mandelbulbs\n\nThe Mandelbrot set lives in 2D. For decades people tried to extend it into three dimensions, but complex numbers only have two components and quaternion fractals looked like lumpy potatoes. In 2009, Daniel White and Paul Nylander found a workaround: instead of extending complex algebra, they used spherical coordinates to define an n-th power operation on 3D points. The result -- the Mandelbulb -- is a genuine 3D fractal with infinite surface detail, bulbous protrusions, and "
+    "body": "\n## Why SDFs\n\nTraditional mesh-based geometry requires you to define every vertex and face up front. Signed distance functions flip that: you describe shapes as math, and the renderer figures out where surfaces are at runtime. The payoff is smooth CSG operations, infinite detail at any zoom level, and scenes you can parameterize with a handful of floats instead of megabytes of vertex data.\n\n> [!note]\n> SDFs are not a replacement for mesh pipelines. They excel at procedural content, prototyping, "
+  },
+  {
+    "slug": "2026-03-01-structured-output-local-llms",
+    "file": "2026-03-01-structured-output-local-llms.md",
+    "title": "Structured Output and Tool Use with Local LLMs",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 10,
+    "description": "Get reliable structured output from local models using JSON mode, grammar-guided decoding, function calling, and validation patterns.",
+    "tags": [
+      "llm",
+      "structured-output",
+      "tool-use",
+      "ollama",
+      "constrained-decoding"
+    ],
+    "body": "\n## Why Structured Output Matters\n\nFree-form text is easy to generate but hard to consume programmatically. The moment your LLM output feeds into another system -- a database insert, an API call, a downstream agent step -- you need guarantees about shape and type. Without them you are writing brittle regex parsers and praying.\n\nLocal LLMs make this harder than hosted APIs because you own the enforcement layer. The upside: you also control it completely. Grammar-guided decoding, schema validation"
+  },
+  {
+    "slug": "2026-03-01-realtime-point-cloud-processing",
+    "file": "2026-03-01-realtime-point-cloud-processing.md",
+    "title": "Real-Time Point Cloud Processing",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 11,
+    "description": "Clean, align, and downsample point clouds using Open3D with spatial indexing, outlier removal, ICP registration, and voxel filtering.",
+    "tags": [
+      "point-clouds",
+      "open3d",
+      "spatial-indexing",
+      "3d-reconstruction",
+      "photogrammetry"
+    ],
+    "body": "\n## Why Point Cloud Processing Matters\n\nEvery 3D capture pipeline -- photogrammetry, LiDAR, gaussian splatting -- produces point clouds as an intermediate or final representation. Raw clouds are noisy, misaligned between scans, and far too dense for downstream consumption. If you cannot clean and register point clouds efficiently, nothing downstream works: meshing fails, splatting trains on garbage, and real-time viewers choke on millions of redundant points.\n\nThe goal is a repeatable pipeline t"
+  },
+  {
+    "slug": "2026-03-01-neural-tts-consumer-hardware",
+    "file": "2026-03-01-neural-tts-consumer-hardware.md",
+    "title": "Neural Text-to-Speech on Consumer Hardware",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 12,
+    "description": "Run neural TTS locally with streaming inference, voice cloning, and quality-latency trade-offs using Coqui TTS and Piper.",
+    "tags": [
+      "tts",
+      "speech-synthesis",
+      "neural-audio",
+      "voice-cloning",
+      "inference"
+    ],
+    "body": "\n## Why Local TTS\n\nCloud TTS APIs are convenient until they are not. Latency spikes, per-character billing, and the inability to clone custom voices without uploading audio to a third party all push the same direction: run it yourself.\n\nModern neural TTS has crossed the quality threshold where a single consumer GPU -- or even a capable CPU -- can produce natural speech in real time. Pick a model, serve it behind a local HTTP endpoint, and integrate it into any pipeline that needs voice output.\n\n"
+  },
+  {
+    "slug": "2026-03-01-noise-functions-procedural-terrain",
+    "file": "2026-03-01-noise-functions-procedural-terrain.md",
+    "title": "Noise Functions and Procedural Terrain",
+    "date": "2026-03-01",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 13,
+    "description": "Generate procedural terrain using layered noise functions, FBM, and domain warping, with an interactive Three.js heightmap demo.",
+    "tags": [
+      "graphics",
+      "procedural-generation",
+      "noise",
+      "terrain",
+      "threejs"
+    ],
+    "body": "\n## Why Noise\n\nRandom numbers alone produce static. Feed `Math.random()` into a heightmap and you get jagged nonsense with no spatial coherence. Noise functions solve this by generating smooth, continuous pseudo-randomness that varies gradually across space. That smoothness is what makes mountains look like mountains instead of white noise.\n\nKen Perlin introduced the original gradient noise algorithm in 1983 for the film Tron. Simplex noise followed in 2001, fixing some dimensional scaling issue"
   },
   {
     "slug": "2026-03-01-marching-cubes-isosurface-extraction",
     "file": "2026-03-01-marching-cubes-isosurface-extraction.md",
     "title": "Marching Cubes — Isosurface Extraction from Scalar Fields",
     "date": "2026-03-01",
-    "timestamp": "2026-03-01T23:52:01.206Z",
+    "timestamp": "2026-04-13T23:10:54.867Z",
     "order": 14,
     "description": "Extract meshes from scalar fields using marching cubes, with lookup tables, normal estimation, and an interactive metaball demo.",
     "tags": [
@@ -325,62 +460,11 @@
     "body": "\n## Why Marching Cubes\n\nThe previous post on SDFs showed how to describe geometry as math. But if you want to feed that geometry into a standard mesh pipeline -- physics engines, vertex shaders, exporters -- you need actual triangles. Marching cubes is the bridge: it takes a scalar field (any function that returns a value at a point in space) and extracts a triangle mesh along a chosen threshold. It has been the workhorse isosurface algorithm since Lorensen and Cline published it in 1987, and it"
   },
   {
-    "slug": "2026-03-01-attention-visualization-transformers",
-    "file": "2026-03-01-attention-visualization-transformers.md",
-    "title": "Attention Visualization in Transformers",
-    "date": "2026-03-01",
-    "timestamp": "2026-03-01T23:51:20.515Z",
-    "order": 18,
-    "description": "Extract and visualize self-attention patterns from transformer models, showing what different heads learn with interactive heatmaps.",
-    "tags": [
-      "llm",
-      "transformers",
-      "attention",
-      "visualization",
-      "pytorch"
-    ],
-    "body": "\n## Why Visualize Attention\n\nIf you followed the microGPT build in an earlier post, you implemented multi-head self-attention as a matrix multiply followed by softmax. The weights that softmax produces are the attention pattern -- a probability distribution over positions for every query token. These patterns are not opaque. You can extract them, plot them, and learn what each head specializes in.\n\nThis matters for three reasons. First, visualization confirms your model is learning structure rat"
-  },
-  {
-    "slug": "2026-03-01-embedding-spaces-in-3d",
-    "file": "2026-03-01-embedding-spaces-in-3d.md",
-    "title": "Embedding Spaces in 3D",
-    "date": "2026-03-01",
-    "timestamp": "2026-03-01T23:51:10.629Z",
-    "order": 19,
-    "description": "Visualize high-dimensional embeddings using PCA, t-SNE, and UMAP, with an interactive 3D scatter plot of word clusters.",
-    "tags": [
-      "llm",
-      "embeddings",
-      "dimensionality-reduction",
-      "umap",
-      "visualization"
-    ],
-    "body": "\n## Why Stare at Embedding Spaces\n\nEvery token your model processes lives as a point in a high-dimensional vector space. That space has structure -- words with similar meaning cluster together, analogies form parallelograms, and entire semantic categories occupy distinct neighborhoods. But 768 dimensions is hard to reason about. Projecting those vectors down to 2D or 3D makes that structure visible and debuggable.\n\nThis matters in practice. When your semantic search returns irrelevant results, v"
-  },
-  {
-    "slug": "2026-03-01-fourier-transforms-visualized",
-    "file": "2026-03-01-fourier-transforms-visualized.md",
-    "title": "Fourier Transforms Visualized",
-    "date": "2026-03-01",
-    "timestamp": "2026-03-01T23:51:06.162Z",
-    "order": 17,
-    "description": "Understand DFT and FFT through interactive epicycle animations, frequency decomposition, and practical signal processing patterns.",
-    "tags": [
-      "math",
-      "fourier-transform",
-      "signal-processing",
-      "visualization",
-      "dft"
-    ],
-    "body": "\n## Why Fourier Transforms Deserve a Visual Intuition\n\nThe Discrete Fourier Transform is one of the most useful algorithms in computing, yet most explanations jump straight to the summation formula and lose people at the complex exponential. The core idea is simple: any periodic signal can be decomposed into a sum of sine and cosine waves at different frequencies. The DFT tells you which frequencies are present and how strong each one is. The inverse DFT reconstructs the original signal from tho"
-  },
-  {
     "slug": "2026-03-01-particle-systems-gpu-simulation",
     "file": "2026-03-01-particle-systems-gpu-simulation.md",
     "title": "Particle Systems on the GPU",
     "date": "2026-03-01",
-    "timestamp": "2026-03-01T23:50:36.892Z",
+    "timestamp": "2026-04-13T23:10:54.867Z",
     "order": 15,
     "description": "Build high-count particle systems with instanced rendering, integration schemes, and GPU-friendly update patterns in Three.js.",
     "tags": [
@@ -397,7 +481,7 @@
     "file": "2026-03-01-pbr-physics-based-shading.md",
     "title": "PBR Materials — Physics-Based Shading in Three.js",
     "date": "2026-03-01",
-    "timestamp": "2026-03-01T23:50:13.105Z",
+    "timestamp": "2026-04-13T23:10:54.867Z",
     "order": 16,
     "description": "Understand Cook-Torrance BRDF, metalness-roughness workflows, and environment lighting with an interactive material parameter grid.",
     "tags": [
@@ -410,146 +494,94 @@
     "body": "\n## Why PBR\n\nTraditional shading models -- Phong, Blinn-Phong -- let you push numbers around until a material \"looks right.\" PBR (Physically-Based Rendering) replaces that guesswork with constraints derived from actual physics: energy conservation, microfacet statistics, and Fresnel reflectance. The result is materials that respond correctly to any lighting environment without per-scene hand-tuning. Every major engine (Unreal, Unity, Godot, Three.js) adopted the metalness-roughness workflow for "
   },
   {
-    "slug": "2026-03-01-noise-functions-procedural-terrain",
-    "file": "2026-03-01-noise-functions-procedural-terrain.md",
-    "title": "Noise Functions and Procedural Terrain",
+    "slug": "2026-03-01-fourier-transforms-visualized",
+    "file": "2026-03-01-fourier-transforms-visualized.md",
+    "title": "Fourier Transforms Visualized",
     "date": "2026-03-01",
-    "timestamp": "2026-03-01T23:49:51.215Z",
-    "order": 13,
-    "description": "Generate procedural terrain using layered noise functions, FBM, and domain warping, with an interactive Three.js heightmap demo.",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 17,
+    "description": "Understand DFT and FFT through interactive epicycle animations, frequency decomposition, and practical signal processing patterns.",
     "tags": [
-      "graphics",
-      "procedural-generation",
-      "noise",
-      "terrain",
-      "threejs"
+      "math",
+      "fourier-transform",
+      "signal-processing",
+      "visualization",
+      "dft"
     ],
-    "body": "\n## Why Noise\n\nRandom numbers alone produce static. Feed `Math.random()` into a heightmap and you get jagged nonsense with no spatial coherence. Noise functions solve this by generating smooth, continuous pseudo-randomness that varies gradually across space. That smoothness is what makes mountains look like mountains instead of white noise.\n\nKen Perlin introduced the original gradient noise algorithm in 1983 for the film Tron. Simplex noise followed in 2001, fixing some dimensional scaling issue"
+    "body": "\n## Why Fourier Transforms Deserve a Visual Intuition\n\nThe Discrete Fourier Transform is one of the most useful algorithms in computing, yet most explanations jump straight to the summation formula and lose people at the complex exponential. The core idea is simple: any periodic signal can be decomposed into a sum of sine and cosine waves at different frequencies. The DFT tells you which frequencies are present and how strong each one is. The inverse DFT reconstructs the original signal from tho"
   },
   {
-    "slug": "2026-03-01-neural-tts-consumer-hardware",
-    "file": "2026-03-01-neural-tts-consumer-hardware.md",
-    "title": "Neural Text-to-Speech on Consumer Hardware",
+    "slug": "2026-03-01-attention-visualization-transformers",
+    "file": "2026-03-01-attention-visualization-transformers.md",
+    "title": "Attention Visualization in Transformers",
     "date": "2026-03-01",
-    "timestamp": "2026-03-01T23:34:37.491Z",
-    "order": 12,
-    "description": "Run neural TTS locally with streaming inference, voice cloning, and quality-latency trade-offs using Coqui TTS and Piper.",
-    "tags": [
-      "tts",
-      "speech-synthesis",
-      "neural-audio",
-      "voice-cloning",
-      "inference"
-    ],
-    "body": "\n## Why Local TTS\n\nCloud TTS APIs are convenient until they are not. Latency spikes, per-character billing, and the inability to clone custom voices without uploading audio to a third party all push the same direction: run it yourself.\n\nModern neural TTS has crossed the quality threshold where a single consumer GPU -- or even a capable CPU -- can produce natural speech in real time. Pick a model, serve it behind a local HTTP endpoint, and integrate it into any pipeline that needs voice output.\n\n"
-  },
-  {
-    "slug": "2026-03-01-lora-fine-tuning-single-gpu",
-    "file": "2026-03-01-lora-fine-tuning-single-gpu.md",
-    "title": "LoRA Fine-Tuning on a Single GPU",
-    "date": "2026-03-01",
-    "timestamp": "2026-03-01T23:33:31.809Z",
-    "order": 8,
-    "description": "Adapt foundation models on consumer hardware using LoRA, covering dataset prep, PEFT training, VRAM management, and adapter merging.",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 18,
+    "description": "Extract and visualize self-attention patterns from transformer models, showing what different heads learn with interactive heatmaps.",
     "tags": [
       "llm",
-      "fine-tuning",
-      "lora",
-      "peft",
+      "transformers",
+      "attention",
+      "visualization",
       "pytorch"
     ],
-    "body": "\n## Why Fine-Tune at All\n\nPrompting gets you 80% of the way. The remaining 20% — consistent output format, domain-specific terminology, reliable tone — often requires the model to internalize patterns that prompt engineering alone cannot reliably enforce. Fine-tuning encodes those patterns into the weights.\n\nFull fine-tuning of a 7B model requires 56GB+ of VRAM just for optimizer states. That rules out most consumer hardware. LoRA sidesteps this by freezing the original weights and training smal"
+    "body": "\n## Why Visualize Attention\n\nIf you followed the microGPT build in an earlier post, you implemented multi-head self-attention as a matrix multiply followed by softmax. The weights that softmax produces are the attention pattern -- a probability distribution over positions for every query token. These patterns are not opaque. You can extract them, plot them, and learn what each head specializes in.\n\nThis matters for three reasons. First, visualization confirms your model is learning structure rat"
   },
   {
-    "slug": "2026-03-01-realtime-point-cloud-processing",
-    "file": "2026-03-01-realtime-point-cloud-processing.md",
-    "title": "Real-Time Point Cloud Processing",
+    "slug": "2026-03-01-embedding-spaces-in-3d",
+    "file": "2026-03-01-embedding-spaces-in-3d.md",
+    "title": "Embedding Spaces in 3D",
     "date": "2026-03-01",
-    "timestamp": "2026-03-01T23:33:00.920Z",
-    "order": 11,
-    "description": "Clean, align, and downsample point clouds using Open3D with spatial indexing, outlier removal, ICP registration, and voxel filtering.",
-    "tags": [
-      "point-clouds",
-      "open3d",
-      "spatial-indexing",
-      "3d-reconstruction",
-      "photogrammetry"
-    ],
-    "body": "\n## Why Point Cloud Processing Matters\n\nEvery 3D capture pipeline -- photogrammetry, LiDAR, gaussian splatting -- produces point clouds as an intermediate or final representation. Raw clouds are noisy, misaligned between scans, and far too dense for downstream consumption. If you cannot clean and register point clouds efficiently, nothing downstream works: meshing fails, splatting trains on garbage, and real-time viewers choke on millions of redundant points.\n\nThe goal is a repeatable pipeline t"
-  },
-  {
-    "slug": "2026-03-01-structured-output-local-llms",
-    "file": "2026-03-01-structured-output-local-llms.md",
-    "title": "Structured Output and Tool Use with Local LLMs",
-    "date": "2026-03-01",
-    "timestamp": "2026-03-01T23:32:40.373Z",
-    "order": 10,
-    "description": "Get reliable structured output from local models using JSON mode, grammar-guided decoding, function calling, and validation patterns.",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 19,
+    "description": "Visualize high-dimensional embeddings using PCA, t-SNE, and UMAP, with an interactive 3D scatter plot of word clusters.",
     "tags": [
       "llm",
-      "structured-output",
-      "tool-use",
-      "ollama",
-      "constrained-decoding"
+      "embeddings",
+      "dimensionality-reduction",
+      "umap",
+      "visualization"
     ],
-    "body": "\n## Why Structured Output Matters\n\nFree-form text is easy to generate but hard to consume programmatically. The moment your LLM output feeds into another system -- a database insert, an API call, a downstream agent step -- you need guarantees about shape and type. Without them you are writing brittle regex parsers and praying.\n\nLocal LLMs make this harder than hosted APIs because you own the enforcement layer. The upside: you also control it completely. Grammar-guided decoding, schema validation"
+    "body": "\n## Why Stare at Embedding Spaces\n\nEvery token your model processes lives as a point in a high-dimensional vector space. That space has structure -- words with similar meaning cluster together, analogies form parallelograms, and entire semantic categories occupy distinct neighborhoods. But 768 dimensions is hard to reason about. Projecting those vectors down to 2D or 3D makes that structure visible and debuggable.\n\nThis matters in practice. When your semantic search returns irrelevant results, v"
   },
   {
-    "slug": "2026-03-01-webgpu-compute-shaders",
-    "file": "2026-03-01-webgpu-compute-shaders.md",
-    "title": "WebGPU Compute Shaders — Parallel Processing in the Browser",
-    "date": "2026-03-01",
-    "timestamp": "2026-03-01T23:32:25.286Z",
-    "order": 7,
-    "description": "Set up WebGPU compute pipelines with WGSL, manage buffers, size workgroups, and run parallel operations entirely in the browser.",
-    "tags": [
-      "webgpu",
-      "compute-shaders",
-      "wgsl",
-      "gpu-programming",
-      "browser"
-    ],
-    "body": "\n## Why Compute Shaders in the Browser Matter\n\nWebGL gave us pixel shaders and vertex shaders, but no general-purpose compute. If you wanted to run a parallel reduction, sort an array, or process an image kernel without rendering a quad, you were hacking around the graphics pipeline. WebGPU fixes this with first-class compute shaders: you dispatch work to the GPU, read results back, and never touch a framebuffer.\n\nThis matters because real applications -- physics simulations, ML inference, audio"
-  },
-  {
-    "slug": "2026-03-01-procedural-geometry-with-sdfs",
-    "file": "2026-03-01-procedural-geometry-with-sdfs.md",
-    "title": "Procedural Geometry with Signed Distance Functions",
-    "date": "2026-03-01",
-    "timestamp": "2026-03-01T23:32:25.248Z",
-    "order": 9,
-    "description": "Build real-time procedural scenes using SDF primitives, CSG operations, and ray marching in GLSL, with Three.js integration.",
-    "tags": [
-      "graphics",
-      "sdf",
-      "ray-marching",
-      "glsl",
-      "procedural-generation"
-    ],
-    "body": "\n## Why SDFs\n\nTraditional mesh-based geometry requires you to define every vertex and face up front. Signed distance functions flip that: you describe shapes as math, and the renderer figures out where surfaces are at runtime. The payoff is smooth CSG operations, infinite detail at any zoom level, and scenes you can parameterize with a handful of floats instead of megabytes of vertex data.\n\n> [!note]\n> SDFs are not a replacement for mesh pipelines. They excel at procedural content, prototyping, "
-  },
-  {
-    "slug": "2026-02-14-photogrammetry-from-video",
-    "file": "2026-02-14-photogrammetry-from-video.md",
-    "title": "Photogrammetry from Video — Reconstructing 3D Geometry from 2D Images",
+    "slug": "2026-02-14-hello-world",
+    "file": "2026-02-14-hello-world.md",
+    "title": "Hello World — A Tour of Every Feature",
     "date": "2026-02-14",
-    "timestamp": "2026-02-15T00:44:04.383Z",
-    "order": 6,
-    "description": "End-to-end photogrammetry pipeline: video frames to textured 3D meshes using Meshroom, with interactive model viewer and practical debugging tips.",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 0,
+    "description": "End-to-end showcase of every blog feature: code highlighting, Mermaid, callouts, chat blocks, steps, and Three.js embeds.",
     "tags": [
-      "photogrammetry",
-      "3d-reconstruction",
-      "meshroom",
-      "computer-vision"
+      "meta",
+      "demo",
+      "markdown",
+      "rendering"
     ],
-    "body": "\n## What Is Photogrammetry\n\nPhotogrammetry is the science of reconstructing 3D geometry from 2D images. Given enough overlapping photographs of a scene, algorithms can recover the camera positions that took each photo, triangulate 3D points visible across multiple views, and ultimately produce a dense mesh with texture.\n\nThe core insight: **if the same physical point appears in two or more images taken from different angles, its 3D position can be triangulated.** Do this for millions of points a"
+    "body": "\n## Welcome\n\nThis is the inaugural post on the research blog — a private space for deep dives into technical topics. This post exists to showcase and verify every rendering feature the blog supports.\n\nThe blog is a **vanilla JS SPA** with no build tools, no frameworks, and no dependencies beyond a few CDN-loaded libraries. Everything renders client-side from markdown files.\n\n## Syntax Highlighting\n\nCode blocks get automatic language detection and Prism.js highlighting.\n\n### JavaScript\n\n```javasc"
+  },
+  {
+    "slug": "2026-02-14-karpathys-microgpt-from-scratch",
+    "file": "2026-02-14-karpathys-microgpt-from-scratch.md",
+    "title": "microGPT from Scratch - Building a Transformer from First Principles",
+    "date": "2026-02-14",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 1,
+    "description": "Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.",
+    "tags": [
+      "llm",
+      "transformers",
+      "microgpt",
+      "pytorch"
+    ],
+    "body": "\n## Why This Post\n\nKarpathy's microGPT write-up is a strong example of learning by implementation. Instead of treating a large language model as a black box, you build a small GPT end to end and inspect every moving part.\n\nPrimary reference: [karpathy.ai/microgpt.html](https://karpathy.ai/microgpt.html)\n\n> [!note]\n> This post is structured as a build notebook. The goal is understanding, not benchmark chasing.\n\n## Post Plan (Feature Map)\n\n| Section Goal | Blog Feature Used | Why |\n|---|---|---|\n|"
   },
   {
     "slug": "2026-02-14-gaussian-splatting-smartphone-companion",
     "file": "2026-02-14-gaussian-splatting-smartphone-companion.md",
     "title": "Companion - Gaussian Splatting from Smartphone Photos (Local RTX 3060 Workflow)",
     "date": "2026-02-14",
-    "timestamp": "2026-02-14T22:47:06.433Z",
+    "timestamp": "2026-04-13T23:10:54.867Z",
     "order": 2.5,
     "description": "Companion guide: capture photos on a phone, reconstruct/train locally, and load your splat in the blog viewer on RTX 3060 12GB.",
     "tags": [
@@ -562,43 +594,11 @@
     "body": "\n## Why This Companion Exists\n\nThis is the practical companion to the Gaussian splatting notes post. It answers one question: **how do I go from phone photos to a usable splat locally?**\n\n> [!note]\n> Target machine: **RTX 3060 12GB VRAM + 32GB system RAM**.\n\n## Requirements\n\n| Component | Minimum | Recommended |\n|---|---|---|\n| GPU | 8GB VRAM | RTX 3060 12GB |\n| System RAM | 16GB | 32GB |\n| Storage | 15GB free | 25GB free |\n| OS | Linux/WSL2 | Ubuntu 22.04+ |\n\n## Capture Checklist (No LiDAR)\n\n- "
   },
   {
-    "slug": "2026-02-14-threejs-rendering-techniques-that-hold-up",
-    "file": "2026-02-14-threejs-rendering-techniques-that-hold-up.md",
-    "title": "Three.js Rendering Techniques - Patterns for Stable Real-World Performance",
-    "date": "2026-02-14",
-    "timestamp": "2026-02-14T19:44:12.125Z",
-    "order": 5,
-    "description": "Improve Three.js frame stability with instancing, culling, LOD strategy, and practical render-loop architecture.",
-    "tags": [
-      "threejs",
-      "webgl",
-      "realtime-rendering",
-      "performance"
-    ],
-    "body": "\n## Why This Guide\n\nThree.js is easy to start and easy to outgrow. The hard part is not getting a cube on screen, it is keeping frame time stable as scene complexity and UX requirements grow.\n\n> [!note]\n> These patterns prioritize consistency under load over flashy demos.\n\n## Post Plan (Feature Map)\n\n| Section Goal | Blog Feature Used | Why |\n|---|---|---|\n| Explain runtime architecture | Mermaid diagram | Make update/render responsibilities explicit |\n| Demonstrate visually | Three.js embed | S"
-  },
-  {
-    "slug": "2026-02-14-comfyui-workflows-that-scale",
-    "file": "2026-02-14-comfyui-workflows-that-scale.md",
-    "title": "ComfyUI Workflows - From Experiments to Repeatable Pipelines",
-    "date": "2026-02-14",
-    "timestamp": "2026-02-14T19:43:50.338Z",
-    "order": 4,
-    "description": "Design versioned ComfyUI graphs that scale from one-off experiments to repeatable production image workflows.",
-    "tags": [
-      "comfyui",
-      "diffusion",
-      "image-generation",
-      "workflow-engineering"
-    ],
-    "body": "\n## Why ComfyUI Matters\n\nComfyUI is powerful because it externalizes the image generation graph. You can inspect every stage, swap components quickly, and encode workflow intent directly in nodes instead of hidden defaults.\n\n> [!note]\n> The goal here is repeatability. A beautiful one-off image is less valuable than a workflow that stays stable under iteration.\n\n## Post Plan (Feature Map)\n\n| Section Goal | Blog Feature Used | Why |\n|---|---|---|\n| Explain graph architecture | Mermaid workflow gra"
-  },
-  {
     "slug": "2026-02-14-local-llms-on-consumer-hardware",
     "file": "2026-02-14-local-llms-on-consumer-hardware.md",
     "title": "Local LLMs on Consumer Hardware - A Practical Playbook",
     "date": "2026-02-14",
-    "timestamp": "2026-02-14T19:43:28.230Z",
+    "timestamp": "2026-04-13T23:10:54.867Z",
     "order": 3,
     "description": "Run local LLMs on consumer hardware with a repeatable stack for model sizing, quantization, benchmarking, and deployment.",
     "tags": [
@@ -610,11 +610,43 @@
     "body": "\n## Why Run Models Locally\n\nLocal LLMs provide privacy, lower marginal cost, and predictable latency for repeated workflows. The trade-off is that you become the platform engineer: model selection, memory budgeting, and quality evaluation are now your job.\n\n> [!note]\n> This is a deployment-focused post, not a benchmark leaderboard.\n\n## Post Plan (Feature Map)\n\n| Section Goal | Blog Feature Used | Why |\n|---|---|---|\n| Hardware sizing | Table + callouts | Turn vague constraints into concrete choi"
   },
   {
+    "slug": "2026-02-14-threejs-rendering-techniques-that-hold-up",
+    "file": "2026-02-14-threejs-rendering-techniques-that-hold-up.md",
+    "title": "Three.js Rendering Techniques - Patterns for Stable Real-World Performance",
+    "date": "2026-02-14",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 5,
+    "description": "Improve Three.js frame stability with instancing, culling, LOD strategy, and practical render-loop architecture.",
+    "tags": [
+      "threejs",
+      "webgl",
+      "realtime-rendering",
+      "performance"
+    ],
+    "body": "\n## Why This Guide\n\nThree.js is easy to start and easy to outgrow. The hard part is not getting a cube on screen, it is keeping frame time stable as scene complexity and UX requirements grow.\n\n> [!note]\n> These patterns prioritize consistency under load over flashy demos.\n\n## Post Plan (Feature Map)\n\n| Section Goal | Blog Feature Used | Why |\n|---|---|---|\n| Explain runtime architecture | Mermaid diagram | Make update/render responsibilities explicit |\n| Demonstrate visually | Three.js embed | S"
+  },
+  {
+    "slug": "2026-02-14-photogrammetry-from-video",
+    "file": "2026-02-14-photogrammetry-from-video.md",
+    "title": "Photogrammetry from Video — Reconstructing 3D Geometry from 2D Images",
+    "date": "2026-02-14",
+    "timestamp": "2026-04-13T23:10:54.867Z",
+    "order": 6,
+    "description": "End-to-end photogrammetry pipeline: video frames to textured 3D meshes using Meshroom, with interactive model viewer and practical debugging tips.",
+    "tags": [
+      "photogrammetry",
+      "3d-reconstruction",
+      "meshroom",
+      "computer-vision"
+    ],
+    "body": "\n## What Is Photogrammetry\n\nPhotogrammetry is the science of reconstructing 3D geometry from 2D images. Given enough overlapping photographs of a scene, algorithms can recover the camera positions that took each photo, triangulate 3D points visible across multiple views, and ultimately produce a dense mesh with texture.\n\nThe core insight: **if the same physical point appears in two or more images taken from different angles, its 3D position can be triangulated.** Do this for millions of points a"
+  },
+  {
     "slug": "2026-02-14-gaussian-splatting-real-time-notes",
     "file": "2026-02-14-gaussian-splatting-real-time-notes.md",
     "title": "Gaussian Splatting for Real-Time Radiance Fields - Practical Notes",
     "date": "2026-02-14",
-    "timestamp": "2026-02-14T19:43:04.714Z",
+    "timestamp": "2026-04-13T23:10:54.866Z",
     "order": 2,
     "description": "Understand Gaussian splatting end to end: representation, projection, sorting, blending, and real-time performance trade-offs.",
     "tags": [
@@ -624,37 +656,5 @@
       "realtime-rendering"
     ],
     "body": "\n## Why Gaussian Splatting Is Interesting\n\nGaussian splatting is one of the most practical bridges between neural scene capture and real-time rendering. You still optimize a scene representation, but runtime behaves more like a renderer than a heavy neural volume integrator.\n\n> [!note]\n> This write-up focuses on implementation intuition: what to store, what to project, and what to optimize first.\n\n## Post Plan (Feature Map)\n\n| Section Goal | Blog Feature Used | Why |\n|---|---|---|\n| Build intuit"
-  },
-  {
-    "slug": "2026-02-14-karpathys-microgpt-from-scratch",
-    "file": "2026-02-14-karpathys-microgpt-from-scratch.md",
-    "title": "microGPT from Scratch - Building a Transformer from First Principles",
-    "date": "2026-02-14",
-    "timestamp": "2026-02-14T19:42:34.979Z",
-    "order": 1,
-    "description": "Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.",
-    "tags": [
-      "llm",
-      "transformers",
-      "microgpt",
-      "pytorch"
-    ],
-    "body": "\n## Why This Post\n\nKarpathy's microGPT write-up is a strong example of learning by implementation. Instead of treating a large language model as a black box, you build a small GPT end to end and inspect every moving part.\n\nPrimary reference: [karpathy.ai/microgpt.html](https://karpathy.ai/microgpt.html)\n\n> [!note]\n> This post is structured as a build notebook. The goal is understanding, not benchmark chasing.\n\n## Post Plan (Feature Map)\n\n| Section Goal | Blog Feature Used | Why |\n|---|---|---|\n|"
-  },
-  {
-    "slug": "2026-02-14-hello-world",
-    "file": "2026-02-14-hello-world.md",
-    "title": "Hello World — A Tour of Every Feature",
-    "date": "2026-02-14",
-    "timestamp": "2026-02-14T18:57:33.542Z",
-    "order": 0,
-    "description": "End-to-end showcase of every blog feature: code highlighting, Mermaid, callouts, chat blocks, steps, and Three.js embeds.",
-    "tags": [
-      "meta",
-      "demo",
-      "markdown",
-      "rendering"
-    ],
-    "body": "\n## Welcome\n\nThis is the inaugural post on the research blog — a private space for deep dives into technical topics. This post exists to showcase and verify every rendering feature the blog supports.\n\nThe blog is a **vanilla JS SPA** with no build tools, no frameworks, and no dependencies beyond a few CDN-loaded libraries. Everything renders client-side from markdown files.\n\n## Syntax Highlighting\n\nCode blocks get automatic language detection and Prism.js highlighting.\n\n### JavaScript\n\n```javasc"
   }
 ]

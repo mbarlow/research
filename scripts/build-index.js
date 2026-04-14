@@ -1,8 +1,17 @@
 #!/usr/bin/env node
-// Reads all posts/*.md, extracts frontmatter, writes content.json + feed.xml
+// Reads all posts/*.md, extracts frontmatter, writes content.json + feed.xml + version.json
 
 import { readdir, readFile, stat, writeFile } from 'fs/promises';
 import { join } from 'path';
+import { execSync } from 'child_process';
+
+function gitOutput(cmd, fallback = '') {
+  try {
+    return execSync(cmd, { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
+  } catch {
+    return fallback;
+  }
+}
 
 const POSTS_DIR = join(process.cwd(), 'posts');
 const SITE_URL = 'https://mbarlow.github.io/research';
@@ -106,6 +115,12 @@ async function build() {
 
   await writeFile(join(process.cwd(), 'feed.xml'), feed);
   console.log('Built feed.xml');
+
+  const tag = gitOutput('git describe --tags --abbrev=0', '');
+  const sha = gitOutput('git rev-parse --short HEAD', '');
+  const version = { tag, sha, builtAt: now };
+  await writeFile(join(process.cwd(), 'version.json'), JSON.stringify(version, null, 2));
+  console.log(`Built version.json (${tag || 'no-tag'} ${sha})`);
 }
 
 function escapeXml(str) {

@@ -24,6 +24,13 @@ nav {
   padding: 0 1.5rem;
 }
 
+.nav-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
 .nav-title {
   font-size: var(--font-size-lg);
   font-weight: 600;
@@ -33,6 +40,15 @@ nav {
 
 .nav-title:hover {
   color: var(--accent);
+}
+
+.nav-version {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  opacity: 0.6;
+  user-select: all;
+  white-space: nowrap;
 }
 
 .nav-actions {

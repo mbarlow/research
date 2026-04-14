@@ -1,12 +1,18 @@
 // Theme system — dark/light toggle + font switcher + localStorage
 
-const MONO_FONTS = [
-  { name: 'JetBrains Mono', value: "'JetBrains Mono', monospace" },
-  { name: 'Fira Code', value: "'Fira Code', monospace" },
-  { name: 'Source Code Pro', value: "'Source Code Pro', monospace" },
+const FONT_PAIRS = [
+  { id: 'IN', label: 'Inter', body: "'Inter', system-ui, -apple-system, sans-serif", mono: "'JetBrains Mono', monospace" },
+  { id: 'IB', label: 'IBM Plex', body: "'IBM Plex Sans', system-ui, sans-serif", mono: "'IBM Plex Mono', monospace" },
+  { id: 'LO', label: 'Lora', body: "'Lora', Georgia, serif", mono: "'Source Code Pro', monospace" },
 ];
 
 let currentFontIndex = 0;
+
+function applyFont(idx) {
+  const pair = FONT_PAIRS[idx];
+  document.documentElement.style.setProperty('--font-body', pair.body);
+  document.documentElement.style.setProperty('--font-mono', pair.mono);
+}
 
 export function getTheme() {
   return document.documentElement.getAttribute('data-theme') || 'dark';
@@ -22,15 +28,14 @@ export function toggleTheme() {
 }
 
 export function cycleFont() {
-  currentFontIndex = (currentFontIndex + 1) % MONO_FONTS.length;
-  const font = MONO_FONTS[currentFontIndex];
-  document.documentElement.style.setProperty('--font-mono', font.value);
+  currentFontIndex = (currentFontIndex + 1) % FONT_PAIRS.length;
+  applyFont(currentFontIndex);
   localStorage.setItem('research-font', currentFontIndex.toString());
-  return font.name;
+  return FONT_PAIRS[currentFontIndex];
 }
 
 export function getCurrentFont() {
-  return MONO_FONTS[currentFontIndex].name;
+  return FONT_PAIRS[currentFontIndex];
 }
 
 export function initTheme() {
@@ -40,6 +45,6 @@ export function initTheme() {
   const savedFont = localStorage.getItem('research-font');
   if (savedFont) {
     currentFontIndex = parseInt(savedFont, 10) || 0;
-    document.documentElement.style.setProperty('--font-mono', MONO_FONTS[currentFontIndex].value);
   }
+  applyFont(currentFontIndex);
 }

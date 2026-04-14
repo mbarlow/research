@@ -4,145 +4,145 @@
   <link href="https://mbarlow.github.io/research" rel="alternate"/>
   <link href="https://mbarlow.github.io/research/feed.xml" rel="self"/>
   <id>https://mbarlow.github.io/research/</id>
-  <updated>2026-03-22T05:43:56.488Z</updated>
+  <updated>2026-04-14T00:20:50.718Z</updated>
   <entry>
-    <title>Verlet Integration Softbody Physics — Jelly, Cloth, and Rope</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-verlet-softbody-physics" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-verlet-softbody-physics</id>
-    <updated>2026-03-05T23:50:44.784Z</updated>
-    <summary>Build a softbody physics engine using Verlet integration and distance constraints, simulating jelly cubes, cloth sheets, and swinging ropes in real time.</summary>
-  </entry>
-  <entry>
-    <title>Impossible Geometry — Shader Tricks That Lie About Depth</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-impossible-geometry-shader-tricks" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-impossible-geometry-shader-tricks</id>
-    <updated>2026-03-05T23:29:49.047Z</updated>
-    <summary>Render Penrose triangles, Escher staircases, and impossible objects using fragment shaders that manipulate depth to create geometries that cannot exist in 3D.</summary>
-  </entry>
-  <entry>
-    <title>Audio Spectrogram Terrain — Fly Through Sound</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-audio-spectrogram-terrain" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-audio-spectrogram-terrain</id>
-    <updated>2026-03-05T23:24:54.932Z</updated>
-    <summary>Transform audio spectrograms into 3D terrain and fly through the landscape of sound, where frequency is width, time is depth, and amplitude is height.</summary>
-  </entry>
-  <entry>
-    <title>Boids on Curved Manifolds — Flocking on a Torus</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-boids-on-curved-manifolds" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-boids-on-curved-manifolds</id>
-    <updated>2026-03-05T23:23:41.463Z</updated>
-    <summary>Simulate Reynolds' flocking algorithm on curved surfaces where topology wraps, twists, and changes the meaning of &quot;nearby&quot; — boids on a torus, sphere, and Klein bottle.</summary>
-  </entry>
-  <entry>
-    <title>Fourier Ocean Waves — Tessendorf's FFT Water Simulation</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-fourier-ocean-waves" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-fourier-ocean-waves</id>
-    <updated>2026-03-05T08:53:32.360Z</updated>
-    <summary>Implement Jerry Tessendorf's FFT-based ocean simulation, the same technique used in film VFX at Pixar and Weta, running in real time with Three.js.</summary>
-  </entry>
-  <entry>
-    <title>Wave Function Collapse — Constraint Propagation Visualized</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-wave-function-collapse-visualized" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-wave-function-collapse-visualized</id>
-    <updated>2026-03-05T03:59:44.166Z</updated>
-    <summary>Visualize the Wave Function Collapse algorithm step by step, watching entropy collapse and constraints propagate to generate coherent tile patterns from local rules.</summary>
-  </entry>
-  <entry>
-    <title>LLM-Guided Evolutionary Art — Language as Fitness Function</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-llm-guided-evolutionary-art" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-llm-guided-evolutionary-art</id>
-    <updated>2026-03-05T03:57:03.731Z</updated>
-    <summary>Evolve visual art using genetic algorithms where a local LLM judges fitness, replacing mathematical objectives with natural language like &quot;more crystalline&quot; or &quot;more ominous.&quot;</summary>
-  </entry>
-  <entry>
-    <title>Music From Geometry — Modal Analysis and Shape Acoustics</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-music-from-geometry-modal-analysis" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-music-from-geometry-modal-analysis</id>
-    <updated>2026-03-05T03:53:43.908Z</updated>
-    <summary>Synthesize sound from 3D shapes by computing their resonant frequencies, turning geometry into musical instruments using modal analysis.</summary>
-  </entry>
-  <entry>
-    <title>Non-Euclidean Rendering — Curved Space in the Browser</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-non-euclidean-rendering" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-non-euclidean-rendering</id>
-    <updated>2026-03-05T03:41:18.898Z</updated>
-    <summary>Ray march through hyperbolic and spherical geometries where parallel lines diverge, rooms are bigger on the inside, and straight lines curve.</summary>
+    <title>ComfyUI Workflows - From Experiments to Repeatable Pipelines</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-comfyui-workflows-that-scale" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-comfyui-workflows-that-scale</id>
+    <updated>2026-04-14T00:20:45.904Z</updated>
+    <summary>Design versioned ComfyUI graphs that scale from one-off experiments to repeatable production image workflows.</summary>
   </entry>
   <entry>
     <title>Physarum Simulation — Slime Mold Intelligence on the GPU</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-03-04-physarum-slime-mold-simulation" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-03-04-physarum-slime-mold-simulation</id>
-    <updated>2026-03-05T03:39:07.961Z</updated>
+    <updated>2026-04-13T23:10:54.867Z</updated>
     <summary>Simulate Physarum polycephalum's emergent network behavior using GPU ping-pong framebuffers, where 40,000 simple agents create stunning organic transport networks.</summary>
   </entry>
   <entry>
-    <title>Flow Fields — Curl Noise and Particle Advection</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-flow-fields-curl-noise" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-flow-fields-curl-noise</id>
-    <updated>2026-03-02T05:48:17.506Z</updated>
-    <summary>Build flow field visualizations using curl noise for divergence-free vector fields, with thousands of advected particles in Three.js.</summary>
+    <title>Non-Euclidean Rendering — Curved Space in the Browser</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-non-euclidean-rendering" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-04-non-euclidean-rendering</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Ray march through hyperbolic and spherical geometries where parallel lines diverge, rooms are bigger on the inside, and straight lines curve.</summary>
   </entry>
   <entry>
-    <title>Strange Attractors — Visualizing Chaotic Systems</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-strange-attractors-chaotic-systems" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-strange-attractors-chaotic-systems</id>
-    <updated>2026-03-02T05:46:35.416Z</updated>
-    <summary>Simulate and render strange attractors (Lorenz, Rössler, Aizawa) as particle traces in 3D, exploring deterministic chaos and sensitive dependence.</summary>
+    <title>Music From Geometry — Modal Analysis and Shape Acoustics</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-music-from-geometry-modal-analysis" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-04-music-from-geometry-modal-analysis</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Synthesize sound from 3D shapes by computing their resonant frequencies, turning geometry into musical instruments using modal analysis.</summary>
   </entry>
   <entry>
-    <title>Cellular Automata — Emergent Complexity from Simple Rules</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-cellular-automata-emergent-complexity" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-cellular-automata-emergent-complexity</id>
-    <updated>2026-03-02T05:45:04.968Z</updated>
-    <summary>Explore cellular automata from Conway's Game of Life to 3D visualization, showing how simple local rules produce complex emergent behavior.</summary>
+    <title>LLM-Guided Evolutionary Art — Language as Fitness Function</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-llm-guided-evolutionary-art" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-04-llm-guided-evolutionary-art</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Evolve visual art using genetic algorithms where a local LLM judges fitness, replacing mathematical objectives with natural language like &quot;more crystalline&quot; or &quot;more ominous.&quot;</summary>
   </entry>
   <entry>
-    <title>Voronoi Diagrams — Cell-Based Procedural Textures</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-voronoi-diagrams-procedural-textures" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-voronoi-diagrams-procedural-textures</id>
-    <updated>2026-03-02T05:43:32.331Z</updated>
-    <summary>Generate Voronoi patterns on the GPU using distance fields, with applications to procedural textures, organic patterns, and terrain generation.</summary>
+    <title>Wave Function Collapse — Constraint Propagation Visualized</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-wave-function-collapse-visualized" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-04-wave-function-collapse-visualized</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Visualize the Wave Function Collapse algorithm step by step, watching entropy collapse and constraints propagate to generate coherent tile patterns from local rules.</summary>
   </entry>
   <entry>
-    <title>L-Systems — Procedural Plants from String Rewriting</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-l-systems-procedural-plants" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-l-systems-procedural-plants</id>
-    <updated>2026-03-02T05:42:18.466Z</updated>
-    <summary>Generate procedural trees and plants using Lindenmayer systems, turtle interpretation, and 3D branching rules with interactive Three.js rendering.</summary>
+    <title>Fourier Ocean Waves — Tessendorf's FFT Water Simulation</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-fourier-ocean-waves" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-04-fourier-ocean-waves</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Implement Jerry Tessendorf's FFT-based ocean simulation, the same technique used in film VFX at Pixar and Weta, running in real time with Three.js.</summary>
   </entry>
   <entry>
-    <title>Reaction-Diffusion — Turing Patterns on the GPU</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-reaction-diffusion-turing-patterns" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-reaction-diffusion-turing-patterns</id>
-    <updated>2026-03-02T05:40:48.300Z</updated>
-    <summary>Simulate the Gray-Scott reaction-diffusion model using GPU ping-pong framebuffers to generate Turing patterns in real time.</summary>
+    <title>Boids on Curved Manifolds — Flocking on a Torus</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-boids-on-curved-manifolds" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-04-boids-on-curved-manifolds</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Simulate Reynolds' flocking algorithm on curved surfaces where topology wraps, twists, and changes the meaning of &quot;nearby&quot; — boids on a torus, sphere, and Klein bottle.</summary>
+  </entry>
+  <entry>
+    <title>Audio Spectrogram Terrain — Fly Through Sound</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-audio-spectrogram-terrain" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-04-audio-spectrogram-terrain</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Transform audio spectrograms into 3D terrain and fly through the landscape of sound, where frequency is width, time is depth, and amplitude is height.</summary>
+  </entry>
+  <entry>
+    <title>Impossible Geometry — Shader Tricks That Lie About Depth</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-impossible-geometry-shader-tricks" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-04-impossible-geometry-shader-tricks</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Render Penrose triangles, Escher staircases, and impossible objects using fragment shaders that manipulate depth to create geometries that cannot exist in 3D.</summary>
+  </entry>
+  <entry>
+    <title>Verlet Integration Softbody Physics — Jelly, Cloth, and Rope</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-verlet-softbody-physics" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-04-verlet-softbody-physics</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Build a softbody physics engine using Verlet integration and distance constraints, simulating jelly cubes, cloth sheets, and swinging ropes in real time.</summary>
   </entry>
   <entry>
     <title>Mandelbulb — 3D Fractals via Ray Marching</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-03-02-mandelbulb-3d-fractals" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-03-02-mandelbulb-3d-fractals</id>
-    <updated>2026-03-02T05:39:10.029Z</updated>
+    <updated>2026-04-13T23:10:54.867Z</updated>
     <summary>Render the Mandelbulb fractal in real time using ray marching, triplex algebra, and distance estimation, with an interactive GLSL viewer.</summary>
   </entry>
   <entry>
-    <title>Marching Cubes — Isosurface Extraction from Scalar Fields</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-marching-cubes-isosurface-extraction" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-01-marching-cubes-isosurface-extraction</id>
-    <updated>2026-03-01T23:52:01.206Z</updated>
-    <summary>Extract meshes from scalar fields using marching cubes, with lookup tables, normal estimation, and an interactive metaball demo.</summary>
+    <title>Reaction-Diffusion — Turing Patterns on the GPU</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-reaction-diffusion-turing-patterns" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-02-reaction-diffusion-turing-patterns</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Simulate the Gray-Scott reaction-diffusion model using GPU ping-pong framebuffers to generate Turing patterns in real time.</summary>
   </entry>
   <entry>
-    <title>Attention Visualization in Transformers</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-attention-visualization-transformers" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-01-attention-visualization-transformers</id>
-    <updated>2026-03-01T23:51:20.515Z</updated>
-    <summary>Extract and visualize self-attention patterns from transformer models, showing what different heads learn with interactive heatmaps.</summary>
+    <title>L-Systems — Procedural Plants from String Rewriting</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-l-systems-procedural-plants" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-02-l-systems-procedural-plants</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Generate procedural trees and plants using Lindenmayer systems, turtle interpretation, and 3D branching rules with interactive Three.js rendering.</summary>
   </entry>
   <entry>
-    <title>Embedding Spaces in 3D</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-embedding-spaces-in-3d" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-01-embedding-spaces-in-3d</id>
-    <updated>2026-03-01T23:51:10.629Z</updated>
-    <summary>Visualize high-dimensional embeddings using PCA, t-SNE, and UMAP, with an interactive 3D scatter plot of word clusters.</summary>
+    <title>Voronoi Diagrams — Cell-Based Procedural Textures</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-voronoi-diagrams-procedural-textures" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-02-voronoi-diagrams-procedural-textures</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Generate Voronoi patterns on the GPU using distance fields, with applications to procedural textures, organic patterns, and terrain generation.</summary>
+  </entry>
+  <entry>
+    <title>Cellular Automata — Emergent Complexity from Simple Rules</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-cellular-automata-emergent-complexity" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-02-cellular-automata-emergent-complexity</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Explore cellular automata from Conway's Game of Life to 3D visualization, showing how simple local rules produce complex emergent behavior.</summary>
+  </entry>
+  <entry>
+    <title>Strange Attractors — Visualizing Chaotic Systems</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-strange-attractors-chaotic-systems" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-02-strange-attractors-chaotic-systems</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Simulate and render strange attractors (Lorenz, Rössler, Aizawa) as particle traces in 3D, exploring deterministic chaos and sensitive dependence.</summary>
+  </entry>
+  <entry>
+    <title>Flow Fields — Curl Noise and Particle Advection</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-flow-fields-curl-noise" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-02-flow-fields-curl-noise</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Build flow field visualizations using curl noise for divergence-free vector fields, with thousands of advected particles in Three.js.</summary>
+  </entry>
+  <entry>
+    <title>WebGPU Compute Shaders — Parallel Processing in the Browser</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-webgpu-compute-shaders" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-webgpu-compute-shaders</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Set up WebGPU compute pipelines with WGSL, manage buffers, size workgroups, and run parallel operations entirely in the browser.</summary>
+  </entry>
+  <entry>
+    <title>LoRA Fine-Tuning on a Single GPU</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-lora-fine-tuning-single-gpu" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-lora-fine-tuning-single-gpu</id>
+    <updated>2026-04-13T23:10:54.867Z</updated>
+    <summary>Adapt foundation models on consumer hardware using LoRA, covering dataset prep, PEFT training, VRAM management, and adapter merging.</summary>
   </entry>
 </feed>

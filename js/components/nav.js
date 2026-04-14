@@ -6,13 +6,16 @@ export function initNav() {
   const nav = document.getElementById('nav');
   nav.innerHTML = `
     <div class="nav-inner">
-      <a href="#/" class="nav-title">Research</a>
+      <div class="nav-brand">
+        <a href="#/" class="nav-title">Research</a>
+        <span class="nav-version" id="nav-version" title="Loading version..."></span>
+      </div>
       <div class="nav-actions">
         <button id="btn-search" class="nav-btn" title="Search (/)">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </button>
         <button id="btn-font" class="nav-btn" title="Cycle font (f)">
-          <span class="nav-font-label">JB</span>
+          <span class="nav-font-label">IN</span>
         </button>
         <button id="btn-theme" class="nav-btn" title="Toggle theme (t)">
           <svg id="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
@@ -31,14 +34,15 @@ export function initNav() {
   });
 
   document.getElementById('btn-font').addEventListener('click', () => {
-    const name = cycleFont();
-    updateFontLabel(name);
+    const pair = cycleFont();
+    updateFontLabel(pair);
   });
 
   document.getElementById('btn-search').addEventListener('click', toggleSearch);
 
   updateThemeIcon();
   updateFontLabel(getCurrentFont());
+  loadVersion();
 }
 
 export function updateThemeIcon() {
@@ -47,8 +51,26 @@ export function updateThemeIcon() {
   document.getElementById('icon-moon').style.display = isDark ? 'block' : 'none';
 }
 
-function updateFontLabel(name) {
-  const labels = { 'JetBrains Mono': 'JB', 'Fira Code': 'FC', 'Source Code Pro': 'SC' };
+function updateFontLabel(pair) {
   const label = document.querySelector('.nav-font-label');
-  if (label) label.textContent = labels[name] || 'JB';
+  if (label && pair) label.textContent = pair.id;
+}
+
+async function loadVersion() {
+  const el = document.getElementById('nav-version');
+  if (!el) return;
+  try {
+    const res = await fetch('version.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error(res.status);
+    const { tag, sha, builtAt } = await res.json();
+    const parts = [];
+    if (tag) parts.push(tag);
+    if (sha) parts.push(sha);
+    el.textContent = parts.join(' · ');
+    const built = builtAt ? new Date(builtAt).toLocaleString() : '';
+    el.title = built ? `Built ${built}` : '';
+  } catch {
+    el.textContent = '';
+    el.title = '';
+  }
 }
