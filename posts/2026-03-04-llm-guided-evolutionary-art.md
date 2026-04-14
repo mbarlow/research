@@ -6,29 +6,24 @@ description: Evolve visual art using genetic algorithms where a local LLM judges
 tags: [generative-art, genetic-algorithms, llm, evolution, creative-coding, ai]
 ---
 
-## Why Evolutionary Art
+## Why now
 
-In 1994, Karl Sims demonstrated that genetic algorithms could evolve stunning visual art. His system bred mathematical expressions — trees of arithmetic operators and functions — selecting survivors based on aesthetic preference. The results were alien and beautiful, but the bottleneck was always the fitness function: either a human sat clicking "better/worse" for hours (interactive evolution), or you defined some mathematical proxy for beauty (color entropy, fractal dimension) that inevitably felt sterile.
+1994. Karl Sims showed genetic algorithms could evolve stunning visual art. Bred mathematical expressions — trees of arithmetic operators — selecting survivors by aesthetic preference.
 
-Local LLMs change the equation. Instead of mathematical proxies, describe what you want: "more crystalline," "darker and more ominous," "organic like coral growth." The LLM evaluates each candidate image against the natural language prompt and returns a fitness score. Evolution proceeds as normal — selection, crossover, mutation — but guided by language instead of math. The fitness function becomes as flexible as English.
+The bottleneck was always the fitness function. Either a human clicked "better/worse" for hours (interactive evolution), or you defined some math proxy for beauty (color entropy, fractal dimension) that inevitably felt sterile.
 
-This is newly practical because local inference (via Ollama) makes it free and fast enough for real-time evolution. A cloud API call per evaluation would cost dollars per generation. Local inference on consumer hardware takes 200ms per evaluation — fast enough for a generation every few seconds with a population of 8.
+Local LLMs change the equation.
+
+Don't define a math proxy. Describe what you want: *more crystalline. Darker and more ominous. Organic like coral growth.*
+
+The LLM evaluates each candidate against the prompt and returns a fitness score. Selection, crossover, mutation — guided by language instead of math. The fitness function is as flexible as English.
+
+This is newly practical because local inference (Ollama) makes evaluation free and fast enough for real-time. Cloud APIs would cost dollars per generation. Local on consumer hardware: 200ms per evaluation. Fast enough for a generation every few seconds with a population of 8.
 
 > [!note]
-> Karl Sims' original work evolved Lisp S-expressions as genomes. Each expression computed a pixel color from (x, y) coordinates. Our approach uses parameterized shaders — a fixed shader program with a vector of floating-point genes that control its behavior. This is less expressive but more controllable, and avoids the problem of evolved programs that crash or produce empty output.
+> Sims evolved Lisp S-expressions as genomes — each expression computed a pixel color from (x, y). Our approach uses parameterized shaders — fixed program, vector of float genes controlling behavior. Less expressive but more controllable. Avoids evolved programs that crash or produce empty output.
 
-## Post Plan (Feature Map)
-
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain evolutionary art history | Text | Karl Sims, the fitness function problem |
-| Show the LLM-as-judge pipeline | Mermaid diagram + code | The key novel combination |
-| Describe genotype design | Code blocks | Parameterized shader genomes |
-| Cover genetic operators | Code blocks | Selection, crossover, mutation |
-| Interactive demo | Three.js scene embed | Watch evolution in real time |
-| Address questions | Chat transcript | Prompt engineering, convergence, diversity |
-
-## The Pipeline
+## The pipeline
 
 ```mermaid
 graph TD
@@ -40,17 +35,18 @@ graph TD
     M --> G
 ```
 
-For each generation:
-1. Render all candidates by setting shader uniforms from their gene vectors
-2. Send rendered images to the LLM with a prompt like "Rate this image 1-10 for how crystalline and geometric it looks"
+Each generation:
+
+1. Render all candidates by setting shader uniforms from gene vectors
+2. Send rendered images to the LLM with a prompt: "Rate 1–10 how crystalline and geometric this looks"
 3. Parse the score as fitness
-4. Select parents via tournament selection
-5. Create children through crossover and mutation
-6. Replace population and repeat
+4. Tournament select parents
+5. Crossover + mutation → children
+6. Replace and repeat
 
-## Genome Design
+## Genome
 
-Each individual is a vector of 12 floats in [0, 1], controlling a fragment shader:
+Vector of 12 floats in [0, 1]. Controls a fragment shader.
 
 ```javascript
 // Gene mapping:
@@ -66,15 +62,15 @@ Each individual is a vector of 12 floats in [0, 1], controlling a fragment shade
 // [11]   Layer blend factor
 ```
 
-The shader uses these genes to control FBM noise, domain warping, symmetry folding, and a three-color palette. The design space is constrained enough that random genomes always produce visible output, but expressive enough that evolved genomes can produce striking images.
+The shader uses these for FBM noise, domain warping, symmetry folding, and a three-color palette. Constrained enough that random genomes always produce visible output. Expressive enough that evolved genomes produce striking images.
 
-## Genetic Operators
+## Operators
 
-**Tournament Selection**: Pick two random individuals, keep the fitter one. Simple, effective, naturally maintains selection pressure without premature convergence.
+**Tournament selection** — pick two random individuals, keep the fitter one. Simple. Maintains pressure without premature convergence.
 
-**Uniform Crossover**: For each gene, randomly pick from parent A or parent B. This preserves good gene combinations while exploring new ones.
+**Uniform crossover** — for each gene, randomly pick from parent A or B. Preserves good combinations while exploring new ones.
 
-**Gaussian Mutation**: Add small random perturbations to each gene with some probability. Clamped to [0, 1].
+**Gaussian mutation** — small random perturbations per gene with some probability. Clamp to [0, 1].
 
 ```javascript
 function evolve(population, fitness) {
@@ -93,9 +89,9 @@ function evolve(population, fitness) {
 }
 ```
 
-## The LLM Prompt
+## The prompt
 
-The prompt needs to be specific enough to guide evolution but not so specific that only one phenotype scores well:
+Specific enough to guide. Loose enough that more than one phenotype scores well.
 
 ```
 Look at this generated abstract image. Rate it from 1 to 10 on how well
@@ -103,29 +99,30 @@ it matches this description: "crystalline, geometric, with deep cool colors
 and sharp angular structures." Only respond with the number.
 ```
 
-Different prompts produce dramatically different evolved populations:
+Different prompts → dramatically different populations:
+
 - "organic, flowing, like underwater coral" → high warp, low symmetry, warm colors
 - "precise, minimalist, black and white" → low noise, high contrast, low saturation
 - "psychedelic, vibrant, kaleidoscopic" → high symmetry, high saturation, many octaves
 
-## Interactive Demo
+## Demo
 
-A population of 8 shader-generated images evolves in real time. Every 3 seconds, the population undergoes selection, crossover, and mutation. The fittest individual (green border) survives to the next generation. The simulated fitness function rewards color diversity, moderate complexity, and symmetry — approximating what an LLM aesthetic judge would select.
+Population of 8 shader images evolving in real time. Selection, crossover, mutation every 3 seconds. Fittest (green border) survives. Simulated fitness rewards color diversity, moderate complexity, symmetry — approximating an LLM aesthetic judge.
 
 <div data-scene="evo-art.js" style="width:100%;height:420px;"></div>
 
-## Common Questions
+## Common questions
 
 ```chat
 user: How many generations until interesting results?
-assistant: With a population of 8-16, you typically see convergence toward a coherent style within 10-20 generations. The first few generations are mostly noise and random patterns. By generation 5-8, selection pressure starts creating clusters of similar-looking individuals. By generation 15-20, the population has usually converged on a specific aesthetic. After that, mutation provides slow exploration around the local optimum.
+assistant: Population of 8–16, coherent style within 10–20 generations. First few are noise and random patterns. By gen 5–8, selection pressure creates clusters of similar individuals. By 15–20, population converges on an aesthetic. After: mutation slowly explores around the local optimum.
 
 user: Doesn't the LLM just give random scores?
-assistant: Modern vision-language models (LLaVA, Llama 3.2 Vision) are surprisingly good at aesthetic evaluation. They have strong priors about visual quality from training data. The key is prompt specificity — "rate this image" gives noisy results, but "rate how crystalline and geometric this looks" gives consistent rankings that meaningfully differ between candidates. The noise in individual evaluations averages out over generations through selection pressure.
+assistant: Modern VLMs (LLaVA, Llama 3.2 Vision) are surprisingly good at aesthetic evaluation. Strong visual priors from training data. Key is prompt specificity — "rate this image" gives noise. "Rate how crystalline and geometric this looks" gives consistent rankings that meaningfully differ. Noise in individual evaluations averages out through selection pressure.
 
-user: Could you evolve the shader code itself, not just parameters?
-assistant: Yes — that's closer to Sims' original approach. You'd evolve an abstract syntax tree of GLSL operations and compile new shaders each generation. The risk is that most random shader programs produce blank or broken output. A safer middle ground is evolving a larger parameter vector (50-100 genes) that controls a more complex fixed shader, or using a small neural network whose weights are the genome.
+user: Could you evolve the shader code itself?
+assistant: Yes — closer to Sims' original. Evolve an AST of GLSL operations, compile new shaders each generation. Risk: most random shader programs produce blank or broken output. Safer middle ground: larger parameter vector (50–100 genes) controlling a more complex fixed shader, or a small neural net whose weights are the genome.
 
 user: What about diversity? Doesn't evolution converge to one look?
-assistant: Yes, that's a known problem. Techniques to maintain diversity include fitness sharing (penalize similarity to other individuals), island models (multiple isolated populations that occasionally exchange individuals), and novelty search (reward individuals for being different from anything seen before, regardless of fitness). Adding 1-2 fully random individuals per generation also helps prevent premature convergence.
+assistant: Yes, known problem. Techniques: fitness sharing (penalize similarity), island models (isolated populations occasionally exchange), novelty search (reward different-from-anything-seen regardless of fitness). Adding 1–2 random individuals per generation also helps.
 ```

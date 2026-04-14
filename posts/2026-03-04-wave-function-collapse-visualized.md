@@ -6,28 +6,24 @@ description: Visualize the Wave Function Collapse algorithm step by step, watchi
 tags: [procedural-generation, algorithms, constraint-satisfaction, visualization, generative-art, threejs]
 ---
 
-## Why Wave Function Collapse
+## Why WFC
 
-In 2016, Maxim Gumin released Wave Function Collapse (WFC) — an algorithm that generates globally coherent patterns from purely local constraints. Give it a set of tiles with rules about which tiles can be adjacent, and it fills an entire grid with a valid arrangement. The name borrows from quantum mechanics: each cell starts in a "superposition" of all possible tiles, and the algorithm progressively "collapses" cells to specific values while propagating constraints to neighbors.
+2016. Maxim Gumin releases Wave Function Collapse. Algorithm that generates globally coherent patterns from purely local constraints.
 
-WFC has become one of the most popular procedural generation techniques in game development. It powers level generation in Caves of Qud, Bad North, and dozens of indie titles. Unlike noise-based generation (which produces random terrain) or grammar-based generation (which follows rigid templates), WFC produces output that is both locally correct (every adjacency is valid) and globally varied (different runs produce different layouts). It sits in a sweet spot between order and randomness.
+Give it a set of tiles with adjacency rules. It fills an entire grid with a valid arrangement.
 
-The algorithm is also deeply visual. Watching it work — cells flickering with uncertainty, collapsing one by one, constraints rippling outward — is more compelling than the final result. The process looks like crystallization, with order growing from seed points and filling the space.
+The name borrows from quantum mechanics. Each cell starts in a superposition of all possible tiles. The algorithm progressively collapses cells to specific values while propagating constraints to neighbors.
+
+Powers level generation in Caves of Qud, Bad North, dozens of indie titles. Unlike noise (random terrain) or grammars (rigid templates), WFC produces output that's both locally correct (every adjacency is valid) and globally varied (different runs, different layouts).
+
+The sweet spot between order and randomness.
+
+The algorithm is also deeply visual. Watching it work — cells flickering with uncertainty, collapsing one by one, constraints rippling outward — is more compelling than the final result. Looks like crystallization.
 
 > [!note]
-> WFC is essentially arc consistency (AC-3) from constraint satisfaction, applied to grid generation. The "quantum mechanics" framing is a metaphor — there's no actual quantum computation. But it's an effective metaphor: the algorithm's behavior genuinely resembles wavefunction collapse, with measurement (observation) determining state and propagation enforcing entanglement-like correlations.
+> WFC is essentially arc consistency (AC-3) from constraint satisfaction, applied to grid generation. The "quantum" framing is a metaphor — no actual quantum computation. But it's an effective metaphor.
 
-## Post Plan (Feature Map)
-
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain the algorithm | Text + mermaid diagram | The observe-collapse-propagate loop |
-| Show constraint propagation | Code blocks | The core AC-3 implementation |
-| Cover entropy and tile design | Table + callout | Why tile edge matching works |
-| Interactive demo | Three.js scene embed | Watch collapse in real time |
-| Address questions | Chat transcript | Backtracking, 3D, performance |
-
-## The Algorithm
+## The algorithm
 
 ```mermaid
 graph TD
@@ -41,17 +37,19 @@ graph TD
     CONTRA -->|No| CHECK
 ```
 
-### Step 1: Observe
+### Observe
 
-Find the uncollapsed cell with the fewest remaining options (lowest entropy). Ties are broken randomly. This heuristic, borrowed from constraint satisfaction, ensures that the most constrained cells are resolved first, reducing the chance of contradictions.
+Find the uncollapsed cell with the fewest remaining options (lowest entropy). Ties broken randomly. Most constrained cells resolve first → fewer contradictions.
 
-### Step 2: Collapse
+### Collapse
 
-Choose one tile from the cell's remaining options. The choice can be uniformly random or weighted — for example, biasing toward grass tiles to create open landscapes.
+Choose one tile from the cell's remaining options. Uniform or weighted (e.g., bias toward grass for open landscapes).
 
-### Step 3: Propagate
+### Propagate
 
-The collapsed cell now constrains its neighbors. For each neighbor, remove any tiles whose edges don't match the collapsed tile. If a neighbor's options are reduced, propagate from that neighbor too. This cascading propagation is what makes WFC powerful — a single collapse can determine tiles across the entire grid.
+The collapsed cell constrains its neighbors. For each neighbor, drop tiles whose edges don't match. If a neighbor's options shrink, propagate from that neighbor too.
+
+This cascading propagation is what makes WFC powerful. A single collapse can determine tiles across the entire grid.
 
 ```javascript
 function propagate(grid, startIdx) {
@@ -78,9 +76,9 @@ function propagate(grid, startIdx) {
 }
 ```
 
-## Tile Design
+## Tiles
 
-Each tile has four edges (top, right, bottom, left), each with a color/type. The adjacency rule: touching edges must have the same color. This simple constraint produces complex global structure.
+Four edges per tile (top, right, bottom, left), each with a color/type. Adjacency rule: touching edges must match.
 
 ```javascript
 const TILES = [
@@ -94,32 +92,32 @@ const TILES = [
 ];
 ```
 
-With just three edge colors (green, brown, blue) and 13 tile types, the system can generate varied landscapes with roads, grass, water, and shorelines — all guaranteed to be locally valid.
+Three edge colors (green, brown, blue) and 13 tile types → varied landscapes with roads, grass, water, shorelines. All locally valid.
 
-## Entropy as Uncertainty
+## Entropy
 
-Entropy quantifies uncertainty. A cell with all 13 tiles possible has maximum entropy. A cell with only 2 remaining options has low entropy. A collapsed cell has zero entropy.
+A cell with all 13 tiles possible has maximum entropy. A cell with 2 options has low entropy. A collapsed cell has zero.
 
-Visualizing entropy reveals the algorithm's decision-making: high-entropy regions (bright) are unconstrained, low-entropy regions (dark) are nearly determined. The propagation wavefront shows constraints rippling outward from each collapse event.
+Visualizing entropy reveals the algorithm's decision-making. High-entropy regions (bright) are unconstrained. Low-entropy (dark) are nearly determined. The propagation wavefront shows constraints rippling outward from each collapse.
 
-## Interactive Demo
+## Demo
 
-A 20x20 grid collapses step by step. Uncollapsed cells glow based on their entropy — brighter means more uncertainty. Watch as roads, water features, and grass regions crystallize from the constraint propagation. When complete, the grid pauses briefly and regenerates.
+20×20 grid collapses step by step. Uncollapsed cells glow by entropy — brighter = more uncertainty. Watch roads, water, and grass crystallize from constraint propagation. Pauses briefly when complete, regenerates.
 
 <div data-scene="wfc.js" style="width:100%;height:420px;"></div>
 
-## Common Questions
+## Common questions
 
 ```chat
-user: What happens when the algorithm hits a contradiction?
-assistant: A contradiction occurs when propagation empties a cell's option set — no tile is compatible with all its collapsed neighbors. The simplest recovery is to restart with a new random seed. More sophisticated implementations use backtracking: undo the last collapse and try a different tile. Full backtracking with arc consistency guarantees a solution exists if one is possible, but restarts are simpler and work well in practice since contradictions are rare with well-designed tile sets.
+user: What happens at a contradiction?
+assistant: A contradiction = propagation empties a cell's option set. No tile compatible with all collapsed neighbors. Simplest recovery: restart with a new random seed. Sophisticated implementations backtrack — undo the last collapse, try another tile. Full backtracking with arc consistency guarantees a solution if one exists. Restarts are simpler and work well with well-designed tile sets — contradictions are rare.
 
 user: Can WFC work in 3D?
-assistant: Yes, and it's spectacular. Each voxel has six faces instead of four edges, and tiles are 3D blocks. The algorithm is identical — observe, collapse, propagate — just with more neighbors. The computational cost is higher (6 faces x more tiles x larger grids), but the results are impressive: coherent 3D structures, cave systems, buildings. Townscaper by Oskar Stalberg uses a 3D WFC variant for its building generation.
+assistant: Yes — spectacularly. Voxels have six faces instead of four edges. Tiles are 3D blocks. Same algorithm — observe, collapse, propagate — more neighbors. Higher computational cost. Coherent 3D structures, cave systems, buildings. Townscaper (Oskar Stålberg) uses a 3D WFC variant.
 
 user: How do you design good tile sets?
-assistant: Start with the output you want and work backward. If you want roads, you need: straight pieces (horizontal, vertical), corners (4 rotations), crossroads, T-junctions, and end caps. Each piece's edges must encode what can connect to it. The most common mistake is missing a transition tile — for example, having road and grass tiles but no tile that transitions between them, which forces contradictions. Test by running WFC many times and checking for frequent restarts.
+assistant: Start with the output you want, work backward. Roads need: straight (h, v), corners (4 rotations), crossroads, T-junctions, end caps. Each piece's edges encode what can connect. Most common mistake: missing a transition tile (road and grass tiles but no transition between them → contradictions). Test by running many times, watch for frequent restarts.
 
-user: How does this compare to Perlin noise for procedural generation?
-assistant: They solve different problems. Perlin noise gives you continuous variation (height maps, cloud density, biome distribution). WFC gives you discrete, structurally correct arrangements (rooms connected by doors, roads that connect, pipes that fit). They complement each other well: use noise for the broad strokes (biome map, elevation), then WFC to fill in the detail (building layouts, path networks) within each biome.
+user: WFC vs Perlin noise for procedural generation?
+assistant: Different problems. Perlin gives continuous variation (height maps, cloud density, biome distribution). WFC gives discrete, structurally correct arrangements (rooms connected by doors, roads that connect, pipes that fit). Use noise for broad strokes (biome map, elevation). WFC for detail (building layouts, path networks) within each biome.
 ```

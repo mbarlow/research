@@ -6,35 +6,28 @@ description: Build a softbody physics engine using Verlet integration and distan
 tags: [physics, simulation, verlet, softbody, threejs, creative-coding]
 ---
 
-## Why Verlet Integration
+## Why Verlet
 
-Most physics simulations store position and velocity. Euler integration updates them: `v += a*dt; x += v*dt`. It's simple but fragile — constraints (fixed distances between particles) require velocity corrections that fight the integrator and cause jitter. Verlet integration sidesteps this by storing position and previous position. Velocity is implicit: `v = x_current - x_previous`. The update is:
+Most physics sims store position and velocity. Euler integration: `v += a*dt; x += v*dt`. Simple but fragile — constraints (fixed distances between particles) need velocity corrections that fight the integrator and cause jitter.
+
+Verlet sidesteps this by storing position and previous position. Velocity is implicit: `v = x_current - x_previous`.
 
 ```
 x_new = 2 * x_current - x_previous + acceleration * dt^2
 ```
 
-Why is this better? Constraints modify positions directly. After integration, you move particles to satisfy distance constraints, and the implicit velocity automatically adjusts — no explicit velocity correction needed. This makes Verlet ideal for systems with many constraints: cloth, rope, softbodies, ragdolls, bridges.
+Why it's better: constraints modify positions directly. After integration, you move particles to satisfy distance constraints, and the implicit velocity automatically adjusts. No explicit velocity correction.
 
-Thomas Jakobsen's 2001 GDC talk "Advanced Character Physics" popularized this approach for games. The same technique powers everything from the cloth in Hitman to the bridges in Poly Bridge to the ragdolls in Overgrowth. It's simple enough to implement in an afternoon and stable enough for production use.
+Ideal for systems with many constraints — cloth, rope, softbodies, ragdolls, bridges.
 
-The entire engine fits in about 50 lines: integrate positions, solve constraints iteratively, handle collisions. No matrix inversions, no implicit solvers, no conjugate gradient. Just move particles and enforce distances.
+Thomas Jakobsen's 2001 GDC talk popularized this for games. The same technique powers cloth in Hitman, bridges in Poly Bridge, ragdolls in Overgrowth. Simple enough to implement in an afternoon. Stable enough for production.
+
+The engine fits in 50 lines. Integrate. Solve constraints iteratively. Handle collisions. No matrix inversions. No implicit solvers. No conjugate gradient. Move particles. Enforce distances.
 
 > [!note]
-> Verlet integration is a symplectic integrator — it exactly conserves a quantity close to the total energy (a "shadow Hamiltonian"). This is why Verlet simulations don't gain or lose energy over time, unlike Euler integration which either explodes (forward Euler) or damps (backward Euler). The long-term stability is why Verlet is also the standard integrator in molecular dynamics simulations.
+> Verlet is symplectic — exactly conserves a quantity close to total energy (a "shadow Hamiltonian"). Verlet sims don't gain or lose energy over time, unlike Euler which either explodes (forward) or damps (backward). Long-term stability is also why Verlet is the standard integrator in molecular dynamics.
 
-## Post Plan (Feature Map)
-
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain Verlet integration | Text + math | Position-based dynamics |
-| Show constraint solving | Code blocks | Distance constraint iteration |
-| Build three objects | Code blocks | Jelly, cloth, rope |
-| Cover collision handling | Code blocks | Floor bounce |
-| Interactive demo | Three.js scene embed | All three running simultaneously |
-| Address questions | Chat transcript | Stiffness, GPU, more shapes |
-
-## The Integration Step
+## Integration
 
 ```javascript
 function verletStep(particles, gravity, dt, damping) {
@@ -56,9 +49,9 @@ function verletStep(particles, gravity, dt, damping) {
 }
 ```
 
-## Distance Constraints
+## Distance constraints
 
-Each constraint enforces a fixed distance between two particles. If the actual distance differs from the rest length, move both particles equally toward (or away from) each other:
+Each constraint enforces a fixed distance between two particles. Actual distance differs from rest length → move both equally toward (or away from) each other.
 
 ```javascript
 function solveConstraints(constraints, iterations) {
@@ -76,11 +69,11 @@ function solveConstraints(constraints, iterations) {
 }
 ```
 
-More iterations = stiffer material. 1-2 iterations gives jelly-like softness. 6-8 iterations gives cloth-like behavior. 20+ iterations approaches rigid-body behavior.
+More iterations = stiffer. 1–2 = jelly. 6–8 = cloth. 20+ = approaches rigid body.
 
-## Building a Cloth
+## Cloth
 
-A cloth is a 2D grid of particles with structural constraints (horizontal and vertical neighbors) and shear constraints (diagonal neighbors):
+2D grid of particles. Structural constraints (horizontal + vertical neighbors). Shear constraints (diagonals).
 
 ```javascript
 function buildCloth(width, height, resX, resY) {
@@ -109,9 +102,9 @@ function buildCloth(width, height, resX, resY) {
 }
 ```
 
-## Building a Jelly Cube
+## Jelly cube
 
-A jelly cube is a 3D grid with structural constraints along all three axes, plus face diagonal constraints for shear resistance:
+3D grid. Constraints along all three axes plus face diagonals for shear resistance.
 
 ```javascript
 function buildJelly(size, resolution) {
@@ -126,9 +119,9 @@ function buildJelly(size, resolution) {
 }
 ```
 
-## Floor Collision
+## Floor collision
 
-Simple floor plane collision with bounce:
+Plane collision with bounce. Reflect previous position.
 
 ```javascript
 function floorCollision(particles, floorY) {
@@ -142,24 +135,24 @@ function floorCollision(particles, floorY) {
 }
 ```
 
-## Interactive Demo
+## Demo
 
-Three softbody objects side by side: a jelly cube (left, green wireframe) that periodically bounces, a cloth sheet (center, blue) hanging from pinned points and billowing in simulated wind, and a rope (right, orange) swinging freely. All use the same Verlet engine. Orbit the camera to view from any angle.
+Three softbodies side by side. Jelly cube (left, green wireframe) bouncing periodically. Cloth (center, blue) hanging from pinned points, billowing in simulated wind. Rope (right, orange) swinging freely. Same Verlet engine. Orbit the camera.
 
 <div data-scene="verlet-softbody.js" style="width:100%;height:420px;"></div>
 
-## Common Questions
+## Common questions
 
 ```chat
-user: How do you make the cloth stiffer?
-assistant: Three approaches. First, increase constraint iterations — more iterations means the constraint solver converges closer to the exact solution. Second, use smaller substeps (run the simulation 3-4 times per frame with a smaller dt). Third, add "bend" constraints that skip one particle (connecting every other particle), which resist folding. In practice, 6-8 iterations with 2-3 substeps gives good cloth behavior.
+user: How do I make the cloth stiffer?
+assistant: Three approaches. (1) More constraint iterations — closer to exact solution. (2) Smaller substeps — run 3–4 times per frame with smaller dt. (3) Bend constraints that skip one particle (connecting every other), resisting folding. 6–8 iterations with 2–3 substeps gives good cloth.
 
 user: Can this run on the GPU?
-assistant: Yes, and it's the standard approach for large particle counts. Position-based dynamics maps naturally to compute shaders — the integration step is embarrassingly parallel, and constraint solving uses a Jacobi-style parallel relaxation (each constraint writes half the correction to each particle, then you average). The main challenge is the constraint graph coloring — constraints that share particles can't be solved simultaneously, so you need to partition them into independent sets. NVIDIA's Flex library does this.
+assistant: Yes — standard approach for large particle counts. PBD maps naturally to compute shaders. Integration is embarrassingly parallel. Constraint solving uses Jacobi-style parallel relaxation (each constraint writes half the correction to each particle, then average). Main challenge: constraint graph coloring — constraints sharing particles can't be solved simultaneously. NVIDIA Flex does this.
 
 user: What about self-collision?
-assistant: Self-collision (cloth folding through itself) is the hardest part of cloth simulation. The simplest approach is spatial hashing — hash particle positions into a grid and check nearby particles for overlap. When two non-connected particles are too close, push them apart with a distance constraint. The cost is O(n) with spatial hashing but the constant factor is high. Production cloth solvers use continuous collision detection (checking if triangles intersect between timesteps) for robustness.
+assistant: The hardest part of cloth simulation. Simplest: spatial hashing — hash positions into a grid, check nearby particles for overlap. Non-connected particles too close → push apart with a distance constraint. O(n) with spatial hashing but high constant factor. Production solvers use continuous collision detection (checking triangle intersection between timesteps) for robustness.
 
-user: Why not just use a physics library like Cannon.js or Ammo.js?
-assistant: For learning and for specific softbody effects, rolling your own Verlet engine is better. Physics libraries are designed for rigid bodies and joints — their softbody support is usually an afterthought. A custom Verlet engine gives you direct control over constraint topology, iteration count, damping, and collision response. It's also much simpler to debug. For a game with mixed rigid and soft bodies, a full library makes sense. For a focused softbody demo like this, 50 lines of custom code beats a 500KB library.
+user: Why not use Cannon.js or Ammo.js?
+assistant: For learning and specific softbody effects, rolling your own beats a library. Physics libraries are designed for rigid bodies — softbody is usually an afterthought. Custom Verlet gives direct control over topology, iterations, damping, collision. Easier to debug. Mixed rigid + soft game → use a library. Focused softbody demo like this → 50 lines beats a 500KB library.
 ```

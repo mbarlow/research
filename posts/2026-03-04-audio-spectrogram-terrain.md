@@ -6,29 +6,22 @@ description: Transform audio spectrograms into 3D terrain and fly through the la
 tags: [audio, visualization, web-audio, threejs, terrain, creative-coding]
 ---
 
-## Why Spectrogram Terrain
+## Spectrograms are heightmaps
 
-A spectrogram is a 2D image: time on one axis, frequency on the other, brightness showing amplitude. It's the standard way to visualize audio — every audio editor, every speech recognition paper, every birdsong field guide uses spectrograms. But a spectrogram is also a heightmap. Map amplitude to elevation and the spectrogram becomes a 3D terrain you can fly through.
+A spectrogram is a 2D image. Time on one axis, frequency on the other, brightness as amplitude. Standard audio visualization.
 
-The mapping is natural: bass frequencies form broad, rolling hills. Treble frequencies create sharp, jagged ridges. Percussive hits appear as cliff walls spanning all frequencies. Harmonic content — voices, instruments — creates parallel ridges at harmonic intervals, like mountain ranges. The resulting terrain is a physical landscape of sound, where the topography tells you about the audio's structure at a glance.
+It's also a heightmap.
 
-The Web Audio API's AnalyserNode provides real-time FFT data at 60fps. Feed it into a Three.js displacement map and you have a scrolling terrain that builds itself in real time from audio. No pre-processing, no offline rendering. The sound becomes landscape as you watch.
+Map amplitude to elevation. The spectrogram becomes a terrain you fly through.
+
+The mapping is natural: bass = broad rolling hills. Treble = sharp jagged ridges. Percussive hits = cliff walls spanning all frequencies. Harmonic content = parallel ridges at harmonic intervals — mountain ranges of voice and instrument.
+
+The Web Audio AnalyserNode provides real-time FFT at 60fps. Feed it into a Three.js displacement map → scrolling terrain that builds itself as the audio plays. No pre-processing. No offline rendering. Sound becomes landscape.
 
 > [!note]
-> The Short-Time Fourier Transform (STFT) that generates spectrograms is a windowed DFT — it divides audio into overlapping frames and computes the frequency content of each. The window size controls the time-frequency tradeoff: longer windows give better frequency resolution but smear transients. The Web Audio AnalyserNode uses a default FFT size of 2048 samples (~46ms at 44.1kHz), which is a good balance for visualization.
+> The Short-Time Fourier Transform (STFT) is a windowed DFT — overlapping frames, frequency content per frame. Window size = time-frequency tradeoff. Longer = better frequency resolution but smears transients. Web Audio default 2048 samples (~46ms at 44.1kHz) is a good visualization balance.
 
-## Post Plan (Feature Map)
-
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain spectrograms | Text | Time-frequency representation basics |
-| Show the mapping | Code blocks + math | Frequency → X, Time → Z, Amplitude → Y |
-| Cover the scrolling buffer | Code blocks | Real-time terrain update |
-| Color mapping | Code blocks | Amplitude to color ramp |
-| Interactive demo | Three.js scene embed | Fly through a procedural spectrogram |
-| Address questions | Chat transcript | Real audio, performance, VR |
-
-## The Mapping
+## The mapping
 
 ```
 Spectrogram → Terrain:
@@ -38,9 +31,9 @@ Spectrogram → Terrain:
   FFT magnitude      → Vertex color (dark = quiet, bright = loud)
 ```
 
-## Scrolling Buffer
+## Scrolling buffer
 
-Each frame, capture one FFT column and shift the terrain forward:
+Capture one FFT column per frame. Shift the terrain forward.
 
 ```javascript
 const FREQ_BINS = 96;
@@ -68,9 +61,9 @@ function updateTerrain(newColumn) {
 }
 ```
 
-## Color Ramp
+## Color ramp
 
-Map FFT amplitude to vertex color for visual depth:
+Amplitude → vertex color for visual depth.
 
 ```javascript
 function heightColor(val) {
@@ -82,9 +75,9 @@ function heightColor(val) {
 }
 ```
 
-## Procedural Spectrogram
+## Procedural spectrogram
 
-For the demo, instead of requiring audio input, we generate a synthetic spectrogram that looks like real audio. Multiple Gaussian peaks drift in frequency over time, simulating harmonic content, with periodic broadband bursts simulating percussive events:
+For the demo, no audio input. Generate something that looks like real audio. Multiple Gaussian peaks drift in frequency over time (harmonic content), with periodic broadband bursts (percussion).
 
 ```javascript
 function generateColumn(time) {
@@ -106,24 +99,24 @@ function generateColumn(time) {
 }
 ```
 
-## Interactive Demo
+## Demo
 
-A procedural spectrogram scrolls in real time, creating an evolving 3D landscape. Harmonic peaks form parallel ridges, percussive events create cliff walls, and the camera flies through the terrain at a low angle. The color encodes amplitude — dark valleys are silence, bright peaks are the loudest frequencies.
+Procedural spectrogram scrolling in real time. Harmonic peaks → parallel ridges. Percussive events → cliff walls. Camera flies through at a low angle. Color = amplitude.
 
 <div data-scene="spectrogram-terrain.js" style="width:100%;height:420px;"></div>
 
-## Common Questions
+## Common questions
 
 ```chat
-user: Can this work with real audio from a microphone?
-assistant: Yes. Replace the procedural generator with Web Audio AnalyserNode connected to getUserMedia(). Call analyser.getByteFrequencyData() each frame to get the FFT column. The only change is the data source — the terrain update code is identical. Browser autoplay policy requires a user gesture before starting audio capture, so you'd add a "Start" button.
+user: Can this work with real mic audio?
+assistant: Yes. Swap the procedural generator for Web Audio AnalyserNode + getUserMedia. Call `analyser.getByteFrequencyData()` per frame. Terrain update code is identical. Browser autoplay policy needs a user gesture — add a Start button.
 
 user: How do you handle the time-frequency tradeoff?
-assistant: The FFT size controls it. Larger FFT (4096) gives more frequency bins and better frequency resolution, but each column represents ~93ms of audio, smearing fast transients. Smaller FFT (512) gives ~12ms time resolution but only 256 frequency bins. For terrain visualization, 1024-2048 is the sweet spot — enough frequency detail to see harmonics, enough time detail to see rhythm.
+assistant: FFT size. Larger (4096) = more bins, better frequency resolution, but ~93ms per column → smears transients. Smaller (512) = 12ms time resolution, only 256 bins. For terrain, 1024–2048 is the sweet spot — enough frequency detail for harmonics, enough time detail for rhythm.
 
 user: Would this work in VR?
-assistant: Beautifully. The terrain metaphor works even better in VR because you have depth perception and scale. Stand on a bass frequency ridge and look across at the treble peaks. Walk through time as the audio plays. The mapping from audio to 3D space is intuitive enough that you can "read" the audio from the landscape — identify instruments by their ridge patterns, find the beat from the cliff walls, spot the chorus by the change in terrain complexity.
+assistant: Beautifully. Depth perception and scale make the terrain metaphor stronger. Stand on a bass ridge, look across at treble peaks. Walk through time as audio plays. Identify instruments by ridge pattern. Find the beat from cliff walls. Spot the chorus from the change in complexity.
 
-user: What about a log frequency scale?
-assistant: Critical for musical content. Human pitch perception is logarithmic — each octave doubles in frequency. A linear frequency axis wastes most of its bins on high frequencies we don't care about, while cramming all the musically important bass and midrange into a few pixels. A mel scale or log scale spaces the bins perceptually, giving equal visual weight to each octave. The terrain looks more musical and the harmonic ridges are evenly spaced.
+user: What about log frequency scale?
+assistant: Critical for music. Pitch perception is logarithmic — each octave doubles. Linear axis wastes most bins on high frequencies that don't matter musically and crams the bass/midrange into a few pixels. Mel or log scale spaces bins perceptually. Equal visual weight per octave. Terrain looks more musical, harmonic ridges are evenly spaced.
 ```

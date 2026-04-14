@@ -6,31 +6,24 @@ description: Render Penrose triangles, Escher staircases, and impossible objects
 tags: [graphics, ray-marching, illusions, glsl, creative-coding, math]
 ---
 
-## Why Impossible Geometry
+## Why impossible geometry
 
-In 1958, Lionel and Roger Penrose published "Impossible Objects: A Special Type of Visual Illusion," introducing the Penrose triangle and Penrose stairs. M.C. Escher immediately recognized the potential and created Waterfall and Ascending and Descending — images of structures that look perfectly solid but cannot exist in three dimensions. The objects exploit a flaw in our visual system: we unconsciously resolve 2D projections into 3D interpretations, and these particular projections admit multiple contradictory 3D interpretations simultaneously.
+1958. Lionel and Roger Penrose publish "Impossible Objects: A Special Type of Visual Illusion." Penrose triangle. Penrose stairs.
 
-The rendering trick is delightfully simple: from one specific viewpoint, certain 3D arrangements of disconnected bars appear to form a continuous loop. The bars don't actually connect — there are gaps between them — but from the right angle, the gaps are hidden behind the bars themselves. Rotate the camera even slightly and the illusion breaks: you see that the bars are at different depths and don't meet.
+Escher recognizes the potential and creates Waterfall and Ascending and Descending. Structures that look perfectly solid but can't exist in 3D.
 
-With ray marching, we can build these objects as proper 3D SDFs and animate the camera between the "impossible" viewpoint and a revealing viewpoint. The transition between "this can't exist" and "oh, it's just separate bars" is the most satisfying part.
+The objects exploit a flaw in the visual system. We unconsciously resolve 2D projections into 3D interpretations, and these particular projections admit multiple contradictory 3D interpretations at once.
+
+The rendering trick is delightfully simple. From one specific viewpoint, certain 3D arrangements of disconnected bars appear to form a continuous loop. The bars don't actually connect — there are gaps — but from the right angle, the gaps hide behind the bars themselves. Rotate slightly and the illusion breaks.
+
+With ray marching, build them as proper 3D SDFs. Animate the camera between the impossible viewpoint and a revealing one. The transition between "this can't exist" and "oh, it's just separate bars" is the satisfying part.
 
 > [!note]
-> The Penrose triangle has been built as a physical sculpture — but only from one specific viewing angle does it appear to be a triangle. From any other angle, you see that the three bars are at different depths, connected by carefully shaped extensions that hide the gaps. The sculpture at the Impossible Triangle roundabout in Perth, Australia is the most famous example.
+> The Penrose triangle has been built as a physical sculpture — but only from one viewing angle does it look like a triangle. The Impossible Triangle roundabout in Perth, Australia is the most famous example.
 
-## Post Plan (Feature Map)
+## The Penrose tribar
 
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain impossible objects | Text | Penrose triangle, Escher's work |
-| Cover the visual system exploit | Text + callout | Why our brains are fooled |
-| Show ray marching implementation | Code blocks | SDFs for impossible objects |
-| The "impossible angle" trick | Code blocks | Camera positioning |
-| Interactive demo | Three.js scene embed | Watch illusions form and break |
-| Address questions | Chat transcript | Physical sculptures, more illusions |
-
-## The Penrose Tribar in SDFs
-
-The tribar is three rectangular bars rotated 120 degrees apart:
+Three rectangular bars rotated 120° apart:
 
 ```glsl
 float penroseTribar(vec3 p) {
@@ -52,9 +45,9 @@ float penroseTribar(vec3 p) {
 }
 ```
 
-From the impossible viewpoint, the three bars visually align to form a closed triangle. The camera is positioned at a specific pitch and yaw where the end of each bar lines up with the beginning of the next. Rotate away from this angle and the gaps appear.
+From the impossible viewpoint, the three bars visually align to form a closed triangle. Camera at a specific pitch and yaw where the end of each bar lines up with the start of the next. Rotate away → gaps appear.
 
-## The Impossible Cube
+## The impossible cube
 
 The Necker cube becomes impossible when you swap the depth of two crossing edges:
 
@@ -74,11 +67,11 @@ float impossibleCube(vec3 p) {
 }
 ```
 
-From the right isometric angle, the front and back faces overlap in a way that makes the depth ambiguous. Color the front and back edges differently and the impossibility becomes vivid — an edge that's simultaneously in front of and behind another.
+From the right isometric angle, front and back faces overlap so depth is ambiguous. Color front and back edges differently — an edge that's simultaneously in front of and behind another.
 
-## The Mobius Ring
+## The Möbius ring
 
-A Mobius strip is not impossible per se, but it has a property that feels impossible: it has only one side. Ray marching a Mobius strip by twisting the cross-section by half the polar angle:
+Not impossible per se. But it has a property that *feels* impossible: one side. Twist the cross-section by half the polar angle:
 
 ```glsl
 float moebiusRing(vec3 p) {
@@ -93,24 +86,24 @@ float moebiusRing(vec3 p) {
 }
 ```
 
-## Interactive Demo
+## Demo
 
-Three impossible objects float in space: a Penrose tribar (left, red/green/blue), an impossible wireframe cube (center, warm white), and a Mobius ring (right, purple-gold). The camera slowly oscillates between viewing angles, revealing and hiding the impossibility. Watch the tribar — at the "impossible" angle, it looks like a solid triangle; as it rotates, the gaps between the bars become visible.
+Three impossible objects float in space. Penrose tribar (red/green/blue), impossible wireframe cube (warm white), Möbius ring (purple-gold). Camera oscillates between viewing angles, revealing and hiding the impossibility.
 
 <div data-scene="impossible-geometry.js" style="width:100%;height:420px;"></div>
 
-## Common Questions
+## Common questions
 
 ```chat
 user: Can you actually 3D print a Penrose triangle?
-assistant: Only as a view-dependent sculpture. The Perth Impossible Triangle is a real physical structure, but it only works from one viewing angle. From that angle, the three separate bars visually align. From any other angle, you see they're at different depths connected by bent extensions. Several artists have 3D printed similar sculptures — they look ordinary from most angles but suddenly snap into the impossible shape from the magic viewpoint.
+assistant: Only as view-dependent sculpture. Perth's Impossible Triangle is real but only works from one angle. From that angle the three separate bars visually align. From any other, you see they're at different depths connected by bent extensions. Several artists have 3D printed similar — ordinary from most angles, snaps into the impossible shape from the magic viewpoint.
 
 user: What other impossible objects exist?
-assistant: Dozens. The Penrose stairs (ascending forever), the blivet (three prongs becoming two), the impossible trident, Devil's fork, and many ambiguous figures like the Necker cube. Oscar Reutersward independently discovered the impossible triangle before Penrose and created hundreds of variations. Sandro Del-Prete and Istvan Orosz have created elaborate impossible architectural scenes. The field is surprisingly rich.
+assistant: Dozens. Penrose stairs (ascending forever), blivet (three prongs becoming two), impossible trident, Devil's fork, ambiguous figures like the Necker cube. Oscar Reutersvärd independently discovered the impossible triangle before Penrose and created hundreds of variations. Sandro Del-Prete and Istvan Orosz built elaborate architectural scenes.
 
-user: Could a game use impossible geometry as a mechanic?
-assistant: Several have. Monument Valley (2014) is built entirely around impossible geometry — the player rotates the camera to create visual alignments that become walkable paths. Echochrome uses the same principle. Superliminal uses forced perspective (objects change size based on where you "place" them visually). These games prove that impossible geometry isn't just an optical curiosity — it's a design space for spatial puzzles.
+user: Could a game use this as a mechanic?
+assistant: Several have. Monument Valley (2014) is built entirely around impossible geometry — rotate the camera to create alignments that become walkable paths. Echochrome same principle. Superliminal uses forced perspective. Impossible geometry is a design space for spatial puzzles, not just optical curiosities.
 
-user: Why does the illusion break with stereo vision?
-assistant: Each eye sees a slightly different angle, and the two viewpoints can't both be at the "impossible" angle simultaneously. Binocular disparity reveals the true depth — one eye sees the gap that the other eye's projection hides. This is why impossible objects work as 2D images but not in VR. The Penrose triangle sculpture in Perth only works because you view it from far enough away that the parallax between your eyes is negligible.
+user: Why does the illusion break in stereo vision?
+assistant: Each eye sees a slightly different angle. Both can't be at the impossible angle simultaneously. Binocular disparity reveals true depth — one eye sees the gap the other's projection hides. Why these work as 2D images but not in VR. Perth's sculpture works only because you view it from far enough that inter-ocular parallax is negligible.
 ```

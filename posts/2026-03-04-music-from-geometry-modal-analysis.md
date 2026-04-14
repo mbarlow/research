@@ -6,44 +6,38 @@ description: Synthesize sound from 3D shapes by computing their resonant frequen
 tags: [audio, physics, simulation, web-audio, threejs, math]
 ---
 
-## Why Modal Analysis
+## Hear the shape
 
-In 1966, mathematician Mark Kac asked "Can one hear the shape of a drum?" — whether the resonant frequencies of a vibrating membrane uniquely determine its geometry. The answer turned out to be no (counterexamples were found in 1992), but the question revealed something profound: geometry and sound are deeply linked. Every rigid body has a set of resonant frequencies — modes — determined by its shape, material, and boundary conditions. Strike a bell and you hear its geometry.
+1966. Mark Kac asks: *Can one hear the shape of a drum?* Whether the resonant frequencies of a vibrating membrane uniquely determine its geometry.
 
-Modal analysis is the study of these resonant modes. A cube rings differently than a sphere. A thin plate produces different harmonics than a thick bar. The relationships between modal frequencies determine whether something sounds "musical" (harmonic ratios) or "noisy" (inharmonic ratios). This is why a tuning fork sounds pure, a bell sounds rich, and a cymbal sounds chaotic — their geometries produce different distributions of resonant frequencies.
+The answer turned out to be no (counterexamples found in 1992). But the question revealed something profound: geometry and sound are deeply linked.
 
-The Web Audio API gives us everything needed to synthesize modal sounds in the browser: oscillators at arbitrary frequencies, gain envelopes for decay, and real-time mixing. Combined with Three.js for visualization, we can build instruments that you play by clicking on shapes.
+Every rigid body has a set of resonant frequencies — modes — determined by its shape, material, and boundary conditions. Strike a bell and you hear its geometry.
+
+A cube rings differently than a sphere. A thin plate produces different harmonics than a thick bar. The relationships between modal frequencies determine whether something sounds *musical* (harmonic ratios) or *noisy* (inharmonic).
+
+A tuning fork sounds pure. A bell sounds rich. A cymbal sounds chaotic. Different geometries → different distributions of resonant frequencies.
+
+Web Audio gives us oscillators at arbitrary frequencies, gain envelopes for decay, real-time mixing. Three.js for visualization. Build instruments you play by clicking shapes.
 
 > [!note]
-> The eigenvalue equation for a vibrating membrane is ∇^2 phi = -lambda * phi (the Helmholtz equation). The eigenvalues lambda determine the resonant frequencies. For simple shapes (rectangles, circles), closed-form solutions exist. For arbitrary geometry, finite element methods compute approximate modes.
+> Eigenvalue equation for a vibrating membrane: `∇²φ = -λφ` (Helmholtz). Eigenvalues λ → resonant frequencies. Closed-form for simple shapes (rectangles, circles). FEM for arbitrary geometry.
 
-## Post Plan (Feature Map)
+## Harmonics by shape
 
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain modal analysis | Text + math | The physics of why shapes have sound |
-| Show harmonic vs. inharmonic | Table | Why drums vs. bars sound different |
-| Cover Web Audio synthesis | Code blocks | Building modal sounds from sine waves |
-| Interactive demo | Three.js scene embed | Click shapes to hear their geometry |
-| Address questions | Chat transcript | Material properties, complexity, realism |
-
-## Harmonic Series by Shape
-
-Different geometries produce different relationships between their resonant frequencies:
-
-| Shape | Mode Ratios | Sound Character | Example |
+| Shape | Mode ratios | Character | Example |
 |---|---|---|---|
-| String (1D) | 1, 2, 3, 4, 5... | Perfectly harmonic | Guitar string |
-| Bar (1D, free) | 1, 2.76, 5.40, 8.93... | Inharmonic, bright | Xylophone |
-| Circular membrane | 1, 1.59, 2.14, 2.30... | Inharmonic, complex | Drum head |
-| Square plate | 1, 1.58, 2.0, 2.24... | Metallic, bell-like | Gong |
-| Sphere (shell) | 1, 1.47, 2.09, 2.56... | Singing, bright | Singing bowl |
+| String (1D) | 1, 2, 3, 4, 5… | Perfectly harmonic | Guitar string |
+| Bar (1D, free) | 1, 2.76, 5.40, 8.93… | Inharmonic, bright | Xylophone |
+| Circular membrane | 1, 1.59, 2.14, 2.30… | Inharmonic, complex | Drum head |
+| Square plate | 1, 1.58, 2.0, 2.24… | Metallic, bell-like | Gong |
+| Sphere (shell) | 1, 1.47, 2.09, 2.56… | Singing, bright | Singing bowl |
 
-The key insight: harmonic ratios (integer multiples) sound "musical" because our auditory system fuses them into a single pitch. Inharmonic ratios sound "metallic" or "noisy" because the brain can't resolve them into a single fundamental.
+The insight: harmonic ratios (integer multiples) sound musical because the auditory system fuses them into a single pitch. Inharmonic ratios sound metallic or noisy because the brain can't resolve them into a single fundamental.
 
-## Synthesizing Modal Sound
+## Synthesis
 
-Each mode is a damped sine wave. Higher modes typically decay faster (they lose energy more quickly). Sum them together:
+Each mode is a damped sine. Higher modes typically decay faster. Sum.
 
 ```javascript
 function strikeShape(audioCtx, frequencies, decays) {
@@ -72,7 +66,7 @@ function strikeShape(audioCtx, frequencies, decays) {
 }
 ```
 
-For realism, add a short noise burst at the onset — the "attack transient" that contains the broadband energy of the initial impact:
+For realism, add a short noise burst at onset — the attack transient with broadband impact energy:
 
 ```javascript
 // Filtered noise burst for attack
@@ -87,12 +81,12 @@ filter.type = 'bandpass';
 filter.frequency.value = baseFreq * 2;
 ```
 
-## Material Properties
+## Material
 
-The same geometry sounds different depending on material. Material affects two things:
+Same geometry, different material → different sound. Material affects:
 
-1. **Frequency scaling**: stiffer materials → higher frequencies (Young's modulus)
-2. **Decay rates**: denser materials ring longer, softer materials damp faster
+1. **Frequency scaling** — stiffer → higher (Young's modulus)
+2. **Decay** — denser rings longer, softer damps faster
 
 ```javascript
 const MATERIALS = {
@@ -103,24 +97,24 @@ const MATERIALS = {
 };
 ```
 
-## Interactive Demo
+## Demo
 
-Click any shape to strike it and hear its modal frequencies. Each shape has a distinct harmonic signature — the cube sounds metallic, the sphere sings like a bowl, the cylinder rings like a tubular bell, and the cone thuds like a muted gong. Shapes pulse and glow when struck.
+Click any shape to strike it. Cube = metallic. Sphere = bowl. Cylinder = tubular bell. Cone = muted gong. Shapes pulse and glow.
 
 <div data-scene="modal-sound.js" style="width:100%;height:420px;"></div>
 
-## Common Questions
+## Common questions
 
 ```chat
-user: How accurate are these frequencies compared to real objects?
-assistant: The mode ratios are based on analytical solutions for idealized shapes (free boundary conditions, uniform material). Real objects have additional complexity — non-uniform thickness, mounting points that constrain vibration, and material damping that varies with frequency. But the ratios capture the essential character. A real cube-shaped bell would have mode ratios close to what's shown here.
+user: How accurate are these frequencies vs real objects?
+assistant: Mode ratios are based on analytical solutions for idealized shapes (free boundary conditions, uniform material). Real objects have non-uniform thickness, mounting points that constrain vibration, frequency-dependent material damping. But the ratios capture the essential character. A real cube-shaped bell would have mode ratios close to these.
 
 user: Could you compute modes for arbitrary meshes?
-assistant: Yes, using finite element analysis (FEA). Discretize the mesh into tetrahedral elements, assemble the stiffness and mass matrices, and solve the generalized eigenvalue problem Ku = lambda * Mu. Libraries like ARPACK compute the first N eigenvalues efficiently. The resulting eigenvectors are the mode shapes (how the surface deforms at each frequency), and the eigenvalues give the frequencies. This is standard in acoustic engineering.
+assistant: Yes. FEA. Discretize into tetrahedral elements, assemble stiffness and mass matrices, solve the generalized eigenvalue problem `Ku = λMu`. ARPACK computes the first N eigenvalues efficiently. Eigenvectors = mode shapes (how the surface deforms at each frequency). Eigenvalues = frequencies. Standard in acoustic engineering.
 
 user: Why do higher modes decay faster?
-assistant: Two reasons. First, higher-frequency vibrations have shorter wavelengths, so the strain rate is higher and internal material damping dissipates more energy per cycle. Second, higher modes have more surface area undergoing large deformations, which means more energy radiated as sound per cycle. Both effects scale roughly with frequency, which is why the exponential decay constant is shorter for higher modes.
+assistant: Two reasons. (1) Higher frequencies = shorter wavelengths = higher strain rate = more internal damping per cycle. (2) Higher modes have more surface area in large deformation = more energy radiated as sound per cycle. Both scale with frequency. Decay constant shorter for higher modes.
 
 user: Can this produce realistic bell sounds?
-assistant: Close but not quite. Real bells have two additional features: slight inharmonicity (modes aren't exact integer ratios, which creates the characteristic "beating" of bells), and coupling between modes (energy transfers between modes over time, causing the timbre to evolve). Adding slight frequency jitter and amplitude modulation between modes would significantly improve realism.
+assistant: Close but not quite. Real bells have slight inharmonicity (modes aren't exact integer ratios — creates the characteristic beating) and coupling between modes (energy transfers between them over time, timbre evolves). Add slight frequency jitter and amplitude modulation between modes for significant realism improvement.
 ```

@@ -6,29 +6,20 @@ description: Simulate Reynolds' flocking algorithm on curved surfaces where topo
 tags: [simulation, boids, flocking, topology, threejs, math, creative-coding]
 ---
 
-## Why Boids on Manifolds
+## Boids in non-flat space
 
-Craig Reynolds' 1987 boids algorithm demonstrated that complex flocking behavior emerges from three simple rules: separation (don't crowd), alignment (match neighbors' heading), and cohesion (steer toward the group). But Reynolds' original implementation lived in flat Euclidean space — an infinite plane where distance is straightforward and there's no boundary to worry about. What happens when you put boids on a curved surface?
+Reynolds' 1987 boids algorithm: complex flocking from three rules. Separation, alignment, cohesion. Reynolds' implementation lived in flat Euclidean space — infinite plane, straightforward distance, no boundary.
 
-On a torus, "nearby" wraps around both the major and minor circles. A boid near one edge of parameter space has neighbors on the opposite side. On a sphere, there's no edge at all, but geodesic distance (the shortest path along the surface) is different from straight-line distance through the interior. On a Klein bottle, a boid that wraps around one axis comes back mirror-reflected — its left and right are swapped.
+Put boids on a curved surface and the dynamics change.
 
-The topology of the surface fundamentally changes the flocking dynamics. On a flat plane, flocks drift linearly. On a torus, flocks form streams that wrap around the donut, creating beautiful looping patterns. On a sphere, flocks follow great circles and form vortex-like patterns at the poles. The geometry constrains the flow in ways that produce structures you never see in flat-space simulations.
+On a torus, "nearby" wraps around both the major and minor circles. A boid near one edge of parameter space has neighbors on the opposite side. On a sphere, no edge — but geodesic distance differs from straight-line distance through the interior. On a Klein bottle, a boid wrapping one axis comes back mirror-reflected. Left and right swap.
+
+Topology constrains flow. Flat plane → flocks drift linearly. Torus → flocks form streams that wrap around the donut. Sphere → great-circle flows, vortices at the poles.
 
 > [!note]
-> The torus is the simplest non-trivially curved surface that's easy to parameterize. It has zero Gaussian curvature (like a flat plane rolled up), which means the boid rules transfer directly from flat space to torus parameter space. A sphere has positive curvature everywhere, which means parallel transport rotates vectors — a boid's heading changes just by moving, even without steering.
+> The torus has zero Gaussian curvature (a flat plane rolled up) — boid rules transfer directly from flat space to torus parameter space. A sphere has positive curvature everywhere, so parallel transport rotates vectors — a boid's heading changes just by moving, even without steering.
 
-## Post Plan (Feature Map)
-
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain boids on flat space | Text + code | The three rules |
-| Introduce manifold complications | Text + math | Geodesic distance, wrapping, curvature |
-| Show torus implementation | Code blocks | Parameter space simulation |
-| Cover 3D rendering | Code blocks | Mapping (u,v) to 3D positions |
-| Interactive demo | Three.js scene embed | 250 boids flocking on a torus |
-| Address questions | Chat transcript | Sphere, Klein bottle, performance |
-
-## The Three Rules (Flat Space)
+## The three rules (flat)
 
 ```javascript
 for (const neighbor of nearbyBoids(boid, perceptionRadius)) {
@@ -47,9 +38,9 @@ boid.velocity += separation * sepWeight
                + cohesion * cohWeight;
 ```
 
-## Wrapping on a Torus
+## Wrapping on a torus
 
-A torus is parameterized by (u, v) where both wrap modulo 2pi. The geodesic distance accounts for this wrapping:
+Parameterize by (u, v). Both wrap mod 2π. Geodesic distance accounts for the wrap.
 
 ```javascript
 function wrapDist(a, b) {
@@ -67,11 +58,11 @@ function geodesicDist(u1, v1, u2, v2) {
 }
 ```
 
-The boid simulation runs entirely in (u, v) parameter space. Positions and velocities are 2D values. The torus radii (R for major, r for minor) scale the distances so that the geodesic metric matches the actual surface distance.
+Simulation runs in (u, v) parameter space. Positions and velocities are 2D. Torus radii (R major, r minor) scale distances so the geodesic metric matches surface distance.
 
-## Mapping to 3D
+## Render to 3D
 
-To render, map each boid's (u, v) position to a 3D point on the torus surface:
+Map (u, v) → 3D point on the surface.
 
 ```javascript
 function torusPoint(u, v, R, r) {
@@ -83,7 +74,7 @@ function torusPoint(u, v, R, r) {
 }
 ```
 
-Orientation requires the surface tangent vectors:
+Orientation needs surface tangents:
 
 ```javascript
 function torusTangentU(u, v) {
@@ -97,26 +88,26 @@ function torusTangentV(u, v) {
 }
 ```
 
-The boid's 3D velocity direction is `du * tangentU + dv * tangentV`, which gives a vector tangent to the surface.
+3D velocity = `du * tangentU + dv * tangentV`. Tangent to the surface.
 
-## Interactive Demo
+## Demo
 
-250 boids flock on the surface of a torus. The wireframe torus shows the surface geometry while boids flow along it in streams, wrapping around both the major and minor circles. Color encodes each boid's identity. Watch for emergent vortices and coherent streams that follow the torus topology.
+250 boids on a torus. Wireframe shows surface. Boids flow in streams, wrapping around both circles. Color = identity. Watch for emergent vortices and streams that follow the topology.
 
 <div data-scene="boids-manifold.js" style="width:100%;height:420px;"></div>
 
-## Common Questions
+## Common questions
 
 ```chat
 user: What happens on a sphere?
-assistant: On a sphere, the geodesic distance is the great-circle distance: d = R * arccos(dot(p1, p2) / R^2). The interesting complication is at the poles — all longitudes converge there, creating a singularity in the parameterization. Boids near a pole experience distorted neighbor detection if you use naive (latitude, longitude) coordinates. The fix is to work in 3D (positions and velocities as vectors on the sphere surface) and project velocities onto the tangent plane after each update.
+assistant: Geodesic distance becomes great-circle: `d = R * arccos(dot(p1, p2) / R²)`. Complication: poles. All longitudes converge there → singularity in (lat, lon) coords. Boids near a pole get distorted neighbor detection. Fix: work in 3D — positions and velocities as vectors on the sphere — and project velocities onto the tangent plane after each update.
 
-user: Can boids on a Klein bottle really have their orientation flipped?
-assistant: Yes. A Klein bottle's parameter space identifies one pair of edges with a twist — when v wraps, u is reflected. A boid that exits the top comes back at the bottom with its horizontal direction reversed. This means a right-turning flock becomes a left-turning flock when it wraps. The simulation handles this by negating the u-component of velocity when v wraps. The result is flocks that periodically reverse their chirality.
+user: Can boids on a Klein bottle really flip orientation?
+assistant: Yes. The Klein bottle's parameter space identifies one pair of edges with a twist — when v wraps, u reflects. A boid exiting the top returns at the bottom with horizontal direction reversed. Right-turning flock becomes left-turning when it wraps. Negate the u-component of velocity when v wraps. Flocks periodically reverse their chirality.
 
 user: How does curvature affect flocking?
-assistant: On surfaces with positive curvature (sphere), geodesics converge — initially parallel boids will eventually meet. This creates a natural focusing effect that makes cohesion stronger than on flat surfaces. On negative curvature (hyperbolic plane), geodesics diverge — flocks tend to spread out and are harder to maintain. The torus has zero Gaussian curvature everywhere (it's a flat torus, topologically), so the flocking dynamics are closest to flat-space boids but with the wrapping topology.
+assistant: Positive curvature (sphere) — geodesics converge. Initially parallel boids eventually meet. Natural focusing effect — cohesion is stronger than flat. Negative curvature (hyperbolic plane) — geodesics diverge. Flocks spread out, harder to maintain. The torus has zero Gaussian curvature (topologically flat), so dynamics are closest to flat-space boids but with the wrapping topology.
 
-user: This is O(n^2) — how to scale it?
-assistant: The naive all-pairs neighbor check is O(n^2). For flat space, spatial hashing or a grid reduces this to O(n). On a torus, you can use the same trick in (u,v) parameter space — hash cells wrap at the boundaries just like the boid positions. On a sphere, use a spherical grid or an octree. For 250 boids at 60fps, O(n^2) is fine (62,500 comparisons per frame). For thousands of boids, spatial hashing is essential. GPU compute shaders handle millions by parallelizing the neighbor search.
+user: O(n²) — how do I scale?
+assistant: Naive all-pairs is O(n²). Flat space — spatial hashing or grid → O(n). Torus — same trick in (u,v); hash cells wrap at boundaries like positions. Sphere — spherical grid or octree. 250 boids at 60fps is fine (62,500 comparisons/frame). Thousands → spatial hashing essential. Millions → GPU compute shaders parallelize the neighbor search.
 ```

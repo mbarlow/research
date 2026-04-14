@@ -6,40 +6,36 @@ description: Ray march through hyperbolic and spherical geometries where paralle
 tags: [graphics, ray-marching, non-euclidean, hyperbolic-geometry, glsl, math]
 ---
 
-## Why Non-Euclidean Geometry
+## Why non-Euclidean
 
-For over two thousand years, Euclid's fifth postulate — that through any point not on a line, exactly one parallel line exists — was assumed to be a necessary truth about space. In the 19th century, Gauss, Bolyai, and Lobachevsky independently proved it wasn't. You can build consistent geometries where infinitely many parallel lines pass through a point (hyperbolic space) or where no parallel lines exist at all (spherical space). These aren't mathematical curiosities — Einstein showed that physical spacetime is non-Euclidean, curved by mass and energy.
+Two thousand years. Euclid's fifth postulate — through any point not on a line, exactly one parallel line exists — was assumed to be a necessary truth about space.
 
-Rendering non-Euclidean spaces means abandoning straight-line ray casting. In curved space, "straight" means geodesic — the shortest path between two points, which curves relative to a Euclidean embedding. In hyperbolic space, geodesics diverge exponentially, meaning that a small room can contain infinite area. In spherical space, all geodesics eventually return to their starting point, meaning you can see the back of your own head if you look far enough.
+19th century. Gauss, Bolyai, and Lobachevsky independently proved it wasn't. You can build consistent geometries where infinitely many parallel lines pass through a point (hyperbolic) or where no parallels exist at all (spherical).
 
-The visual results are immediately striking: repeating structures that shrink toward infinity in a way that feels fundamentally different from Euclidean perspective. Escher's Circle Limit woodcuts are the most famous visualization of hyperbolic tiling. With GPU ray marching, we can walk through these spaces in real time.
+These aren't curiosities. Einstein showed physical spacetime is non-Euclidean, curved by mass and energy.
+
+Rendering non-Euclidean spaces means abandoning straight-line ray casting. In curved space, "straight" means *geodesic* — the shortest path between two points, which curves relative to a Euclidean embedding.
+
+In hyperbolic space, geodesics diverge exponentially — a small room can contain infinite area. In spherical space, all geodesics return to their start — you can see the back of your own head if you look far enough.
+
+Visually: repeating structures shrink toward infinity in a way that feels fundamentally different from Euclidean perspective. Escher's Circle Limit woodcuts are the most famous visualization. With GPU ray marching, you can walk through these spaces in real time.
 
 > [!note]
-> Video games occasionally use non-Euclidean tricks — portals in Portal, the impossible architecture in Antichamber, the curved space in Hyperbolica. Most use portal-based cheats rather than actual curved-space rendering. True hyperbolic ray marching, as shown here, computes geodesics directly.
+> Games occasionally use non-Euclidean tricks — Portal portals, Antichamber's impossible architecture, Hyperbolica's curved space. Most are portal-based cheats. True hyperbolic ray marching computes geodesics directly.
 
-## Post Plan (Feature Map)
-
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain the geometry | Text + math | What non-Euclidean means precisely |
-| Cover the three classical geometries | Table + callout | Euclidean vs. hyperbolic vs. spherical |
-| Show the rendering technique | Code blocks | Log-polar domain repetition |
-| Build an interactive demo | Three.js scene embed | Fly through hyperbolic architecture |
-| Address common questions | Chat transcript | Games, physics, practicality |
-
-## The Three Classical Geometries
+## The three classical geometries
 
 | Property | Euclidean | Hyperbolic | Spherical |
 |---|---|---|---|
-| Parallel lines through a point | Exactly 1 | Infinitely many | 0 |
-| Triangle angle sum | = 180 | < 180 | > 180 |
-| Area growth with radius | r^2 | e^r (exponential) | Bounded |
+| Parallels through a point | 1 | Infinite | 0 |
+| Triangle angle sum | = 180° | < 180° | > 180° |
+| Area growth with radius | r² | e^r (exponential) | Bounded |
 | Curvature | 0 | Negative | Positive |
 | Real-world example | Flat table | Saddle surface | Earth's surface |
 
-## Rendering Hyperbolic Space
+## Hyperbolic rendering
 
-The key technique is **logarithmic-polar domain repetition**. In Euclidean space, we tile by modular arithmetic (`mod(x, cellSize)`). In hyperbolic space, distances grow exponentially from the center, so we tile in log-polar coordinates:
+The trick: **logarithmic-polar domain repetition**. Euclidean uses modular arithmetic (`mod(x, cellSize)`). Hyperbolic distances grow exponentially from the center, so we tile in log-polar coords:
 
 ```glsl
 vec3 hyperbolicFold(vec3 p) {
@@ -61,11 +57,11 @@ vec3 hyperbolicFold(vec3 p) {
 }
 ```
 
-This creates cells that are equal-sized in the hyperbolic metric but shrink exponentially toward the center and toward infinity in Euclidean embedding — exactly the Circle Limit effect.
+Cells are equal-sized in the hyperbolic metric. Shrink exponentially toward the center and toward infinity in Euclidean embedding. Exactly the Circle Limit effect.
 
-## The SDF Scene
+## The scene
 
-Inside each hyperbolic cell, we place geometry using standard signed distance functions:
+Standard SDFs inside each hyperbolic cell:
 
 ```glsl
 float map(vec3 p) {
@@ -87,11 +83,11 @@ float map(vec3 p) {
 }
 ```
 
-Each cell gets a unique color derived from its cell ID (which ring and which sector), creating the characteristic hyperbolic coloring where you can track the tiling structure.
+Each cell gets a unique color from its cell ID (ring + sector). You can track the tiling structure visually.
 
-## Ambient Occlusion in Curved Space
+## AO in curved space
 
-Standard ray-marched ambient occlusion works by sampling the distance field along the normal direction. In non-Euclidean space, this still works because the SDF is locally Euclidean — curvature only manifests over larger distances:
+Standard ray-marched AO works because the SDF is locally Euclidean — curvature only manifests over larger distances:
 
 ```glsl
 float calcAO(vec3 p, vec3 n) {
@@ -106,24 +102,24 @@ float calcAO(vec3 p, vec3 n) {
 }
 ```
 
-## Interactive Demo
+## Demo
 
-Fly through a hyperbolic cathedral — pillars and arches repeat infinitely, shrinking toward the horizon in every direction. The architecture is identical in each cell, but the hyperbolic metric makes each repetition appear smaller, creating an infinite corridor that fits within a finite view.
+Fly through a hyperbolic cathedral. Pillars and arches repeat infinitely, shrinking toward the horizon in every direction. Identical architecture per cell, but the hyperbolic metric makes each repetition appear smaller. Infinite corridor in a finite view.
 
 <div data-scene="non-euclidean.js" style="width:100%;height:420px;"></div>
 
-## Common Questions
+## Common questions
 
 ```chat
-user: Is this actually rendering in curved space, or just faking it?
-assistant: It's a hybrid. The domain repetition in log-polar coordinates creates the visual signature of hyperbolic space — the exponential shrinking of cells toward the boundary. But the rays themselves travel in straight lines through a Euclidean embedding. True hyperbolic ray marching would integrate geodesic equations (modifying ray direction at each step based on the Christoffel symbols of the metric). The visual result is nearly identical for this type of scene, and the log-polar approach runs 10x faster.
+user: Is this actually rendering in curved space or just faking it?
+assistant: Hybrid. Domain repetition in log-polar creates the visual signature of hyperbolic space — exponential shrinking toward the boundary. But the rays travel in straight lines through a Euclidean embedding. True hyperbolic ray marching would integrate geodesic equations (modifying direction at each step based on Christoffel symbols of the metric). Visual result is nearly identical for this type of scene. Log-polar runs 10x faster.
 
-user: Could you render the Poincare disk model exactly?
-assistant: Yes. The Poincare disk maps the entire hyperbolic plane into a unit circle. Points near the boundary represent points "at infinity." You'd ray march in the disk model using the hyperbolic distance metric d(p,q) = acosh(1 + 2|p-q|^2 / ((1-|p|^2)(1-|q|^2))). The SDF would be defined in terms of this metric. It's more mathematically pure but produces a similar visual to the log-polar approach for architectural scenes.
+user: Could you render the Poincaré disk model exactly?
+assistant: Yes. Poincaré disk maps the entire hyperbolic plane into a unit circle. Points near the boundary = "at infinity." Ray march in the disk model using hyperbolic distance: `d(p,q) = acosh(1 + 2|p-q|² / ((1-|p|²)(1-|q|²)))`. SDF defined in terms of this metric. More mathematically pure. Similar visual for architectural scenes.
 
 user: What about VR in non-Euclidean space?
-assistant: It works and it's deeply disorienting. Henry Segerman and Vi Hart have built VR experiences in hyperbolic and spherical space. The brain struggles to reconcile the visual input with its Euclidean expectations — rooms that are "bigger on the inside" create a specific kind of spatial nausea that's different from normal VR sickness. The rendering is the same as here but stereoscopic, with geodesic rays computed per eye.
+assistant: Works. Deeply disorienting. Henry Segerman and Vi Hart built VR experiences in hyperbolic and spherical. The brain struggles to reconcile visual input with Euclidean expectations — "bigger on the inside" rooms create a specific spatial nausea distinct from normal VR sickness. Same rendering, stereoscopic, geodesic rays per eye.
 
 user: Do any shipping games use real curved-space rendering?
-assistant: Hyperbolica (2022) is the closest — it actually renders in hyperbolic space, though with some compromises for performance. Most games use portal tricks: render the scene from multiple viewpoints and stitch them together at portal boundaries. This gives the illusion of non-Euclidean space without the per-pixel geodesic computation. Antichamber, Superliminal, and Manifold Garden all use this approach.
+assistant: Hyperbolica (2022) is closest — actually renders in hyperbolic space with some performance compromises. Most games use portal tricks: render from multiple viewpoints, stitch at portal boundaries. Illusion without per-pixel geodesic computation. Antichamber, Superliminal, Manifold Garden all use this.
 ```
