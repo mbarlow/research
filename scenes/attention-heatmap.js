@@ -62,36 +62,30 @@ const head3 = [
 
 const HEADS = [head0, head1, head2, head3];
 
-// --- Color mapping: dark blue -> cyan -> yellow -> white ---
+// --- Palette-driven color ramp: bg → elevated → accent → text ---
 
-function attentionColor(value) {
-  // value in [0, 1]
-  const t = Math.max(0, Math.min(1, value));
-  let r, g, b;
-
-  if (t < 0.25) {
-    const f = t / 0.25;
-    r = 0.05 + f * 0.0;
-    g = 0.05 + f * 0.15;
-    b = 0.15 + f * 0.35;
-  } else if (t < 0.5) {
-    const f = (t - 0.25) / 0.25;
-    r = 0.05 + f * 0.0;
-    g = 0.20 + f * 0.45;
-    b = 0.50 + f * 0.10;
-  } else if (t < 0.75) {
-    const f = (t - 0.5) / 0.25;
-    r = 0.05 + f * 0.85;
-    g = 0.65 + f * 0.25;
-    b = 0.60 - f * 0.45;
-  } else {
-    const f = (t - 0.75) / 0.25;
-    r = 0.90 + f * 0.10;
-    g = 0.90 + f * 0.10;
-    b = 0.15 + f * 0.65;
-  }
-
-  return `rgb(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)})`;
+function makeRamp(palette) {
+  const stops = [
+    { t: 0.00, rgb: palette.bg },
+    { t: 0.30, rgb: palette.elevated },
+    { t: 0.55, rgb: palette.hues[4] },   // teal/cool
+    { t: 0.78, rgb: palette.accent },    // hot
+    { t: 1.00, rgb: palette.text },      // cream peak
+  ];
+  return (value) => {
+    const t = Math.max(0, Math.min(1, value));
+    for (let i = 1; i < stops.length; i++) {
+      if (t <= stops[i].t) {
+        const a = stops[i - 1], b = stops[i];
+        const f = (t - a.t) / (b.t - a.t);
+        const r = a.rgb.r + (b.rgb.r - a.rgb.r) * f;
+        const g = a.rgb.g + (b.rgb.g - a.rgb.g) * f;
+        const bl = a.rgb.b + (b.rgb.b - a.rgb.b) * f;
+        return `rgb(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(bl * 255)})`;
+      }
+    }
+    return `rgb(0,0,0)`;
+  };
 }
 
 // --- Interpolation between two matrices ---
@@ -113,7 +107,9 @@ function smoothStep(t) {
   return t * t * (3 - 2 * t);
 }
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
+  const css = palette.as.css;
+  const attentionColor = makeRamp(palette);
   const dpr = Math.min(window.devicePixelRatio, 2);
   let width = container.clientWidth;
   let height = container.clientHeight || 420;
@@ -135,7 +131,7 @@ export function init(canvas, container) {
     if (!running) return;
     requestAnimationFrame(draw);
 
-    const elapsed = timestamp - startTime;
+    const elapsed = Math.max(0, timestamp - startTime);
     const totalCycle = CYCLE_DURATION;
     const cyclePos = (elapsed % (totalCycle * HEADS.length)) / totalCycle;
     const currentHead = Math.floor(cyclePos) % HEADS.length;
@@ -172,23 +168,23 @@ export function init(canvas, container) {
     const originY = padding + headerHeight + labelAreaY + (availH - gridH) / 2;
 
     // Clear
-    ctx.fillStyle = '#0d1117';
+    ctx.fillStyle = css.bg;
     ctx.fillRect(0, 0, width, height);
 
     // Title
-    ctx.fillStyle = '#c9d1d9';
+    ctx.fillStyle = css.text;
     ctx.font = 'bold 14px monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
     ctx.fillText('Self-Attention Weights', width / 2, padding);
 
     // Head label
-    ctx.fillStyle = '#8b949e';
+    ctx.fillStyle = css.textSecondary;
     ctx.font = '12px monospace';
     ctx.fillText(displayLabel, width / 2, padding + 18);
 
     // Draw column labels (top)
-    ctx.fillStyle = '#8b949e';
+    ctx.fillStyle = css.textSecondary;
     ctx.font = '11px monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
@@ -202,14 +198,14 @@ export function init(canvas, container) {
     }
 
     // Label axis: "Key" on top
-    ctx.fillStyle = '#58a6ff';
+    ctx.fillStyle = css.accent;
     ctx.font = '10px monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
     ctx.fillText('Key \u2192', originX + gridW / 2, originY - 32);
 
     // Draw row labels (left) and "Query" axis label
-    ctx.fillStyle = '#8b949e';
+    ctx.fillStyle = css.textSecondary;
     ctx.font = '11px monospace';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
@@ -220,7 +216,7 @@ export function init(canvas, container) {
 
     // Query axis label (vertical)
     ctx.save();
-    ctx.fillStyle = '#58a6ff';
+    ctx.fillStyle = css.accent;
     ctx.font = '10px monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
@@ -249,7 +245,7 @@ export function init(canvas, container) {
 
         // Draw value text in cells if large enough
         if (cellSize >= 32) {
-          ctx.fillStyle = val > 0.5 ? '#0d1117' : '#c9d1d9';
+          ctx.fillStyle = val > 0.6 ? css.bg : css.text;
           ctx.font = '10px monospace';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';

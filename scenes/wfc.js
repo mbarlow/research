@@ -7,37 +7,55 @@ const GRID = 20;
 const EDGE_COLORS = { green: 0, brown: 1, blue: 2 };
 
 // Tile definitions: [top, right, bottom, left] edge colors
-// Also a display color for the tile body
-const TILES = [
-  { edges: [0, 0, 0, 0], color: [0.2, 0.55, 0.2], name: 'grass' },
-  { edges: [0, 1, 0, 1], color: [0.45, 0.35, 0.2], name: 'road-h' },
-  { edges: [1, 0, 1, 0], color: [0.45, 0.35, 0.2], name: 'road-v' },
-  { edges: [1, 1, 1, 1], color: [0.5, 0.4, 0.25], name: 'road-cross' },
-  { edges: [1, 0, 0, 1], color: [0.4, 0.32, 0.2], name: 'road-tl' },
-  { edges: [1, 1, 0, 0], color: [0.4, 0.32, 0.2], name: 'road-tr' },
-  { edges: [0, 0, 1, 1], color: [0.4, 0.32, 0.2], name: 'road-bl' },
-  { edges: [0, 1, 1, 0], color: [0.4, 0.32, 0.2], name: 'road-br' },
-  { edges: [2, 2, 2, 2], color: [0.15, 0.3, 0.6], name: 'water' },
-  { edges: [0, 0, 2, 0], color: [0.2, 0.45, 0.4], name: 'shore-s' },
-  { edges: [2, 0, 0, 0], color: [0.2, 0.45, 0.4], name: 'shore-n' },
-  { edges: [0, 2, 0, 0], color: [0.2, 0.45, 0.4], name: 'shore-e' },
-  { edges: [0, 0, 0, 2], color: [0.2, 0.45, 0.4], name: 'shore-w' },
+// Tile *colors* are built from the palette at init time.
+const TILE_SPECS = [
+  { edges: [0, 0, 0, 0], kind: 'grass', name: 'grass' },
+  { edges: [0, 1, 0, 1], kind: 'road',  name: 'road-h' },
+  { edges: [1, 0, 1, 0], kind: 'road',  name: 'road-v' },
+  { edges: [1, 1, 1, 1], kind: 'junction', name: 'road-cross' },
+  { edges: [1, 0, 0, 1], kind: 'road',  name: 'road-tl' },
+  { edges: [1, 1, 0, 0], kind: 'road',  name: 'road-tr' },
+  { edges: [0, 0, 1, 1], kind: 'road',  name: 'road-bl' },
+  { edges: [0, 1, 1, 0], kind: 'road',  name: 'road-br' },
+  { edges: [2, 2, 2, 2], kind: 'water', name: 'water' },
+  { edges: [0, 0, 2, 0], kind: 'shore', name: 'shore-s' },
+  { edges: [2, 0, 0, 0], kind: 'shore', name: 'shore-n' },
+  { edges: [0, 2, 0, 0], kind: 'shore', name: 'shore-e' },
+  { edges: [0, 0, 0, 2], kind: 'shore', name: 'shore-w' },
 ];
 
-// Adjacency: top/bottom edges must match, left/right edges must match
-function canPlace(tileA, dirFromA, tileB) {
-  // dir: 0=top, 1=right, 2=bottom, 3=left
-  const opposite = [2, 3, 0, 1];
-  return TILES[tileA].edges[dirFromA] === TILES[tileB].edges[opposite[dirFromA]];
+function buildTiles(palette) {
+  const h = palette.hues;
+  const KIND_COLORS = {
+    grass:    palette.shade(h[3], -0.08), // forest, slightly darker
+    road:     palette.shade(h[2], -0.15), // amber, earthy
+    junction: palette.shade(h[2], -0.05), // brighter junction
+    water:    palette.shade(h[4], -0.10), // teal deep
+    shore:    palette.shade(h[4], 0.08),  // teal light
+  };
+  return TILE_SPECS.map(s => ({
+    edges: s.edges,
+    name: s.name,
+    color: [KIND_COLORS[s.kind].r, KIND_COLORS[s.kind].g, KIND_COLORS[s.kind].b],
+  }));
 }
 
-export function init(canvas, container) {
+export function init(canvas, container, palette) {
   const width = container.clientWidth;
   const height = container.clientHeight || 420;
+  const hex = palette.as.hex;
+
+  const TILES = buildTiles(palette);
+
+  // Adjacency: top/bottom edges must match, left/right edges must match
+  function canPlace(tileA, dirFromA, tileB) {
+    const opposite = [2, 3, 0, 1];
+    return TILES[tileA].edges[dirFromA] === TILES[tileB].edges[opposite[dirFromA]];
+  }
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
   renderer.setSize(width, height);
-  renderer.setClearColor(0x0a0a12);
+  renderer.setClearColor(hex.bg);
 
   const aspect = width / height;
   const viewSize = GRID * 0.6;
@@ -57,7 +75,7 @@ export function init(canvas, container) {
 
   for (let y = 0; y < GRID; y++) {
     for (let x = 0; x < GRID; x++) {
-      const mat = new THREE.MeshBasicMaterial({ color: 0x222233 });
+      const mat = new THREE.MeshBasicMaterial({ color: hex.elevated });
       const mesh = new THREE.Mesh(cellGeo, mat);
       mesh.rotation.x = -Math.PI / 2;
       mesh.position.set(x - GRID / 2 + 0.5, 0, y - GRID / 2 + 0.5);
@@ -103,11 +121,14 @@ export function init(canvas, container) {
       const c = tile.color;
       cellMaterials[i].color.setRGB(c[0], c[1], c[2]);
     } else {
-      // Entropy visualization: fewer options = darker/cooler
+      // Entropy: high entropy → cooler elevated bg, low entropy → warmer toward accent
       const entropy = grid[i].size / TILES.length;
-      const r = 0.1 + entropy * 0.15;
-      const g = 0.1 + entropy * 0.1;
-      const b = 0.15 + entropy * 0.2;
+      const lo = palette.elevated;
+      const hi = palette.accent;
+      const t = 1 - entropy;
+      const r = lo.r + (hi.r - lo.r) * t * 0.35;
+      const g = lo.g + (hi.g - lo.g) * t * 0.35;
+      const b = lo.b + (hi.b - lo.b) * t * 0.35;
       cellMaterials[i].color.setRGB(r, g, b);
     }
   }

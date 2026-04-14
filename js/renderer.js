@@ -2,6 +2,7 @@
 // frontmatter → marked → enhance (Prism, Mermaid, Three.js, etc.)
 
 import { marked } from 'marked';
+import { getPalette, subscribePalette } from './palette.js';
 
 // Parse YAML-like frontmatter from markdown
 export function parseFrontmatter(text) {
@@ -216,28 +217,36 @@ export async function enhance(container) {
   for (const el of sceneBlocks) {
     const src = el.getAttribute('data-scene');
     try {
-      const canvas = document.createElement('canvas');
-      canvas.style.width = '100%';
-      canvas.style.height = '100%';
-      el.appendChild(canvas);
       el.classList.add('scene-container');
       const module = await import(`../scenes/${src}`);
-      if (module.init) {
-        const cleanup = await module.init(canvas, el);
-        if (cleanup) {
-          const observer = new MutationObserver((mutations) => {
-            for (const m of mutations) {
-              for (const node of m.removedNodes) {
-                if (node === el || node.contains?.(el)) {
-                  cleanup();
-                  observer.disconnect();
-                }
-              }
+      if (!module.init) continue;
+
+      let currentCleanup = null;
+      const mount = async () => {
+        if (currentCleanup) { try { currentCleanup(); } catch {} currentCleanup = null; }
+        el.innerHTML = '';
+        const canvas = document.createElement('canvas');
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        el.appendChild(canvas);
+        currentCleanup = await module.init(canvas, el, getPalette());
+      };
+      await mount();
+
+      const unsubscribe = subscribePalette(() => { mount(); });
+
+      const observer = new MutationObserver((mutations) => {
+        for (const m of mutations) {
+          for (const node of m.removedNodes) {
+            if (node === el || node.contains?.(el)) {
+              if (currentCleanup) { try { currentCleanup(); } catch {} }
+              unsubscribe();
+              observer.disconnect();
             }
-          });
-          observer.observe(el.parentElement || document.body, { childList: true, subtree: true });
+          }
         }
-      }
+      });
+      observer.observe(el.parentElement || document.body, { childList: true, subtree: true });
     } catch (e) {
       el.innerHTML = `<div class="scene-error">Scene failed to load: ${src}</div>`;
       console.warn('Scene load failed:', e);
