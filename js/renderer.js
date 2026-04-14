@@ -212,7 +212,7 @@ export async function enhance(container) {
     }
   }
 
-  // Three.js scene embeds
+  // Three.js scene embeds — lazy mount, unmount offscreen
   const sceneBlocks = container.querySelectorAll('[data-scene]');
   for (const el of sceneBlocks) {
     const src = el.getAttribute('data-scene');
@@ -222,24 +222,48 @@ export async function enhance(container) {
       if (!module.init) continue;
 
       let currentCleanup = null;
+      let mounting = false;
+
       const mount = async () => {
+        if (currentCleanup || mounting) return;
+        mounting = true;
+        try {
+          el.innerHTML = '';
+          const canvas = document.createElement('canvas');
+          canvas.style.width = '100%';
+          canvas.style.height = '100%';
+          el.appendChild(canvas);
+          currentCleanup = await module.init(canvas, el, getPalette());
+        } finally {
+          mounting = false;
+        }
+      };
+
+      const unmount = () => {
         if (currentCleanup) { try { currentCleanup(); } catch {} currentCleanup = null; }
         el.innerHTML = '';
-        const canvas = document.createElement('canvas');
-        canvas.style.width = '100%';
-        canvas.style.height = '100%';
-        el.appendChild(canvas);
-        currentCleanup = await module.init(canvas, el, getPalette());
       };
-      await mount();
 
-      const unsubscribe = subscribePalette(() => { mount(); });
+      // Intersection-driven mount/unmount. rootMargin warms up early and
+      // keeps the scene alive for a screenful past the edge so quick scrolls
+      // don't thrash mount/unmount.
+      const io = new IntersectionObserver((entries) => {
+        const visible = entries[0].isIntersecting;
+        if (visible) mount();
+        else unmount();
+      }, { rootMargin: '400px 0px' });
+      io.observe(el);
+
+      const unsubscribe = subscribePalette(() => {
+        if (currentCleanup) { unmount(); mount(); }
+      });
 
       const observer = new MutationObserver((mutations) => {
         for (const m of mutations) {
           for (const node of m.removedNodes) {
             if (node === el || node.contains?.(el)) {
-              if (currentCleanup) { try { currentCleanup(); } catch {} }
+              unmount();
+              io.disconnect();
               unsubscribe();
               observer.disconnect();
             }
