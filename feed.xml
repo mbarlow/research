@@ -4,12 +4,19 @@
   <link href="https://mbarlow.github.io/research" rel="alternate"/>
   <link href="https://mbarlow.github.io/research/feed.xml" rel="self"/>
   <id>https://mbarlow.github.io/research/</id>
-  <updated>2026-04-14T04:06:16.083Z</updated>
+  <updated>2026-04-14T04:36:41.136Z</updated>
+  <entry>
+    <title>Own Your Tools — Three Chrome Extensions, No Store Required</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-04-14-chrome-extensions-own-your-tools" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-04-14-chrome-extensions-own-your-tools</id>
+    <updated>2026-04-14T04:36:32.659Z</updated>
+    <summary>Three small MIT-licensed Chrome extensions — pretty-json, recorder, snapshot — built to be installed as unpacked Developer Mode extensions. No store. No telemetry. Your data stays local.</summary>
+  </entry>
   <entry>
     <title>Saengsation — The Keyboard as System Status</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-04-14-saengsation-keyboard-as-status" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-04-14-saengsation-keyboard-as-status</id>
-    <updated>2026-04-14T04:06:09.517Z</updated>
+    <updated>2026-04-14T04:17:59.107Z</updated>
     <summary>A Go-only RGB LED controller for the Keychron V7 that mirrors what Claude Code is doing — waiting, acknowledged, working, idle — via keyboard lighting.</summary>
   </entry>
   <entry>
@@ -137,12 +144,5 @@
     <id>https://mbarlow.github.io/research/#/post/2026-03-01-webgpu-compute-shaders</id>
     <updated>2026-04-14T01:08:46.022Z</updated>
     <summary>Set up WebGPU compute pipelines with WGSL, manage buffers, size workgroups, and run parallel operations entirely in the browser.</summary>
-  </entry>
-  <entry>
-    <title>Structured Output and Tool Use with Local LLMs</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-structured-output-local-llms" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-01-structured-output-local-llms</id>
-    <updated>2026-04-14T01:07:25.878Z</updated>
-    <summary>Get reliable structured output from local models using JSON mode, grammar-guided decoding, function calling, and validation patterns.</summary>
   </entry>
 </feed>

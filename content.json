@@ -1,10 +1,28 @@
 [
   {
+    "slug": "2026-04-14-chrome-extensions-own-your-tools",
+    "file": "2026-04-14-chrome-extensions-own-your-tools.md",
+    "title": "Own Your Tools — Three Chrome Extensions, No Store Required",
+    "date": "2026-04-14",
+    "timestamp": "2026-04-14T04:36:32.659Z",
+    "order": 41,
+    "description": "Three small MIT-licensed Chrome extensions — pretty-json, recorder, snapshot — built to be installed as unpacked Developer Mode extensions. No store. No telemetry. Your data stays local.",
+    "tags": [
+      "chrome",
+      "extensions",
+      "tooling",
+      "privacy",
+      "open-source",
+      "javascript"
+    ],
+    "body": "\n## Why unpacked\n\nChrome extensions don't have to come from the Web Store.\n\n`chrome://extensions` → Developer Mode → Load unpacked. Point at a directory. Done.\n\nThat one path is the whole argument for this post.\n\n## What the Store costs you\n\n- **Review queue** — days to weeks between code and installed bits\n- **Permission theater** — store-distributed extensions prompt for permissions up front, encouraging over-broad manifests\n- **Telemetry surface** — many Store extensions phone home. Ad blocke"
+  },
+  {
     "slug": "2026-04-14-saengsation-keyboard-as-status",
     "file": "2026-04-14-saengsation-keyboard-as-status.md",
     "title": "Saengsation — The Keyboard as System Status",
     "date": "2026-04-14",
-    "timestamp": "2026-04-14T04:06:09.517Z",
+    "timestamp": "2026-04-14T04:17:59.107Z",
     "order": 40,
     "description": "A Go-only RGB LED controller for the Keychron V7 that mirrors what Claude Code is doing — waiting, acknowledged, working, idle — via keyboard lighting.",
     "tags": [
@@ -17,7 +35,7 @@
       "linux",
       "tooling"
     ],
-    "body": "\n## The idea\n\nPeripheral status is ambient data. The keyboard is already in your field of view. Use it.\n\n`saengsation` turns the Keychron V7 into a status indicator. Claude is waiting for input → the keys glow red. I hit enter → green breathing fade. Claude starts thinking → rainbow spiral. Claude stops → dim blue pulse.\n\nNo alt-tab. No terminal glance. Peripheral vision does the work.\n\n> แสง (saeng) = light. Sensation = the rest.\n\n## Why build one\n\nThe existing options were bad.\n\n- **Via web ap"
+    "body": "\n<figure>\n  <img src=\"media/saengsation/keys.jpg\" alt=\"Keychron V7 under saengsation\" style=\"width:100%;height:auto;\">\n</figure>\n\n## The idea\n\nPeripheral status is ambient data. The keyboard is already in your field of view. Use it.\n\n`saengsation` turns the Keychron V7 into a status indicator. Claude is waiting for input → the keys glow red. I hit enter → green breathing fade. Claude starts thinking → rainbow spiral. Claude stops → dim blue pulse.\n\nNo alt-tab. No terminal glance. Peripheral visi"
   },
   {
     "slug": "2026-03-04-wave-function-collapse-visualized",
