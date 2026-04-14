@@ -81,7 +81,8 @@ async function loadIndex() {
 function renderPostCard(post) {
   const tags = renderTagList(post.tags);
   const dateTime = formatPostDateTime(post);
-  return `<div class="post-card" data-slug="${post.slug}" onclick="if(!event.target.closest('.post-card-share'))location.hash='#/post/${post.slug}'">
+  return `<div class="post-card" data-slug="${post.slug}">
+    <a class="post-card-link" href="#/post/${post.slug}" aria-label="${post.title}"></a>
     <div class="post-card-head">
       <div class="post-card-date">${dateTime}</div>
       <button class="post-card-share" type="button" title="Copy share text" aria-label="Copy share text">
@@ -137,6 +138,13 @@ document.addEventListener('click', (e) => {
   e.stopPropagation();
   const card = btn.closest('.post-card');
   if (card) copyShareText(btn, card.dataset.slug);
+});
+
+document.addEventListener('auxclick', (e) => {
+  if (e.target.closest('.post-card-share')) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
 });
 
 // Route: Home

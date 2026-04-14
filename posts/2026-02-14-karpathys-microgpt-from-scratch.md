@@ -27,14 +27,16 @@ A tiny GPT stack:
 4. Sampling — temperature/top-k generation
 
 ```mermaid
-flowchart LR
-    A["Raw text"] --> B["Tokenizer"]
-    B --> C["Token ids"]
-    C --> D["Embeddings and positions"]
-    D --> E["Transformer blocks"]
-    E --> F["Layer norm and LM head"]
-    F --> G["Cross entropy loss"]
-    G --> H["Backprop and AdamW"]
+flowchart TB
+    subgraph r1 [" "]
+        direction LR
+        A["Raw text"] --> B["Tokenizer"] --> C["Token ids"] --> D["Embeddings and positions"]
+    end
+    subgraph r2 [" "]
+        direction LR
+        E["Transformer blocks"] --> F["Layer norm and LM head"] --> G["Cross entropy loss"] --> H["Backprop and AdamW"]
+    end
+    D --> E
     H --> E
 ```
 

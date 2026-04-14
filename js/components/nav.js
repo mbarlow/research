@@ -1,13 +1,14 @@
 // Top navigation bar
 import { toggleTheme, getTheme, cycleFont, getCurrentFont } from '../theme.js';
 import { toggleSearch } from '../search.js';
+import { initWfcLogo } from './wfc-logo.js';
 
 export function initNav() {
   const nav = document.getElementById('nav');
   nav.innerHTML = `
     <div class="nav-inner">
       <div class="nav-brand">
-        <a href="#/" class="nav-logo" aria-hidden="true"><span></span><span></span><span></span><span></span></a>
+        <a href="#/" class="nav-logo" aria-hidden="true" title="Wave Function Collapse"><canvas id="nav-logo-canvas"></canvas></a>
         <a href="#/" class="nav-title">Research</a>
         <span class="nav-version" id="nav-version" title="Loading version..."></span>
       </div>
@@ -44,6 +45,12 @@ export function initNav() {
   updateThemeIcon();
   updateFontLabel(getCurrentFont());
   loadVersion();
+
+  const logoCanvas = document.getElementById('nav-logo-canvas');
+  if (logoCanvas) {
+    const isMobile = window.matchMedia('(max-width: 480px)').matches;
+    initWfcLogo(logoCanvas, isMobile ? 18 : 30);
+  }
 }
 
 export function updateThemeIcon() {

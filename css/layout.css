@@ -61,6 +61,7 @@
 .content {
   max-width: var(--max-width);
   width: 100%;
+  min-width: 0;
   align-self: start;
   margin: 0 auto;
   padding: 2rem 1.5rem 4rem;

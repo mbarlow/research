@@ -470,10 +470,7 @@ figcaption {
   /* Nav — shrink spacing; cap nav-inner; drop version below 480px */
   .nav-inner { padding: 0 0.75rem; }
   .nav-brand { gap: 0.5rem; min-width: 0; flex: 1 1 auto; }
-  .nav-logo {
-    grid-template-columns: 10px 10px;
-    grid-template-rows: 10px 10px;
-  }
+  .nav-logo { width: 22px; height: 22px; }
   .nav-title { font-size: 1rem; flex-shrink: 0; }
   .nav-version {
     font-size: 0.6rem;
@@ -581,7 +578,7 @@ figcaption {
   /* Narrow mobile — hide version string entirely at <= 480px */
   @media (max-width: 480px) {
     .nav-version { display: none; }
-    .nav-logo { grid-template-columns: 9px 9px; grid-template-rows: 9px 9px; }
+    .nav-logo { width: 18px; height: 18px; }
     .nav-btn { width: 36px; height: 36px; }
     .nav-inner { padding: 0 0.5rem; }
   }

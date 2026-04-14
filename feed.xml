@@ -4,7 +4,21 @@
   <link href="https://mbarlow.github.io/research" rel="alternate"/>
   <link href="https://mbarlow.github.io/research/feed.xml" rel="self"/>
   <id>https://mbarlow.github.io/research/</id>
-  <updated>2026-04-14T12:19:19.519Z</updated>
+  <updated>2026-04-14T22:38:44.238Z</updated>
+  <entry>
+    <title>microGPT from Scratch - Building a Transformer from First Principles</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-karpathys-microgpt-from-scratch" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-karpathys-microgpt-from-scratch</id>
+    <updated>2026-04-14T21:16:53.647Z</updated>
+    <summary>Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.</summary>
+  </entry>
+  <entry>
+    <title>Save the Session — bsm, csm, vt for LLM Work Across Projects</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-04-14-session-persistence-bsm-csm-vt" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-04-14-session-persistence-bsm-csm-vt</id>
+    <updated>2026-04-14T21:04:31.538Z</updated>
+    <summary>Three small skills for persisting work session state when you juggle multiple LLM-assisted projects — byobu layouts, Chrome debug tabs, and graceful VT escapes when the compositor dies.</summary>
+  </entry>
   <entry>
     <title>Own Your Tools — Three Chrome Extensions, No Store Required</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-04-14-chrome-extensions-own-your-tools" rel="alternate"/>
@@ -25,55 +39,6 @@
     <id>https://mbarlow.github.io/research/#/post/2026-03-04-wave-function-collapse-visualized</id>
     <updated>2026-04-14T01:26:23.193Z</updated>
     <summary>Visualize the Wave Function Collapse algorithm step by step, watching entropy collapse and constraints propagate to generate coherent tile patterns from local rules.</summary>
-  </entry>
-  <entry>
-    <title>Physarum Simulation — Slime Mold Intelligence on the GPU</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-physarum-slime-mold-simulation" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-physarum-slime-mold-simulation</id>
-    <updated>2026-04-14T01:25:01.280Z</updated>
-    <summary>Simulate Physarum polycephalum's emergent network behavior using GPU ping-pong framebuffers, where 40,000 simple agents create stunning organic transport networks.</summary>
-  </entry>
-  <entry>
-    <title>LLM-Guided Evolutionary Art — Language as Fitness Function</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-llm-guided-evolutionary-art" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-llm-guided-evolutionary-art</id>
-    <updated>2026-04-14T01:22:57.288Z</updated>
-    <summary>Evolve visual art using genetic algorithms where a local LLM judges fitness, replacing mathematical objectives with natural language like &quot;more crystalline&quot; or &quot;more ominous.&quot;</summary>
-  </entry>
-  <entry>
-    <title>Boids on Curved Manifolds — Flocking on a Torus</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-boids-on-curved-manifolds" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-boids-on-curved-manifolds</id>
-    <updated>2026-04-14T01:20:54.865Z</updated>
-    <summary>Simulate Reynolds' flocking algorithm on curved surfaces where topology wraps, twists, and changes the meaning of &quot;nearby&quot; — boids on a torus, sphere, and Klein bottle.</summary>
-  </entry>
-  <entry>
-    <title>Audio Spectrogram Terrain — Fly Through Sound</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-04-audio-spectrogram-terrain" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-04-audio-spectrogram-terrain</id>
-    <updated>2026-04-14T01:20:20.660Z</updated>
-    <summary>Transform audio spectrograms into 3D terrain and fly through the landscape of sound, where frequency is width, time is depth, and amplitude is height.</summary>
-  </entry>
-  <entry>
-    <title>Voronoi Diagrams — Cell-Based Procedural Textures</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-voronoi-diagrams-procedural-textures" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-voronoi-diagrams-procedural-textures</id>
-    <updated>2026-04-14T01:14:27.359Z</updated>
-    <summary>Generate Voronoi patterns on the GPU using distance fields, with applications to procedural textures, organic patterns, and terrain generation.</summary>
-  </entry>
-  <entry>
-    <title>Strange Attractors — Visualizing Chaotic Systems</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-strange-attractors-chaotic-systems" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-strange-attractors-chaotic-systems</id>
-    <updated>2026-04-14T01:13:47.446Z</updated>
-    <summary>Simulate and render strange attractors (Lorenz, Rössler, Aizawa) as particle traces in 3D, exploring deterministic chaos and sensitive dependence.</summary>
-  </entry>
-  <entry>
-    <title>Reaction-Diffusion — Turing Patterns on the GPU</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-reaction-diffusion-turing-patterns" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-reaction-diffusion-turing-patterns</id>
-    <updated>2026-04-14T01:13:02.912Z</updated>
-    <summary>Simulate the Gray-Scott reaction-diffusion model using GPU ping-pong framebuffers to generate Turing patterns in real time.</summary>
   </entry>
   <entry>
     <title>Mandelbulb — 3D Fractals via Ray Marching</title>
@@ -97,32 +62,11 @@
     <summary>Explore cellular automata from Conway's Game of Life to 3D visualization, showing how simple local rules produce complex emergent behavior.</summary>
   </entry>
   <entry>
-    <title>WebGPU Compute Shaders — Parallel Processing in the Browser</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-webgpu-compute-shaders" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-01-webgpu-compute-shaders</id>
-    <updated>2026-04-14T01:08:46.022Z</updated>
-    <summary>Set up WebGPU compute pipelines with WGSL, manage buffers, size workgroups, and run parallel operations entirely in the browser.</summary>
-  </entry>
-  <entry>
-    <title>Structured Output and Tool Use with Local LLMs</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-structured-output-local-llms" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-01-structured-output-local-llms</id>
-    <updated>2026-04-14T01:07:25.878Z</updated>
-    <summary>Get reliable structured output from local models using JSON mode, grammar-guided decoding, function calling, and validation patterns.</summary>
-  </entry>
-  <entry>
     <title>Real-Time Point Cloud Processing</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-03-01-realtime-point-cloud-processing" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-03-01-realtime-point-cloud-processing</id>
     <updated>2026-04-14T01:06:28.515Z</updated>
     <summary>Clean, align, and downsample point clouds using Open3D with spatial indexing, outlier removal, ICP registration, and voxel filtering.</summary>
-  </entry>
-  <entry>
-    <title>Procedural Geometry with Signed Distance Functions</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-procedural-geometry-with-sdfs" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-01-procedural-geometry-with-sdfs</id>
-    <updated>2026-04-14T01:05:25.934Z</updated>
-    <summary>Build real-time procedural scenes using SDF primitives, CSG operations, and ray marching in GLSL, with Three.js integration.</summary>
   </entry>
   <entry>
     <title>PBR Materials — Physics-Based Shading in Three.js</title>
@@ -132,17 +76,45 @@
     <summary>Understand Cook-Torrance BRDF, metalness-roughness workflows, and environment lighting with an interactive material parameter grid.</summary>
   </entry>
   <entry>
-    <title>Particle Systems on the GPU</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-particle-systems-gpu-simulation" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-01-particle-systems-gpu-simulation</id>
-    <updated>2026-04-14T00:45:32.497Z</updated>
-    <summary>Build high-count particle systems with instanced rendering, integration schemes, and GPU-friendly update patterns in Three.js.</summary>
+    <title>Marching Cubes — Isosurface Extraction from Scalar Fields</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-marching-cubes-isosurface-extraction" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-marching-cubes-isosurface-extraction</id>
+    <updated>2026-04-14T00:41:37.545Z</updated>
+    <summary>Extract meshes from scalar fields using marching cubes, with lookup tables, normal estimation, and an interactive metaball demo.</summary>
   </entry>
   <entry>
-    <title>Noise Functions and Procedural Terrain</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-noise-functions-procedural-terrain" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-01-noise-functions-procedural-terrain</id>
-    <updated>2026-04-14T00:43:58.090Z</updated>
-    <summary>Generate procedural terrain using layered noise functions, FBM, and domain warping, with an interactive Three.js heightmap demo.</summary>
+    <title>Attention Visualization in Transformers</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-attention-visualization-transformers" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-attention-visualization-transformers</id>
+    <updated>2026-04-14T00:37:08.777Z</updated>
+    <summary>Extract and visualize self-attention patterns from transformer models, showing what different heads learn with interactive heatmaps.</summary>
+  </entry>
+  <entry>
+    <title>Photogrammetry from Video — Reconstructing 3D Geometry from 2D Images</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-photogrammetry-from-video" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-photogrammetry-from-video</id>
+    <updated>2026-04-14T00:34:56.659Z</updated>
+    <summary>End-to-end photogrammetry pipeline: video frames to textured 3D meshes using Meshroom, with interactive model viewer and practical debugging tips.</summary>
+  </entry>
+  <entry>
+    <title>Hello World — A Tour of Every Feature</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-hello-world" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-hello-world</id>
+    <updated>2026-04-14T00:32:55.828Z</updated>
+    <summary>End-to-end showcase of every blog feature: code highlighting, Mermaid, callouts, chat blocks, steps, and Three.js embeds.</summary>
+  </entry>
+  <entry>
+    <title>Companion - Gaussian Splatting from Smartphone Photos (Local RTX 3060 Workflow)</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-gaussian-splatting-smartphone-companion" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-gaussian-splatting-smartphone-companion</id>
+    <updated>2026-04-14T00:32:19.538Z</updated>
+    <summary>Companion guide: capture photos on a phone, reconstruct/train locally, and load your splat in the blog viewer on RTX 3060 12GB.</summary>
+  </entry>
+  <entry>
+    <title>Gaussian Splatting for Real-Time Radiance Fields - Practical Notes</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-gaussian-splatting-real-time-notes" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-gaussian-splatting-real-time-notes</id>
+    <updated>2026-04-14T00:31:46.455Z</updated>
+    <summary>Understand Gaussian splatting end to end: representation, projection, sorting, blending, and real-time performance trade-offs.</summary>
   </entry>
 </feed>

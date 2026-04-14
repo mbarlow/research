@@ -33,21 +33,19 @@ nav {
   min-width: 0;
 }
 
-/* DSGN-style logo cluster: 3-square monogram */
+/* Live WFC pixel-grid logo */
 .nav-logo {
-  display: grid;
-  grid-template-columns: 14px 14px;
-  grid-template-rows: 14px 14px;
-  gap: 2px;
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
   flex-shrink: 0;
+  line-height: 0;
 }
 
-.nav-logo span {
-  background: var(--text);
-}
-
-.nav-logo span:nth-child(2) {
-  background: var(--accent);
+.nav-logo canvas {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 .nav-title {
@@ -197,6 +195,32 @@ nav {
   background: var(--accent-soft);
   border-left-color: var(--accent);
   padding-left: 2.5rem;
+}
+
+.post-card-link {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.post-card > *:not(.post-card-link) {
+  position: relative;
+  z-index: 1;
+}
+
+.post-card-title,
+.post-card-desc,
+.post-card-date,
+.post-card-head,
+.post-card-tags {
+  pointer-events: none;
+}
+
+.post-card-share,
+.tag-inline {
+  pointer-events: auto;
 }
 
 .post-card-head {
