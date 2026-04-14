@@ -58,8 +58,8 @@ function updateFontLabel(pair) {
 }
 
 async function loadVersion() {
-  const el = document.getElementById('nav-version');
-  if (!el) return;
+  const navEl = document.getElementById('nav-version');
+  const footerEl = document.getElementById('site-footer-version');
   try {
     const res = await fetch('version.json', { cache: 'no-cache' });
     if (!res.ok) throw new Error(res.status);
@@ -73,10 +73,12 @@ async function loadVersion() {
       const stamp = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
       parts.push(stamp);
     }
-    el.textContent = parts.join(' · ');
-    el.title = builtAt ? `Built ${new Date(builtAt).toLocaleString()}` : '';
+    const text = parts.join(' · ');
+    const title = builtAt ? `Built ${new Date(builtAt).toLocaleString()}` : '';
+    if (navEl) { navEl.textContent = text; navEl.title = title; }
+    if (footerEl) { footerEl.textContent = text; footerEl.title = title; }
   } catch {
-    el.textContent = '';
-    el.title = '';
+    if (navEl) { navEl.textContent = ''; navEl.title = ''; }
+    if (footerEl) { footerEl.textContent = ''; footerEl.title = ''; }
   }
 }
