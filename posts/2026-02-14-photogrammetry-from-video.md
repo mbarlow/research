@@ -6,18 +6,16 @@ description: End-to-end photogrammetry pipeline: video frames to textured 3D mes
 tags: [photogrammetry, 3d-reconstruction, meshroom, computer-vision]
 ---
 
-## What Is Photogrammetry
+## What it is
 
-Photogrammetry is the science of reconstructing 3D geometry from 2D images. Given enough overlapping photographs of a scene, algorithms can recover the camera positions that took each photo, triangulate 3D points visible across multiple views, and ultimately produce a dense mesh with texture.
+Reconstructing 3D geometry from 2D images.
 
-The core insight: **if the same physical point appears in two or more images taken from different angles, its 3D position can be triangulated.** Do this for millions of points and you get a 3D model.
+The core insight: **the same physical point in two images from different angles can be triangulated.** Do that for millions of points and you have a model.
 
 > [!note]
-> Photogrammetry works best on textured, diffuse surfaces. Shiny, transparent, or uniform surfaces lack the visual features needed for matching.
+> Works on textured, diffuse surfaces. Fails on shiny, transparent, or uniform ones — there's nothing to match.
 
-## Pipeline Overview
-
-The full reconstruction pipeline has distinct stages, each building on the previous:
+## The pipeline
 
 ```mermaid
 graph LR
@@ -32,47 +30,45 @@ graph LR
     I --> J[OBJ + Texture]
 ```
 
-Each stage can fail independently. Understanding what each one does helps you debug when results are wrong.
+Each stage fails independently. Knowing which stage failed is half the debugging.
 
-## Feature Extraction
+## Feature extraction
 
-The first computational step is detecting **keypoints** — distinctive local patterns in each image that can be reliably identified again in other images.
-
-Common feature detectors:
+Detect **keypoints** — local patterns distinctive enough to be re-found in other images.
 
 | Algorithm | Strengths | Weaknesses |
 |-----------|-----------|------------|
-| SIFT | Scale/rotation invariant, very robust | Patented (was), slower |
-| AKAZE | Fast, open-source, good for video | Less distinctive than SIFT |
-| SuperPoint | Learned features, handles poor lighting | Requires GPU, less tested |
+| SIFT | Scale/rotation invariant, robust | Patented (was), slower |
+| AKAZE | Fast, open source, good for video | Less distinctive than SIFT |
+| SuperPoint | Learned, handles poor lighting | GPU required, less battle-tested |
 
-Each keypoint gets a **descriptor** — a numeric fingerprint that encodes the local image pattern. Two keypoints in different images are considered a match if their descriptors are similar enough.
+Each keypoint gets a **descriptor** — a numeric fingerprint. Match = similar descriptors.
 
 > [!tip]
-> Texture-rich surfaces produce many keypoints. Blank walls, sky, and water produce almost none. When capturing, make sure your subject has visual detail across the surface.
+> Texture-rich surfaces yield many keypoints. Sky, blank walls, water yield almost none. Capture surfaces with detail.
 
-## Feature Matching
+## Feature matching
 
-After extracting keypoints from every image, the pipeline matches them **pairwise** — finding which keypoints in image A correspond to the same physical point seen in image B.
+Match keypoints pairwise across images.
 
-This is expensive: for N images, there are N*(N-1)/2 possible pairs. Pipelines use strategies to reduce this:
+For N images that's N(N-1)/2 pairs — too many. Strategies:
 
-- **Sequential matching** — only match nearby frames (good for video)
+- **Sequential** — only match nearby frames (good for video)
 - **Vocabulary tree** — cluster descriptors to find visually similar images first
-- **GPS/metadata** — skip pairs from physically distant positions
+- **GPS / metadata** — skip pairs from physically distant positions
 
-After matching, **geometric verification** filters false matches using the fundamental matrix (epipolar constraint). Points that don't satisfy the two-view geometry are rejected.
+Then **geometric verification** rejects matches that don't satisfy the epipolar constraint.
 
 > [!warning]
-> Insufficient overlap between images is the most common cause of reconstruction failure. Aim for 60–80% overlap between consecutive frames.
+> Insufficient overlap is the #1 reconstruction failure. 60–80% overlap between consecutive frames.
 
 ## Structure from Motion
 
-Structure from Motion (SfM) is the core algorithmic step. It simultaneously recovers:
+SfM solves three things at once:
 
-1. **Camera poses** — the position and orientation of each camera
-2. **Sparse 3D points** — a cloud of triangulated features
-3. **Camera intrinsics** — focal length, sensor size, lens distortion
+1. Camera poses — position + orientation per camera
+2. Sparse 3D points — triangulated features
+3. Camera intrinsics — focal length, sensor, distortion
 
 ```mermaid
 sequenceDiagram
@@ -91,9 +87,9 @@ sequenceDiagram
     end
 ```
 
-**Bundle adjustment** is the optimization that ties it all together — it minimizes reprojection error across all cameras and points simultaneously. It's computationally expensive but critical for accuracy.
+**Bundle adjustment** is the optimizer that ties it together — minimize reprojection error across all cameras and points jointly. Expensive. Critical.
 
-For phone cameras, providing intrinsics helps significantly:
+For phone cameras, supply intrinsics:
 
 ```text
 Pixel 8a:
@@ -104,48 +100,48 @@ Pixel 8a:
 
 ## Multi-View Stereo
 
-SfM produces a **sparse** point cloud — thousands to millions of points, but not enough for a detailed surface. Multi-View Stereo (MVS) fills in the gaps.
+SfM gives you a **sparse** cloud. MVS densifies it.
 
-For each image, MVS computes a **depth map** — the distance from the camera to the nearest surface at each pixel. It does this by:
+For each image, compute a **depth map**:
 
-1. For each pixel, projecting a ray into 3D
-2. Checking neighboring camera images for matching patches at various depths
-3. Selecting the depth with the best photometric consistency
+1. Project a ray for each pixel
+2. Check neighbor cameras at varying depths
+3. Pick the depth with the best photometric agreement
 
-The depth maps are then fused into a **dense point cloud** with tens of millions of points.
+Fuse depth maps → dense point cloud, tens of millions of points.
 
 > [!tip]
-> More images from more angles produce better depth maps. For video, 2fps extraction typically gives good overlap without excessive redundancy.
+> Video at 2fps gives good MVS overlap without redundant frames.
 
-## Meshing and Texturing
+## Mesh + texture
 
-The dense point cloud is converted to a triangle mesh using **Poisson surface reconstruction** — fitting a smooth surface through the oriented points.
+Dense cloud → triangle mesh via **Poisson surface reconstruction** (smooth surface fit through oriented points).
 
-After meshing, **UV mapping** projects the original image colors onto the mesh surface. The result is typically:
+Then **UV mapping** projects original image colors onto the mesh:
 
-- `texturedMesh.obj` — the 3D geometry (vertices, faces, UV coordinates)
-- `texturedMesh.mtl` — material definition (references the texture file)
-- `texture_1001.exr` — the texture atlas (high dynamic range image)
+- `texturedMesh.obj` — geometry (vertices, faces, UVs)
+- `texturedMesh.mtl` — material (references the texture)
+- `texture_1001.exr` — texture atlas (HDR)
 
-The OBJ/MTL/texture triplet is the standard output format that most 3D tools can import.
+OBJ/MTL/texture is the universal handoff format.
 
-## Interactive Result
+## Result
 
-Here's a real photogrammetry result — a flower arrangement reconstructed from a phone video. Drag to orbit, scroll to zoom.
+A flower arrangement reconstructed from a 30-second phone video. Drag to orbit. Scroll to zoom.
 
 <div data-scene="photogrammetry-viewer.js" style="width:100%;height:500px;"></div>
 
 > [!note]
-> This model was reconstructed from a 30-second phone video using the automated pipeline described below. The texture comes from the original video frames projected onto the mesh.
+> Reconstructed using the pipeline below. Texture is the original video frames projected onto the mesh.
 
-## My Pipeline
+## My pipeline
 
-Here's the automated pipeline I run at home. Drop an MP4 into the input folder and walk away.
+Drop an MP4 in. Walk away.
 
 ````steps
-### Extract frames from video
+### Extract frames
 
-ffmpeg pulls frames from the input video at 2fps. This gives good overlap for a typical walk-around capture without creating thousands of redundant frames.
+ffmpeg at 2fps. Good overlap for a walk-around capture without thousands of redundant frames.
 
 ```bash
 ffmpeg -i video.mp4 -vf fps=2 -q:v 2 frames/frame_%05d.png
@@ -153,7 +149,7 @@ ffmpeg -i video.mp4 -vf fps=2 -q:v 2 frames/frame_%05d.png
 
 ### Reconstruct with Meshroom
 
-The frames are fed to Meshroom running in a Docker container with GPU access. Camera intrinsics for Pixel 8a are passed as overrides for better initial calibration.
+Dockerized Meshroom with GPU access. Pixel 8a intrinsics passed as overrides for better initial calibration.
 
 ```bash
 docker run --rm --gpus all \
@@ -169,9 +165,9 @@ docker run --rm --gpus all \
             "CameraInit:sensorWidth=6.29"
 ```
 
-### Automated watcher with inotifywait
+### Watch the input directory
 
-`reconstruct.sh` runs as a daemon, watching the input directory. When a new MP4 appears, it extracts frames and kicks off reconstruction automatically.
+`reconstruct.sh` runs as a daemon. New MP4 lands → frames extracted → reconstruction starts.
 
 ```bash
 inotifywait -m -e create -e moved_to "$INPUT_DIR" \
@@ -182,38 +178,38 @@ done
 
 ### Collect output
 
-Meshroom outputs land in `output/{name}/` — OBJ mesh, MTL material, and EXR texture. The script skips videos that already have output, so you can restart without reprocessing.
+Meshroom writes to `output/{name}/` — OBJ, MTL, EXR. Script skips videos that already have output, so restarts are free.
 ````
 
-## Practical Tips
+## Symptom → cause → fix
 
-| Problem | Symptom | Fix |
+| Symptom | Cause | Fix |
 |---------|---------|-----|
-| Few features matched | SfM fails, no reconstruction | Reshoot with more texture/overlap |
-| Blurry frames | Noisy mesh, holes | Use tripod or slower movement |
-| Shiny/reflective surfaces | Missing geometry, phantom points | Spray with matte powder or avoid |
-| Single-color surfaces | Holes in reconstruction | Add temporary texture (tape, stickers) |
-| Moving objects in frame | Ghost geometry, artifacts | Mask out moving regions or reshoot |
-| Scale is wrong | Model is huge/tiny | Use known-distance reference points |
-| Dark/uneven lighting | Poor matching, color banding | Use even diffuse lighting |
-| Not enough VRAM | Process killed, OOM | Reduce image resolution or use CPU fallback |
+| Few features matched | Bland surface | Reshoot with more texture/overlap |
+| Blurry frames | Hand shake | Tripod or slower movement |
+| Shiny/reflective | No matchable detail | Matte powder or skip |
+| Single-color surfaces | No features | Add temporary texture (tape, stickers) |
+| Moving objects in frame | SfM breaks | Mask the moving region or reshoot |
+| Wrong scale | No reference | Add a known-distance reference object |
+| Dark/uneven lighting | Bad matching, color banding | Even diffuse lighting |
+| Process killed | OOM | Reduce resolution or fall back to CPU |
 
-## Debugging Common Issues
+## Q&A
 
 ```chat
-user: My reconstruction only has part of the object. The back is missing.
-assistant: The camera didn't see the back with enough overlap. SfM can only reconstruct what's visible in multiple images from different angles. Re-capture with a full orbit around the object — aim for 60-80% overlap between consecutive views.
+user: Reconstruction has the front but no back.
+assistant: Camera didn't see the back with enough overlap. SfM only reconstructs what's visible from multiple angles. Re-capture with a full orbit, 60–80% overlap between consecutive views.
 
-user: The mesh has the right shape but the texture looks stretched and blurry.
-assistant: That's usually a UV mapping issue from insufficient camera poses in that region. More images from additional angles during capture helps the texturing stage project sharp details. Also check that the source images aren't motion-blurred.
+user: Mesh shape is right but the texture is stretched and blurry.
+assistant: UV mapping issue from sparse camera poses in that region. More angles during capture sharpens the texturing. And check the source frames aren't motion-blurred.
 
-user: Meshroom runs but produces an empty output folder.
-assistant: Check the Meshroom log — most likely SfM failed to initialize. Common causes: too few features (bland surfaces), not enough overlap between images, or wrong camera intrinsics. Try starting with a known-good dataset to verify your pipeline works, then iterate on capture technique.
+user: Meshroom runs but the output folder is empty.
+assistant: Check the log. Usually SfM failed to initialize — too few features, not enough overlap, wrong intrinsics. Run a known-good dataset first to confirm the pipeline. Then iterate on capture.
 
-user: How many frames do I need from a video?
-assistant: For a 360° walk-around, 2fps extraction from a 30-60 second video typically gives 60-120 frames — that's usually enough. Quality matters more than quantity. Steady motion with good overlap beats more blurry frames.
+user: How many frames from a video?
+assistant: 2fps from a 30–60s walk-around → 60–120 frames. Usually enough. Steady motion beats more blurry frames every time.
 ```
 
-## What's Next
+## What's next
 
-The natural extension is **gaussian splatting** — same input (images + camera poses from SfM), but instead of meshing, you optimize a set of 3D Gaussians that can be rendered in real-time. I have a companion pipeline for that using COLMAP + the graphdeco gaussian-splatting trainer.
+The natural extension is **gaussian splatting** — same input (images + SfM poses), but instead of meshing, optimize a set of 3D Gaussians that render in real time. Companion pipeline lives in the next post.

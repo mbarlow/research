@@ -6,32 +6,25 @@ description: Build a tiny GPT with PyTorch and understand attention, training lo
 tags: [llm, transformers, microgpt, pytorch]
 ---
 
-## Why This Post
+## Why build it small
 
-Karpathy's microGPT write-up is a strong example of learning by implementation. Instead of treating a large language model as a black box, you build a small GPT end to end and inspect every moving part.
+Karpathy's microGPT teaches by implementation. You don't read about a transformer. You build one end to end.
 
-Primary reference: [karpathy.ai/microgpt.html](https://karpathy.ai/microgpt.html)
+A 6B parameter model is a black box. A 4-layer, 4-head, 256-dim model fits in your head. That's the point.
+
+Reference: [karpathy.ai/microgpt.html](https://karpathy.ai/microgpt.html)
 
 > [!note]
-> This post is structured as a build notebook. The goal is understanding, not benchmark chasing.
+> Build notebook, not benchmark report. The goal is understanding.
 
-## Post Plan (Feature Map)
+## The four layers
 
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Build mental model | Mermaid flowchart + sequence | Visualize forward pass and training loop |
-| Teach implementation | Python code blocks + callouts | Show minimal but correct modules |
-| Make it interactive | Chat transcript | Surface common learner questions |
-| Provide execution path | Steps block | Give a concrete path from clone to sampling |
+A tiny GPT stack:
 
-## Big Picture
-
-A tiny GPT training stack has four layers:
-
-1. Data pipeline (tokenization, batching)
-2. Model (embeddings, attention, MLP, residual blocks)
-3. Optimization loop (loss, backward pass, optimizer step)
-4. Sampling loop (temperature/top-k generation)
+1. Data — tokenize, batch
+2. Model — embeddings, attention, MLP, residuals
+3. Optimization — loss, backward, step
+4. Sampling — temperature/top-k generation
 
 ```mermaid
 flowchart LR
@@ -45,7 +38,7 @@ flowchart LR
     H --> E
 ```
 
-## Minimal Attention Block
+## Causal self-attention, minimal
 
 ```python
 import math
@@ -82,9 +75,9 @@ class CausalSelfAttention(nn.Module):
 ```
 
 > [!tip]
-> If training diverges early, inspect two things first: learning rate and whether your causal mask is correctly applied.
+> Diverging in the first few hundred steps? Check learning rate. Then check the causal mask is actually being applied.
 
-## Training Loop in One Diagram
+## Training loop
 
 ```mermaid
 sequenceDiagram
@@ -101,24 +94,24 @@ sequenceDiagram
     end
 ```
 
-## Conversation: Typical Sticking Points
+## Sticking points
 
 ```chat
-user: Why does tiny GPT training feel unstable compared to CNN tutorials?
-assistant: Two reasons dominate: sequence loss is harder than image classification, and transformer training is sensitive to optimization settings (LR, warmup, weight decay, gradient clipping).
+user: Tiny GPT training feels unstable compared to CNN tutorials. Why?
+assistant: Sequence loss is harder than image classification, and transformers are sensitive to LR, warmup, weight decay, and gradient clipping. Two things you didn't have to tune for a CNN.
 
-user: What should I log first?
-assistant: Start with train loss, validation loss, gradient norm, and tokens/sec. If you add one more metric, log learning rate per step.
+user: What do I log first?
+assistant: Train loss, validation loss, gradient norm, tokens/sec. If you add one more, log learning rate per step.
 
-user: How do I know if my model is learning structure and not memorizing?
-assistant: Check validation loss trends and sample from held-out prompts. If outputs copy verbatim chunks often, reduce model size or increase data diversity.
+user: How do I tell if it's learning vs memorizing?
+assistant: Watch validation loss and sample from held-out prompts. If the outputs paste long verbatim chunks, shrink the model or diversify the data.
 ```
 
-## Hands-on Steps
+## The build
 
 ````steps
-### Step 1: Build a tiny dataset pipeline
-Start with a small corpus so iteration cycles are short:
+### Step 1: Tiny dataset
+Short corpus = short iteration cycle.
 
 ```bash
 curl -L -o input.txt https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt
@@ -129,8 +122,8 @@ print("chars:", len(chars), "tokens:", len(text))
 PY
 ```
 
-### Step 2: Train a baseline model
-Use a small config to validate correctness before scaling:
+### Step 2: Train a baseline
+Small config first. Validate correctness before you scale.
 
 ```bash
 python train.py \
@@ -143,8 +136,8 @@ python train.py \
   --eval_interval 250
 ```
 
-### Step 3: Add quality-of-life improvements
-Add reproducibility and safety rails:
+### Step 3: Add the safety rails
+Reproducibility and grad clipping.
 
 ```python
 torch.manual_seed(1337)
@@ -152,29 +145,31 @@ torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
 optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4, weight_decay=0.1)
 ```
 
-### Step 4: Sample and inspect
-Generate with controlled randomness:
+### Step 4: Sample and look
+Controlled randomness.
 
 ```bash
 python sample.py --start "ROMEO:" --max_new_tokens 200 --temperature 0.8 --top_k 100
 ```
 ````
 
-## Scaling Checklist
+## When to scale what
 
-| Decision | Start Here | When to Increase |
+| Lever | Start | Bump when |
 |---|---|---|
-| Context length | 128 | Validation loss plateaus due to truncation |
+| Context length | 128 | Validation loss plateaus from truncation |
 | Layers | 4 | Underfitting with clean optimization |
-| Embedding dim | 256 | Capacity bottleneck in samples |
-| Batch size | 64 | GPU utilization is low |
+| Embedding dim | 256 | Capacity bottleneck visible in samples |
+| Batch size | 64 | GPU sitting idle |
 
 > [!warning]
-> More parameters without a better data pipeline usually buys slower training, not better understanding.
+> More parameters without a better data pipeline buys slower training, not better understanding.
 
-## Wrap-Up
+## The summary
 
-microGPT is valuable because it compresses the transformer stack into something you can fully hold in your head. Once the tiny version works, scaling decisions become engineering trade-offs instead of mystery.
+A working tiny GPT collapses the transformer stack into something you can hold in your head.
+
+Once that works, scaling is engineering. Not mystery.
 
 ## Generation Metadata
 

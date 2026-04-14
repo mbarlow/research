@@ -6,23 +6,16 @@ description: Improve Three.js frame stability with instancing, culling, LOD stra
 tags: [threejs, webgl, realtime-rendering, performance]
 ---
 
-## Why This Guide
+## The hard part isn't the cube
 
-Three.js is easy to start and easy to outgrow. The hard part is not getting a cube on screen, it is keeping frame time stable as scene complexity and UX requirements grow.
+Three.js is easy to start. Easy to outgrow.
+
+Putting a cube on screen is not the hard part. Keeping frame time stable as the scene grows is.
 
 > [!note]
 > These patterns prioritize consistency under load over flashy demos.
 
-## Post Plan (Feature Map)
-
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Explain runtime architecture | Mermaid diagram | Make update/render responsibilities explicit |
-| Demonstrate visually | Three.js embed | Show a scalable scene pattern in motion |
-| Provide execution workflow | Steps block | Turn concepts into implementation order |
-| Diagnose perf issues | Chat transcript + table | Fast path to debugging |
-
-## Runtime Architecture
+## Runtime architecture
 
 ```mermaid
 graph TD
@@ -37,11 +30,11 @@ graph TD
     H -->|No| D
 ```
 
-## Interactive Scene: Instancing + Motion
+## Interactive: instancing in motion
 
 <div data-scene="threejs-techniques-scene.js" style="width:100%;height:420px;"></div>
 
-## A Reliable Render Loop
+## A reliable render loop
 
 ```javascript
 const clock = new THREE.Clock();
@@ -61,45 +54,45 @@ animate();
 ```
 
 > [!tip]
-> Clamp `dt` so tab throttling or frame drops do not explode physics or camera smoothing.
+> Clamp `dt`. Tab throttling and frame drops will explode physics or camera smoothing if you don't.
 
-## Conversation: Performance Triage
+## Performance triage
 
 ```chat
-user: FPS drops when I add many repeated meshes. What should I switch to?
-assistant: Use InstancedMesh first. It removes most draw-call overhead for repeated geometry and material combinations.
+user: FPS drops when I add many repeated meshes. What do I switch to?
+assistant: InstancedMesh. Removes the draw-call overhead for repeated geometry+material combos.
 
-user: My scene looks good but stutters every few seconds.
-assistant: Check garbage generation in your animation loop. Reuse vectors and matrices instead of allocating each frame.
+user: Scene looks fine but stutters every few seconds.
+assistant: GC. Reuse vectors and matrices across frames instead of allocating each tick.
 
-user: How do I decide what to optimize first?
-assistant: Profile by category: CPU update time, GPU draw time, and overdraw/fill rate. Optimize the dominant bottleneck, not the loudest guess.
+user: How do I pick what to optimize first?
+assistant: Profile by category — CPU update, GPU draw, overdraw/fill rate. Optimize the dominant bottleneck. Not the loudest guess.
 ```
 
-## Build Order for a Scalable Scene
+## Build order
 
 ````steps
-### Step 1: Set a frame budget and baseline metrics
+### Step 1: Frame budget + baseline metrics
 Track frame time and draw calls before adding effects.
 
-### Step 2: Use instancing for repeated geometry
-Convert repeated meshes into `THREE.InstancedMesh` and verify draw-call reduction.
+### Step 2: Instance the repeats
+Convert repeated meshes to `THREE.InstancedMesh`. Verify draw-call drop.
 
-### Step 3: Add LOD and culling
-Use distance-based detail levels and frustum checks to avoid rendering unseen work.
+### Step 3: LOD + culling
+Distance-based detail. Frustum checks. Stop rendering work that isn't seen.
 
-### Step 4: Layer postprocessing intentionally
-Add effects one by one and keep a feature flag to disable expensive passes quickly.
+### Step 4: Postprocessing, layered
+Add effects one at a time. Keep a feature flag to disable expensive passes fast.
 ````
 
-## Quick Patterns That Pay Off
+## Patterns that pay
 
 | Pattern | Benefit | Cost |
 |---|---|---|
 | Instancing | Fewer draw calls | Per-instance transform management |
 | Texture atlases | Fewer material switches | UV authoring complexity |
 | LOD groups | Stable frame time | Asset prep overhead |
-| Explicit cleanup | Less memory leak risk | Lifecycle code discipline |
+| Explicit cleanup | Less leak risk | Lifecycle discipline |
 
 ```javascript
 window.addEventListener('resize', () => {
@@ -112,11 +105,13 @@ window.addEventListener('resize', () => {
 ```
 
 > [!warning]
-> Visual polish features are usually multiplicative. Add them late, and only if frame budget remains healthy.
+> Visual polish stacks multiplicatively. Add it late, only if budget remains healthy.
 
-## Wrap-Up
+## The summary
 
-A production-ready Three.js app is mostly architecture and discipline: bounded frame loop, measured budgets, and scene complexity that scales predictably.
+A production Three.js app is architecture and discipline.
+
+Bounded loop. Measured budget. Scene complexity that scales predictably.
 
 ## Generation Metadata
 

@@ -6,34 +6,27 @@ description: Run local LLMs on consumer hardware with a repeatable stack for mod
 tags: [llm, local-inference, quantization, deployment]
 ---
 
-## Why Run Models Locally
+## Why local
 
-Local LLMs provide privacy, lower marginal cost, and predictable latency for repeated workflows. The trade-off is that you become the platform engineer: model selection, memory budgeting, and quality evaluation are now your job.
+Privacy. Lower marginal cost. Predictable latency.
+
+The catch: you become the platform engineer. Model selection, memory budgeting, and quality evaluation are now your job.
 
 > [!note]
-> This is a deployment-focused post, not a benchmark leaderboard.
+> This is a deployment post. Not a leaderboard.
 
-## Post Plan (Feature Map)
+## Pick by budget envelope
 
-| Section Goal | Blog Feature Used | Why |
+| Hardware | First model class | Typical quant |
 |---|---|---|
-| Hardware sizing | Table + callouts | Turn vague constraints into concrete choices |
-| Workflow design | Mermaid decision graph | Encode model/quant decisions clearly |
-| Execution guide | Steps block + shell commands | Give a reproducible setup path |
-| Troubleshooting | Chat transcript | Explain failure modes quickly |
-
-## Start with a Budget Envelope
-
-| Hardware Profile | Good First Model Class | Typical Quant |
-|---|---|---|
-| 16GB RAM laptop, no discrete GPU | 3B to 8B instruct | Q4_K_M |
-| 32GB RAM desktop, mid GPU | 7B to 14B instruct | Q4_K_M to Q5_K_M |
-| 64GB RAM workstation, strong GPU | 14B to 32B | Q5/KV-cache tuning |
+| 16GB RAM laptop, no GPU | 3B–8B instruct | Q4_K_M |
+| 32GB RAM desktop, mid GPU | 7B–14B instruct | Q4_K_M → Q5_K_M |
+| 64GB RAM workstation, strong GPU | 14B–32B | Q5 + KV-cache tuning |
 
 > [!tip]
-> Pick the smallest model that solves your target task reliably. Stability beats raw parameter count.
+> Smallest model that solves your task reliably wins. Stability beats parameter count.
 
-## Decision Flow
+## The decision
 
 ```mermaid
 flowchart TD
@@ -50,14 +43,14 @@ flowchart TD
     H -->|Yes| J[Freeze stack and document]
 ```
 
-## Core Commands
+## Core commands
 
 ```bash
-# Example with Ollama
+# Ollama
 ollama pull qwen2.5:7b-instruct
 ollama run qwen2.5:7b-instruct "Summarize this incident report in 5 bullets"
 
-# Example with llama.cpp server
+# llama.cpp server
 ./llama-server \
   -m ./models/model.gguf \
   -c 8192 \
@@ -67,38 +60,38 @@ ollama run qwen2.5:7b-instruct "Summarize this incident report in 5 bullets"
 ```
 
 > [!warning]
-> Verify model license terms before using local models in commercial workflows.
+> Check the license before shipping a local model in a commercial product.
 
-## Conversation: Common Local LLM Problems
+## Common failures
 
 ```chat
-user: The model is fast but answers are shallow. What should I change first?
-assistant: Keep the model and improve prompt structure plus retrieval context. Only scale model size after prompt and grounding are clean.
+user: Model is fast but answers are shallow. What do I change first?
+assistant: Keep the model. Improve prompt structure and add retrieval context. Don't scale model size until grounding is clean.
 
-user: I get out-of-memory when context gets large.
-assistant: Lower context length, reduce batch size, and consider stronger quantization. Also verify KV-cache settings, which often dominate memory.
+user: OOM as context grows.
+assistant: Drop context length. Reduce batch size. Stronger quantization. Then check KV-cache settings — they often dominate memory.
 
-user: How do I compare two model builds objectively?
-assistant: Use a fixed prompt set, deterministic settings when possible, and score outputs against explicit criteria (factuality, format compliance, latency).
+user: How do I compare two builds objectively?
+assistant: Fixed prompt set. Deterministic settings. Score against explicit criteria — factuality, format compliance, latency. Same sheet.
 ```
 
-## Reproducible Local Setup
+## The reproducible loop
 
 ````steps
-### Step 1: Define your acceptance tests
-Write 20 to 50 real prompts that reflect your production workload. Include edge cases and failure examples.
+### Step 1: Write your acceptance tests
+20–50 real prompts that reflect production. Include the failure cases.
 
-### Step 2: Select a baseline model and quant
-Start with an instruct model in Q4 class quantization and record exact model ID/version.
+### Step 2: Pick a baseline
+Instruct model, Q4 quant. Record the exact model ID and version.
 
-### Step 3: Benchmark latency and quality together
-Collect tokens/sec, response latency, and quality scores in one sheet so optimization does not hide regressions.
+### Step 3: Measure latency and quality together
+Tokens/sec, response latency, quality score — one sheet. Optimization that hides regressions is not optimization.
 
 ### Step 4: Freeze and document
-Lock model, quant, runtime flags, and prompt template. Add a quick rollback option to the previous known-good build.
+Lock model, quant, runtime flags, prompt template. Keep a one-step rollback to the previous good build.
 ````
 
-## Minimal Evaluation Harness
+## Minimal eval harness
 
 ```python
 from time import perf_counter
@@ -118,9 +111,11 @@ def evaluate(client, prompts):
     return rows
 ```
 
-## Wrap-Up
+## The summary
 
-Local LLM success is mostly operational discipline: pick a task, measure quality and latency together, then freeze a reproducible stack. Good local deployments are boring by design.
+Pick a task. Measure quality and latency together. Freeze a reproducible stack.
+
+Good local deployments are boring on purpose.
 
 ## Generation Metadata
 

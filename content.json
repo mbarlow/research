@@ -1,5 +1,118 @@
 [
   {
+    "slug": "2026-02-14-threejs-rendering-techniques-that-hold-up",
+    "file": "2026-02-14-threejs-rendering-techniques-that-hold-up.md",
+    "title": "Three.js Rendering Techniques - Patterns for Stable Real-World Performance",
+    "date": "2026-02-14",
+    "timestamp": "2026-04-14T00:35:27.481Z",
+    "order": 5,
+    "description": "Improve Three.js frame stability with instancing, culling, LOD strategy, and practical render-loop architecture.",
+    "tags": [
+      "threejs",
+      "webgl",
+      "realtime-rendering",
+      "performance"
+    ],
+    "body": "\n## The hard part isn't the cube\n\nThree.js is easy to start. Easy to outgrow.\n\nPutting a cube on screen is not the hard part. Keeping frame time stable as the scene grows is.\n\n> [!note]\n> These patterns prioritize consistency under load over flashy demos.\n\n## Runtime architecture\n\n```mermaid\ngraph TD\n    A[Init Renderer + Scene + Camera] --> B[Load Assets]\n    B --> C[Build Render Graph]\n    C --> D[Animation Loop]\n    D --> E[Update Simulation]\n    D --> F[Render Passes]\n    D --> G[Frame Metri"
+  },
+  {
+    "slug": "2026-02-14-photogrammetry-from-video",
+    "file": "2026-02-14-photogrammetry-from-video.md",
+    "title": "Photogrammetry from Video — Reconstructing 3D Geometry from 2D Images",
+    "date": "2026-02-14",
+    "timestamp": "2026-04-14T00:34:56.659Z",
+    "order": 6,
+    "description": "End-to-end photogrammetry pipeline: video frames to textured 3D meshes using Meshroom, with interactive model viewer and practical debugging tips.",
+    "tags": [
+      "photogrammetry",
+      "3d-reconstruction",
+      "meshroom",
+      "computer-vision"
+    ],
+    "body": "\n## What it is\n\nReconstructing 3D geometry from 2D images.\n\nThe core insight: **the same physical point in two images from different angles can be triangulated.** Do that for millions of points and you have a model.\n\n> [!note]\n> Works on textured, diffuse surfaces. Fails on shiny, transparent, or uniform ones — there's nothing to match.\n\n## The pipeline\n\n```mermaid\ngraph LR\n    A[Video] --> B[Frames]\n    B --> C[Feature Extraction]\n    C --> D[Feature Matching]\n    D --> E[Structure from Motion]"
+  },
+  {
+    "slug": "2026-02-14-local-llms-on-consumer-hardware",
+    "file": "2026-02-14-local-llms-on-consumer-hardware.md",
+    "title": "Local LLMs on Consumer Hardware - A Practical Playbook",
+    "date": "2026-02-14",
+    "timestamp": "2026-04-14T00:34:04.616Z",
+    "order": 3,
+    "description": "Run local LLMs on consumer hardware with a repeatable stack for model sizing, quantization, benchmarking, and deployment.",
+    "tags": [
+      "llm",
+      "local-inference",
+      "quantization",
+      "deployment"
+    ],
+    "body": "\n## Why local\n\nPrivacy. Lower marginal cost. Predictable latency.\n\nThe catch: you become the platform engineer. Model selection, memory budgeting, and quality evaluation are now your job.\n\n> [!note]\n> This is a deployment post. Not a leaderboard.\n\n## Pick by budget envelope\n\n| Hardware | First model class | Typical quant |\n|---|---|---|\n| 16GB RAM laptop, no GPU | 3B–8B instruct | Q4_K_M |\n| 32GB RAM desktop, mid GPU | 7B–14B instruct | Q4_K_M → Q5_K_M |\n| 64GB RAM workstation, strong GPU | 14B–"
+  },
+  {
+    "slug": "2026-02-14-karpathys-microgpt-from-scratch",
+    "file": "2026-02-14-karpathys-microgpt-from-scratch.md",
+    "title": "microGPT from Scratch - Building a Transformer from First Principles",
+    "date": "2026-02-14",
+    "timestamp": "2026-04-14T00:33:33.744Z",
+    "order": 1,
+    "description": "Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.",
+    "tags": [
+      "llm",
+      "transformers",
+      "microgpt",
+      "pytorch"
+    ],
+    "body": "\n## Why build it small\n\nKarpathy's microGPT teaches by implementation. You don't read about a transformer. You build one end to end.\n\nA 6B parameter model is a black box. A 4-layer, 4-head, 256-dim model fits in your head. That's the point.\n\nReference: [karpathy.ai/microgpt.html](https://karpathy.ai/microgpt.html)\n\n> [!note]\n> Build notebook, not benchmark report. The goal is understanding.\n\n## The four layers\n\nA tiny GPT stack:\n\n1. Data — tokenize, batch\n2. Model — embeddings, attention, MLP, r"
+  },
+  {
+    "slug": "2026-02-14-hello-world",
+    "file": "2026-02-14-hello-world.md",
+    "title": "Hello World — A Tour of Every Feature",
+    "date": "2026-02-14",
+    "timestamp": "2026-04-14T00:32:55.828Z",
+    "order": 0,
+    "description": "End-to-end showcase of every blog feature: code highlighting, Mermaid, callouts, chat blocks, steps, and Three.js embeds.",
+    "tags": [
+      "meta",
+      "demo",
+      "markdown",
+      "rendering"
+    ],
+    "body": "\n## What this is\n\nThe first post. It exists to verify every rendering feature works.\n\nThe blog is a vanilla JS SPA. No build step. No framework. Markdown rendered client-side.\n\n## Syntax highlighting\n\nPrism.js, autoloaded per language.\n\n### JavaScript\n\n```javascript\n// Transformer self-attention (simplified)\nfunction selfAttention(Q, K, V, dk) {\n  const scores = matmul(Q, transpose(K));\n  const scaled = scores.map(row => row.map(v => v / Math.sqrt(dk)));\n  const weights = softmax(scaled);\n  retu"
+  },
+  {
+    "slug": "2026-02-14-gaussian-splatting-smartphone-companion",
+    "file": "2026-02-14-gaussian-splatting-smartphone-companion.md",
+    "title": "Companion - Gaussian Splatting from Smartphone Photos (Local RTX 3060 Workflow)",
+    "date": "2026-02-14",
+    "timestamp": "2026-04-14T00:32:19.538Z",
+    "order": 2.5,
+    "description": "Companion guide: capture photos on a phone, reconstruct/train locally, and load your splat in the blog viewer on RTX 3060 12GB.",
+    "tags": [
+      "graphics",
+      "gaussian-splatting",
+      "workflow",
+      "colmap",
+      "rtx3060"
+    ],
+    "body": "\n## What this is\n\nCompanion to the Gaussian splatting notes. One question, one path:\n\n**Phone photos → working splat, locally, on a 3060.**\n\n> [!note]\n> Target machine: **RTX 3060 12GB VRAM + 32GB system RAM**.\n\n## Hardware\n\n| Component | Minimum | Recommended |\n|---|---|---|\n| GPU | 8GB VRAM | RTX 3060 12GB |\n| System RAM | 16GB | 32GB |\n| Storage | 15GB free | 25GB free |\n| OS | Linux/WSL2 | Ubuntu 22.04+ |\n\n## Capture rules\n\n- 80–200 photos\n- Heavy overlap between adjacent shots\n- Move slow\n-"
+  },
+  {
+    "slug": "2026-02-14-gaussian-splatting-real-time-notes",
+    "file": "2026-02-14-gaussian-splatting-real-time-notes.md",
+    "title": "Gaussian Splatting for Real-Time Radiance Fields - Practical Notes",
+    "date": "2026-02-14",
+    "timestamp": "2026-04-14T00:31:46.455Z",
+    "order": 2,
+    "description": "Understand Gaussian splatting end to end: representation, projection, sorting, blending, and real-time performance trade-offs.",
+    "tags": [
+      "graphics",
+      "gaussian-splatting",
+      "radiance-fields",
+      "realtime-rendering"
+    ],
+    "body": "\n## Why splats won\n\nSplats sit on the right edge of a tradeoff: they keep the optimization story of neural scene capture, but the runtime is a renderer, not an integrator.\n\nYou train like a neural method. You render like a graphics pipeline. That's the whole pitch.\n\n> [!note]\n> This is implementation intuition. What to store. What to project. What to optimize first.\n\n## The model\n\nA 3D Gaussian has three things you optimize:\n\n- mean `mu` — where it lives\n- covariance `Sigma` — its shape and orie"
+  },
+  {
     "slug": "2026-02-14-comfyui-workflows-that-scale",
     "file": "2026-02-14-comfyui-workflows-that-scale.md",
     "title": "ComfyUI Workflows - From Experiments to Repeatable Pipelines",
@@ -543,118 +656,5 @@
       "visualization"
     ],
     "body": "\n## Why Stare at Embedding Spaces\n\nEvery token your model processes lives as a point in a high-dimensional vector space. That space has structure -- words with similar meaning cluster together, analogies form parallelograms, and entire semantic categories occupy distinct neighborhoods. But 768 dimensions is hard to reason about. Projecting those vectors down to 2D or 3D makes that structure visible and debuggable.\n\nThis matters in practice. When your semantic search returns irrelevant results, v"
-  },
-  {
-    "slug": "2026-02-14-hello-world",
-    "file": "2026-02-14-hello-world.md",
-    "title": "Hello World — A Tour of Every Feature",
-    "date": "2026-02-14",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 0,
-    "description": "End-to-end showcase of every blog feature: code highlighting, Mermaid, callouts, chat blocks, steps, and Three.js embeds.",
-    "tags": [
-      "meta",
-      "demo",
-      "markdown",
-      "rendering"
-    ],
-    "body": "\n## Welcome\n\nThis is the inaugural post on the research blog — a private space for deep dives into technical topics. This post exists to showcase and verify every rendering feature the blog supports.\n\nThe blog is a **vanilla JS SPA** with no build tools, no frameworks, and no dependencies beyond a few CDN-loaded libraries. Everything renders client-side from markdown files.\n\n## Syntax Highlighting\n\nCode blocks get automatic language detection and Prism.js highlighting.\n\n### JavaScript\n\n```javasc"
-  },
-  {
-    "slug": "2026-02-14-karpathys-microgpt-from-scratch",
-    "file": "2026-02-14-karpathys-microgpt-from-scratch.md",
-    "title": "microGPT from Scratch - Building a Transformer from First Principles",
-    "date": "2026-02-14",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 1,
-    "description": "Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.",
-    "tags": [
-      "llm",
-      "transformers",
-      "microgpt",
-      "pytorch"
-    ],
-    "body": "\n## Why This Post\n\nKarpathy's microGPT write-up is a strong example of learning by implementation. Instead of treating a large language model as a black box, you build a small GPT end to end and inspect every moving part.\n\nPrimary reference: [karpathy.ai/microgpt.html](https://karpathy.ai/microgpt.html)\n\n> [!note]\n> This post is structured as a build notebook. The goal is understanding, not benchmark chasing.\n\n## Post Plan (Feature Map)\n\n| Section Goal | Blog Feature Used | Why |\n|---|---|---|\n|"
-  },
-  {
-    "slug": "2026-02-14-gaussian-splatting-smartphone-companion",
-    "file": "2026-02-14-gaussian-splatting-smartphone-companion.md",
-    "title": "Companion - Gaussian Splatting from Smartphone Photos (Local RTX 3060 Workflow)",
-    "date": "2026-02-14",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 2.5,
-    "description": "Companion guide: capture photos on a phone, reconstruct/train locally, and load your splat in the blog viewer on RTX 3060 12GB.",
-    "tags": [
-      "graphics",
-      "gaussian-splatting",
-      "workflow",
-      "colmap",
-      "rtx3060"
-    ],
-    "body": "\n## Why This Companion Exists\n\nThis is the practical companion to the Gaussian splatting notes post. It answers one question: **how do I go from phone photos to a usable splat locally?**\n\n> [!note]\n> Target machine: **RTX 3060 12GB VRAM + 32GB system RAM**.\n\n## Requirements\n\n| Component | Minimum | Recommended |\n|---|---|---|\n| GPU | 8GB VRAM | RTX 3060 12GB |\n| System RAM | 16GB | 32GB |\n| Storage | 15GB free | 25GB free |\n| OS | Linux/WSL2 | Ubuntu 22.04+ |\n\n## Capture Checklist (No LiDAR)\n\n- "
-  },
-  {
-    "slug": "2026-02-14-local-llms-on-consumer-hardware",
-    "file": "2026-02-14-local-llms-on-consumer-hardware.md",
-    "title": "Local LLMs on Consumer Hardware - A Practical Playbook",
-    "date": "2026-02-14",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 3,
-    "description": "Run local LLMs on consumer hardware with a repeatable stack for model sizing, quantization, benchmarking, and deployment.",
-    "tags": [
-      "llm",
-      "local-inference",
-      "quantization",
-      "deployment"
-    ],
-    "body": "\n## Why Run Models Locally\n\nLocal LLMs provide privacy, lower marginal cost, and predictable latency for repeated workflows. The trade-off is that you become the platform engineer: model selection, memory budgeting, and quality evaluation are now your job.\n\n> [!note]\n> This is a deployment-focused post, not a benchmark leaderboard.\n\n## Post Plan (Feature Map)\n\n| Section Goal | Blog Feature Used | Why |\n|---|---|---|\n| Hardware sizing | Table + callouts | Turn vague constraints into concrete choi"
-  },
-  {
-    "slug": "2026-02-14-threejs-rendering-techniques-that-hold-up",
-    "file": "2026-02-14-threejs-rendering-techniques-that-hold-up.md",
-    "title": "Three.js Rendering Techniques - Patterns for Stable Real-World Performance",
-    "date": "2026-02-14",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 5,
-    "description": "Improve Three.js frame stability with instancing, culling, LOD strategy, and practical render-loop architecture.",
-    "tags": [
-      "threejs",
-      "webgl",
-      "realtime-rendering",
-      "performance"
-    ],
-    "body": "\n## Why This Guide\n\nThree.js is easy to start and easy to outgrow. The hard part is not getting a cube on screen, it is keeping frame time stable as scene complexity and UX requirements grow.\n\n> [!note]\n> These patterns prioritize consistency under load over flashy demos.\n\n## Post Plan (Feature Map)\n\n| Section Goal | Blog Feature Used | Why |\n|---|---|---|\n| Explain runtime architecture | Mermaid diagram | Make update/render responsibilities explicit |\n| Demonstrate visually | Three.js embed | S"
-  },
-  {
-    "slug": "2026-02-14-photogrammetry-from-video",
-    "file": "2026-02-14-photogrammetry-from-video.md",
-    "title": "Photogrammetry from Video — Reconstructing 3D Geometry from 2D Images",
-    "date": "2026-02-14",
-    "timestamp": "2026-04-13T23:10:54.867Z",
-    "order": 6,
-    "description": "End-to-end photogrammetry pipeline: video frames to textured 3D meshes using Meshroom, with interactive model viewer and practical debugging tips.",
-    "tags": [
-      "photogrammetry",
-      "3d-reconstruction",
-      "meshroom",
-      "computer-vision"
-    ],
-    "body": "\n## What Is Photogrammetry\n\nPhotogrammetry is the science of reconstructing 3D geometry from 2D images. Given enough overlapping photographs of a scene, algorithms can recover the camera positions that took each photo, triangulate 3D points visible across multiple views, and ultimately produce a dense mesh with texture.\n\nThe core insight: **if the same physical point appears in two or more images taken from different angles, its 3D position can be triangulated.** Do this for millions of points a"
-  },
-  {
-    "slug": "2026-02-14-gaussian-splatting-real-time-notes",
-    "file": "2026-02-14-gaussian-splatting-real-time-notes.md",
-    "title": "Gaussian Splatting for Real-Time Radiance Fields - Practical Notes",
-    "date": "2026-02-14",
-    "timestamp": "2026-04-13T23:10:54.866Z",
-    "order": 2,
-    "description": "Understand Gaussian splatting end to end: representation, projection, sorting, blending, and real-time performance trade-offs.",
-    "tags": [
-      "graphics",
-      "gaussian-splatting",
-      "radiance-fields",
-      "realtime-rendering"
-    ],
-    "body": "\n## Why Gaussian Splatting Is Interesting\n\nGaussian splatting is one of the most practical bridges between neural scene capture and real-time rendering. You still optimize a scene representation, but runtime behaves more like a renderer than a heavy neural volume integrator.\n\n> [!note]\n> This write-up focuses on implementation intuition: what to store, what to project, and what to optimize first.\n\n## Post Plan (Feature Map)\n\n| Section Goal | Blog Feature Used | Why |\n|---|---|---|\n| Build intuit"
   }
 ]

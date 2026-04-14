@@ -4,7 +4,56 @@
   <link href="https://mbarlow.github.io/research" rel="alternate"/>
   <link href="https://mbarlow.github.io/research/feed.xml" rel="self"/>
   <id>https://mbarlow.github.io/research/</id>
-  <updated>2026-04-14T00:20:50.718Z</updated>
+  <updated>2026-04-14T00:35:34.530Z</updated>
+  <entry>
+    <title>Three.js Rendering Techniques - Patterns for Stable Real-World Performance</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-threejs-rendering-techniques-that-hold-up" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-threejs-rendering-techniques-that-hold-up</id>
+    <updated>2026-04-14T00:35:27.481Z</updated>
+    <summary>Improve Three.js frame stability with instancing, culling, LOD strategy, and practical render-loop architecture.</summary>
+  </entry>
+  <entry>
+    <title>Photogrammetry from Video — Reconstructing 3D Geometry from 2D Images</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-photogrammetry-from-video" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-photogrammetry-from-video</id>
+    <updated>2026-04-14T00:34:56.659Z</updated>
+    <summary>End-to-end photogrammetry pipeline: video frames to textured 3D meshes using Meshroom, with interactive model viewer and practical debugging tips.</summary>
+  </entry>
+  <entry>
+    <title>Local LLMs on Consumer Hardware - A Practical Playbook</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-local-llms-on-consumer-hardware" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-local-llms-on-consumer-hardware</id>
+    <updated>2026-04-14T00:34:04.616Z</updated>
+    <summary>Run local LLMs on consumer hardware with a repeatable stack for model sizing, quantization, benchmarking, and deployment.</summary>
+  </entry>
+  <entry>
+    <title>microGPT from Scratch - Building a Transformer from First Principles</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-karpathys-microgpt-from-scratch" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-karpathys-microgpt-from-scratch</id>
+    <updated>2026-04-14T00:33:33.744Z</updated>
+    <summary>Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.</summary>
+  </entry>
+  <entry>
+    <title>Hello World — A Tour of Every Feature</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-hello-world" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-hello-world</id>
+    <updated>2026-04-14T00:32:55.828Z</updated>
+    <summary>End-to-end showcase of every blog feature: code highlighting, Mermaid, callouts, chat blocks, steps, and Three.js embeds.</summary>
+  </entry>
+  <entry>
+    <title>Companion - Gaussian Splatting from Smartphone Photos (Local RTX 3060 Workflow)</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-gaussian-splatting-smartphone-companion" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-gaussian-splatting-smartphone-companion</id>
+    <updated>2026-04-14T00:32:19.538Z</updated>
+    <summary>Companion guide: capture photos on a phone, reconstruct/train locally, and load your splat in the blog viewer on RTX 3060 12GB.</summary>
+  </entry>
+  <entry>
+    <title>Gaussian Splatting for Real-Time Radiance Fields - Practical Notes</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-gaussian-splatting-real-time-notes" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-gaussian-splatting-real-time-notes</id>
+    <updated>2026-04-14T00:31:46.455Z</updated>
+    <summary>Understand Gaussian splatting end to end: representation, projection, sorting, blending, and real-time performance trade-offs.</summary>
+  </entry>
   <entry>
     <title>ComfyUI Workflows - From Experiments to Repeatable Pipelines</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-02-14-comfyui-workflows-that-scale" rel="alternate"/>
@@ -95,54 +144,5 @@
     <id>https://mbarlow.github.io/research/#/post/2026-03-02-reaction-diffusion-turing-patterns</id>
     <updated>2026-04-13T23:10:54.867Z</updated>
     <summary>Simulate the Gray-Scott reaction-diffusion model using GPU ping-pong framebuffers to generate Turing patterns in real time.</summary>
-  </entry>
-  <entry>
-    <title>L-Systems — Procedural Plants from String Rewriting</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-l-systems-procedural-plants" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-l-systems-procedural-plants</id>
-    <updated>2026-04-13T23:10:54.867Z</updated>
-    <summary>Generate procedural trees and plants using Lindenmayer systems, turtle interpretation, and 3D branching rules with interactive Three.js rendering.</summary>
-  </entry>
-  <entry>
-    <title>Voronoi Diagrams — Cell-Based Procedural Textures</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-voronoi-diagrams-procedural-textures" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-voronoi-diagrams-procedural-textures</id>
-    <updated>2026-04-13T23:10:54.867Z</updated>
-    <summary>Generate Voronoi patterns on the GPU using distance fields, with applications to procedural textures, organic patterns, and terrain generation.</summary>
-  </entry>
-  <entry>
-    <title>Cellular Automata — Emergent Complexity from Simple Rules</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-cellular-automata-emergent-complexity" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-cellular-automata-emergent-complexity</id>
-    <updated>2026-04-13T23:10:54.867Z</updated>
-    <summary>Explore cellular automata from Conway's Game of Life to 3D visualization, showing how simple local rules produce complex emergent behavior.</summary>
-  </entry>
-  <entry>
-    <title>Strange Attractors — Visualizing Chaotic Systems</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-strange-attractors-chaotic-systems" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-strange-attractors-chaotic-systems</id>
-    <updated>2026-04-13T23:10:54.867Z</updated>
-    <summary>Simulate and render strange attractors (Lorenz, Rössler, Aizawa) as particle traces in 3D, exploring deterministic chaos and sensitive dependence.</summary>
-  </entry>
-  <entry>
-    <title>Flow Fields — Curl Noise and Particle Advection</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-02-flow-fields-curl-noise" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-02-flow-fields-curl-noise</id>
-    <updated>2026-04-13T23:10:54.867Z</updated>
-    <summary>Build flow field visualizations using curl noise for divergence-free vector fields, with thousands of advected particles in Three.js.</summary>
-  </entry>
-  <entry>
-    <title>WebGPU Compute Shaders — Parallel Processing in the Browser</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-webgpu-compute-shaders" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-01-webgpu-compute-shaders</id>
-    <updated>2026-04-13T23:10:54.867Z</updated>
-    <summary>Set up WebGPU compute pipelines with WGSL, manage buffers, size workgroups, and run parallel operations entirely in the browser.</summary>
-  </entry>
-  <entry>
-    <title>LoRA Fine-Tuning on a Single GPU</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-lora-fine-tuning-single-gpu" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-01-lora-fine-tuning-single-gpu</id>
-    <updated>2026-04-13T23:10:54.867Z</updated>
-    <summary>Adapt foundation models on consumer hardware using LoRA, covering dataset prep, PEFT training, VRAM management, and adapter merging.</summary>
   </entry>
 </feed>

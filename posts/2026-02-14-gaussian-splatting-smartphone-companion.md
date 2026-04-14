@@ -6,14 +6,16 @@ description: Companion guide: capture photos on a phone, reconstruct/train local
 tags: [graphics, gaussian-splatting, workflow, colmap, rtx3060]
 ---
 
-## Why This Companion Exists
+## What this is
 
-This is the practical companion to the Gaussian splatting notes post. It answers one question: **how do I go from phone photos to a usable splat locally?**
+Companion to the Gaussian splatting notes. One question, one path:
+
+**Phone photos → working splat, locally, on a 3060.**
 
 > [!note]
 > Target machine: **RTX 3060 12GB VRAM + 32GB system RAM**.
 
-## Requirements
+## Hardware
 
 | Component | Minimum | Recommended |
 |---|---|---|
@@ -22,17 +24,17 @@ This is the practical companion to the Gaussian splatting notes post. It answers
 | Storage | 15GB free | 25GB free |
 | OS | Linux/WSL2 | Ubuntu 22.04+ |
 
-## Capture Checklist (No LiDAR)
+## Capture rules
 
-- 80 to 200 photos
-- Strong overlap between adjacent shots
-- Slow movement around the subject
-- Stable lighting and exposure lock if possible
-- Remove blurry photos before reconstruction
+- 80–200 photos
+- Heavy overlap between adjacent shots
+- Move slow
+- Lock exposure if you can
+- Drop the blurry ones before you reconstruct
 
-## Source Photo Strip
+## Source photos
 
-Place your real inputs here (this strip currently uses placeholders):
+Replace these placeholders with your real captures:
 
 <div class="photo-strip">
   <figure><img src="media/gaussian-splats/source/shot-01.svg" alt="Source shot 01"><figcaption>Shot 01</figcaption></figure>
@@ -45,7 +47,7 @@ Place your real inputs here (this strip currently uses placeholders):
   <figure><img src="media/gaussian-splats/source/shot-08.svg" alt="Source shot 08"><figcaption>Shot 08</figcaption></figure>
 </div>
 
-## End-to-End Steps
+## End to end
 
 ````steps
 ### Step 1: Install dependencies
@@ -55,7 +57,7 @@ sudo apt update
 sudo apt install -y git cmake build-essential ninja-build ffmpeg python3-venv libgl1 colmap
 ```
 
-### Step 2: Set up Gaussian Splatting repo
+### Step 2: Set up the Gaussian Splatting repo
 
 ```bash
 git clone https://github.com/graphdeco-inria/gaussian-splatting.git
@@ -66,14 +68,14 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### Step 3: Put photos in input folder
+### Step 3: Drop photos in input folder
 
 ```bash
 mkdir -p data/desk/input
 cp ~/Pictures/desk/*.jpg data/desk/input/
 ```
 
-### Step 4: Run conversion (COLMAP pipeline)
+### Step 4: Run COLMAP conversion
 
 ```bash
 python convert.py -s data/desk
@@ -92,20 +94,20 @@ python train.py \
   --densify_until_iter 9000
 ```
 
-### Step 6: Copy trained splat output for this blog viewer
+### Step 6: Copy the trained splat into the blog viewer
 
 ```bash
 cp output/desk/point_cloud/iteration_15000/point_cloud.ply \
   /home/mbarlow/git/github.com/mbarlow/research/media/gaussian-splats/output/scene.ply
 ```
 
-Then change the embed path in this post from `train.splat` to `scene.ply` when you want to view your own result.
+Then point the embed below at `scene.ply` instead of `train.splat`.
 ````
 
 > [!tip]
-> If training fails with OOM, reduce photos first, then keep `--resolution 2` and retry.
+> OOM during training? Cut the photo count first. Keep `--resolution 2`. Retry.
 
-## Interactive Splat Viewer
+## Viewer
 
 <div data-scene="gaussian-splat-viewer.js" data-splat="media/gaussian-splats/output/example-nike.splat" data-splat-fallback="media/gaussian-splats/output/train.splat" style="width:100%;height:460px;"></div>
 
@@ -116,17 +118,17 @@ Then change the embed path in this post from `train.splat` to `scene.ply` when y
 > - `media/gaussian-splats/output/train.splat` (downloaded from antimatter demo assets)
 > - `media/gaussian-splats/output/example-nike.splat` from `https://media.reshot.ai/models/nike_next/model.splat`
 
-## Quick Debug Q&A
+## Failures and fixes
 
 ```chat
-user: I only see the fallback sample and not my own result.
-llm: Your trained file path is likely wrong. Confirm exact filename and location: `media/gaussian-splats/output/scene.ply`.
+user: I only see the fallback sample, not my own result.
+llm: Path is wrong. Confirm the file is exactly at `media/gaussian-splats/output/scene.ply`.
 
 user: Reconstruction quality is poor.
-llm: Capture quality is usually the bottleneck. Remove blurry shots, increase overlap, and avoid rapid lighting changes.
+llm: Capture is the bottleneck, not the model. Drop blurry shots, increase overlap, hold lighting steady.
 
-user: Is this expected to be fast on 3060?
-llm: Yes for small-to-medium scenes. Start with 80 to 120 photos, then scale up once your first run works.
+user: Should this be fast on a 3060?
+llm: Yes, for small-to-medium scenes. Start at 80–120 photos. Scale up after the first run works.
 ```
 
 ## Generation Metadata

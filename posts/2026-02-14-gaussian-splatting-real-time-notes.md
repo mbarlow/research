@@ -6,25 +6,22 @@ description: Understand Gaussian splatting end to end: representation, projectio
 tags: [graphics, gaussian-splatting, radiance-fields, realtime-rendering]
 ---
 
-## Why Gaussian Splatting Is Interesting
+## Why splats won
 
-Gaussian splatting is one of the most practical bridges between neural scene capture and real-time rendering. You still optimize a scene representation, but runtime behaves more like a renderer than a heavy neural volume integrator.
+Splats sit on the right edge of a tradeoff: they keep the optimization story of neural scene capture, but the runtime is a renderer, not an integrator.
+
+You train like a neural method. You render like a graphics pipeline. That's the whole pitch.
 
 > [!note]
-> This write-up focuses on implementation intuition: what to store, what to project, and what to optimize first.
+> This is implementation intuition. What to store. What to project. What to optimize first.
 
-## Post Plan (Feature Map)
+## The model
 
-| Section Goal | Blog Feature Used | Why |
-|---|---|---|
-| Build intuition | Mermaid diagrams | Clarify training vs rendering stages |
-| Show interactivity | Three.js embed | Give a visual analog to projected splats |
-| Make it actionable | Steps block + code | Provide a toy pipeline to implement |
-| Address confusion | Chat transcript + callouts | Handle common stumbling points |
+A 3D Gaussian has three things you optimize:
 
-## Mental Model
-
-A 3D Gaussian has mean `mu`, covariance `Sigma`, and color/opacity attributes. During rendering, each Gaussian is projected into screen space and blended in depth-aware order.
+- mean `mu` — where it lives
+- covariance `Sigma` — its shape and orientation
+- color + opacity — what it contributes
 
 ```mermaid
 graph TD
@@ -36,11 +33,11 @@ graph TD
     F --> G[Rendered Image]
 ```
 
-## Interactive Analog: Point-Splat Cloud
+## Interactive analog: point-splat cloud
 
 <div data-scene="gaussian-splat-cloud.js" style="width:100%;height:420px;"></div>
 
-## Projection Pipeline
+## The render path
 
 ```mermaid
 sequenceDiagram
@@ -56,7 +53,9 @@ sequenceDiagram
     R-->>Cam: Alpha blended contribution
 ```
 
-## Minimal Math Stub
+Project, sort, blend. The graphics pipeline you already know — applied to anisotropic ellipses instead of triangles.
+
+## Projection in code
 
 ```python
 import numpy as np
@@ -81,26 +80,26 @@ def project_gaussian(mu_world, sigma_world, view_proj, jacobian_2d):
 ```
 
 > [!tip]
-> If splats shimmer while moving the camera, verify sort stability and clamping on very thin covariance eigenvalues.
+> Splats shimmering when the camera moves? Check sort stability and clamp the floor on tiny covariance eigenvalues.
 
-## Conversation: Debugging Quality vs Speed
+## Debugging, in conversation form
 
 ```chat
-user: Why do my splats look blurry even with many points?
-assistant: Usually covariance is too large or opacity accumulation is saturating early. Clamp covariance floor and tune alpha so detail survives.
+user: Splats look blurry even with many points. Why?
+assistant: Covariance is too large or alpha is saturating early. Clamp the covariance floor and tune opacity so detail survives blending.
 
-user: What is the first optimization to try for speed?
-assistant: Tile-based culling and local sorting. You avoid processing most splats for most pixels.
+user: First optimization for speed?
+assistant: Tile-based culling and per-tile sort. You stop processing most splats for most pixels.
 
-user: How do I reduce popping artifacts during camera motion?
-assistant: Stabilize sort order, use consistent depth keys, and avoid aggressive pruning thresholds that switch contributions frame to frame.
+user: How do I kill the popping during camera motion?
+assistant: Stabilize sort order. Use consistent depth keys. Avoid pruning thresholds that flip contributions frame to frame.
 ```
 
-## Build a Toy Splat Renderer
+## Build a toy splat renderer
 
 ````steps
 ### Step 1: Start with point sprites
-Render thousands of points to validate camera controls and GPU upload paths:
+Render thousands of points first. Validate camera controls and GPU upload paths before anything fancy.
 
 ```javascript
 const geometry = new THREE.BufferGeometry();
@@ -111,40 +110,40 @@ scene.add(new THREE.Points(geometry, material));
 ```
 
 ### Step 2: Add per-point scale and alpha
-Store basic splat attributes in buffers:
+Splat attributes go in buffers.
 
 ```javascript
 geometry.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
 geometry.setAttribute('alpha', new THREE.BufferAttribute(alpha, 1));
 ```
 
-### Step 3: Introduce screen-space sorting
-Sort by camera depth each frame (or per tile) before draw:
+### Step 3: Sort by depth before drawing
+Per-frame sort, or per-tile if you're feeling brave.
 
 ```javascript
 indices.sort((a, b) => depth[b] - depth[a]);
 geometry.setIndex(indices);
 ```
 
-### Step 4: Replace point circles with anisotropic ellipses
-Move from isotropic sprites toward covariance-aware splats in a custom shader.
+### Step 4: Replace circles with anisotropic ellipses
+Drop point sprites. Move to a custom shader that respects the projected covariance.
 ````
 
-## Practical Heuristics
+## Symptom → first fix
 
-| Problem | Symptom | First Fix |
+| Problem | Symptom | First fix |
 |---|---|---|
 | Oversmoothing | Plastic look | Lower covariance upper bound |
-| Noise flicker | Sparkling edges | Raise opacity floor slowly |
-| Fill-rate bottleneck | FPS drops at close range | Aggressive tile culling |
+| Noise flicker | Sparkling edges | Raise opacity floor, slowly |
+| Fill-rate bottleneck | FPS drops up close | Aggressive tile culling |
 | Memory pressure | VRAM spikes | Quantize attributes |
 
 > [!warning]
-> Treat this as a renderer architecture problem, not just a model quality problem. Many failures are pipeline failures.
+> Most "model quality" failures are pipeline failures. Project, cull, sort, blend — fix the pipeline before you blame the optimizer.
 
-## Wrap-Up
+## The summary
 
-Gaussian splatting is compelling because it keeps the optimization story of neural methods while giving you renderer-style control at runtime. If you can project, cull, sort, and blend well, you can ship useful real-time outputs.
+Project. Cull. Sort. Blend. Get those four right and splats ship.
 
 ## Generation Metadata
 

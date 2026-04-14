@@ -6,15 +6,15 @@ description: End-to-end showcase of every blog feature: code highlighting, Merma
 tags: [meta, demo, markdown, rendering]
 ---
 
-## Welcome
+## What this is
 
-This is the inaugural post on the research blog — a private space for deep dives into technical topics. This post exists to showcase and verify every rendering feature the blog supports.
+The first post. It exists to verify every rendering feature works.
 
-The blog is a **vanilla JS SPA** with no build tools, no frameworks, and no dependencies beyond a few CDN-loaded libraries. Everything renders client-side from markdown files.
+The blog is a vanilla JS SPA. No build step. No framework. Markdown rendered client-side.
 
-## Syntax Highlighting
+## Syntax highlighting
 
-Code blocks get automatic language detection and Prism.js highlighting.
+Prism.js, autoloaded per language.
 
 ### JavaScript
 
@@ -74,9 +74,9 @@ python train.py \
 }
 ```
 
-## Mermaid Diagrams
+## Mermaid
 
-### Flowchart — Transformer Architecture
+### Flowchart — transformer architecture
 
 ```mermaid
 graph TD
@@ -91,7 +91,7 @@ graph TD
     H --> I[Output Probabilities]
 ```
 
-### Sequence Diagram — Inference Pipeline
+### Sequence — inference pipeline
 
 ```mermaid
 sequenceDiagram
@@ -115,47 +115,45 @@ sequenceDiagram
     API-->>User: {generated_text}
 ```
 
-## Callout Blocks
+## Callouts
 
 > [!note]
-> This is a **note** callout. Use it for important information that supplements the main content. Supports full markdown including `inline code` and [links](#).
+> A **note**. Supplementary detail. Supports `inline code` and [links](#).
 
 > [!warning]
-> This is a **warning** callout. Model weights are large — `gpt2-xl` is 6.4GB. Make sure you have enough disk space and VRAM before downloading.
+> A **warning**. `gpt2-xl` is 6.4GB. Check disk and VRAM before pulling it.
 
 > [!tip]
-> This is a **tip** callout. Use `torch.compile()` on PyTorch 2.0+ for a free 20-30% speedup on most transformer models.
+> A **tip**. `torch.compile()` on PyTorch 2.0+ buys 20–30% on most transformers, free.
 
 > [!danger]
-> This is a **danger** callout. Never expose model inference endpoints without authentication. An open `/generate` endpoint can be exploited for prompt injection, resource exhaustion, or data exfiltration.
+> A **danger**. Never expose a `/generate` endpoint without auth. Open inference is prompt injection, resource exhaustion, and data exfiltration waiting to happen.
 
-## AI Chat Transcript
+## Chat transcript
 
 ```chat
 user: How does self-attention work in transformers?
-assistant: Self-attention lets each token in a sequence attend to every other token. Here's the process:
+assistant: Each token attends to every other token. Three steps:
 
-1. Each token gets projected into three vectors: **Query (Q)**, **Key (K)**, and **Value (V)**
-2. Attention scores are computed as `QK^T / sqrt(d_k)`
-3. Scores are passed through softmax to get attention weights
-4. The output is the weighted sum of Value vectors
+1. Project each token to **Query (Q)**, **Key (K)**, **Value (V)**
+2. Score: `QK^T / sqrt(d_k)`
+3. Softmax → weights → weighted sum of V
 
-The key insight is that this allows the model to learn which tokens are relevant to each other, regardless of their distance in the sequence.
-user: What makes multi-head attention different from single-head?
-assistant: Multi-head attention runs several attention operations in parallel, each with different learned projections. Think of it like having multiple "perspectives" on the same data:
+The model learns which tokens matter to each other regardless of distance.
+user: What does multi-head buy you over single-head?
+assistant: Multiple parallel attention ops with different learned projections — different perspectives on the same input:
 
-- **Head 1** might learn to attend to syntactic relationships
-- **Head 2** might focus on semantic similarity
-- **Head 3** might capture positional patterns
+- **Head 1** — syntactic relationships
+- **Head 2** — semantic similarity
+- **Head 3** — positional patterns
 
-The outputs are concatenated and projected back to the original dimension. This gives the model much richer representational capacity than a single attention head.
+Concat, project back to original dim. Richer representation than one head.
 ```
 
-## Tutorial Steps
+## Steps
 
 ````steps
 ### Step 1: Set up the environment
-Create a virtual environment and install dependencies:
 
 ```bash
 python -m venv .venv
@@ -163,7 +161,7 @@ source .venv/bin/activate
 pip install torch transformers datasets
 ```
 
-Verify CUDA is available:
+Verify CUDA:
 
 ```python
 import torch
@@ -171,8 +169,7 @@ print(f"CUDA: {torch.cuda.is_available()}")
 print(f"Device: {torch.cuda.get_device_name(0)}")
 ```
 
-### Step 2: Load the tokenizer and model
-Download a pre-trained GPT-2 model:
+### Step 2: Load tokenizer + model
 
 ```python
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
@@ -181,8 +178,7 @@ tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
 model = GPT2LMHeadModel.from_pretrained('gpt2').cuda()
 ```
 
-### Step 3: Generate text
-Run inference with temperature sampling:
+### Step 3: Generate
 
 ```python
 input_ids = tokenizer.encode("The transformer architecture", return_tensors="pt").cuda()
@@ -191,30 +187,30 @@ print(tokenizer.decode(output[0]))
 ```
 ````
 
-## Three.js Embed
+## Three.js embed
 
-A spinning cube rendered with Three.js — loaded dynamically as an ES module:
+A spinning cube. ES module, loaded on demand.
 
 <div data-scene="hello-world.js" style="width:100%;height:400px;"></div>
 
 ## Typography
 
-Regular text with **bold**, *italic*, and `inline code`. Here's a [link to marked.js docs](https://marked.js.org).
+**Bold**, *italic*, `inline code`, [link](https://marked.js.org).
 
 ### Lists
 
 Unordered:
 - Gaussian splatting for real-time radiance fields
-- NeRF variants and their trade-offs
-- Diffusion models vs GANs for image synthesis
+- NeRF variants and their tradeoffs
+- Diffusion vs GANs for image synthesis
 
 Ordered:
-1. Tokenize input text
-2. Run through embedding layer
-3. Apply positional encoding
-4. Pass through N transformer blocks
-5. Project to vocabulary size
-6. Sample from output distribution
+1. Tokenize
+2. Embed
+3. Add positional encoding
+4. N transformer blocks
+5. Project to vocab
+6. Sample
 
 ### Table
 
@@ -232,14 +228,14 @@ Ordered:
 
 ---
 
-## What's Next
+## What's next
 
-This blog will cover deep dives into:
+Deep dives, queued:
 
-- **Karpathy's microGPT** — building transformers from scratch
-- **Gaussian splatting** — real-time radiance field rendering
-- **Local LLMs** — running and fine-tuning models on consumer hardware
-- **ComfyUI workflows** — advanced image generation pipelines
-- **Three.js techniques** — WebGL/WebGPU rendering patterns
+- **Karpathy's microGPT** — transformers from scratch
+- **Gaussian splatting** — real-time radiance fields
+- **Local LLMs** — running and fine-tuning on consumer hardware
+- **ComfyUI workflows** — versioned image generation
+- **Three.js techniques** — WebGL/WebGPU patterns
 
-Each post will include runnable code, diagrams, and interactive embeds where they help understanding.
+Code, diagrams, and embeds where they earn their keep.
