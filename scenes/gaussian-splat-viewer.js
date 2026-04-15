@@ -66,7 +66,8 @@ function computeSplatBounds(viewer) {
   return { centroid, extent, maxExtent };
 }
 
-export async function init(canvas, container) {
+export async function init(canvas, container, palette) {
+  const hex = palette.as.hex;
   const splatPath = container.getAttribute('data-splat') || DEFAULT_SPLAT_PATH;
   const splatFallbackPath = container.getAttribute('data-splat-fallback') || DEFAULT_SPLAT_PATH;
   const loadPaths = uniquePaths([splatPath, splatFallbackPath, DEFAULT_SPLAT_PATH]);

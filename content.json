@@ -179,23 +179,6 @@
     "body": "\n## Why PBR\n\nPhong and Blinn-Phong let you push numbers around until a material looks right. PBR replaces guesswork with constraints: energy conservation, microfacet statistics, Fresnel reflectance.\n\nMaterials respond correctly to any lighting. No per-scene hand-tuning. That's the whole pitch.\n\nEvery major engine adopted metalness-roughness for this reason. Once you see the math, you understand why every sphere in a PBR chart looks the way it does.\n\n> [!note]\n> PBR ≠ photorealism. It means the s"
   },
   {
-    "slug": "2026-03-01-marching-cubes-isosurface-extraction",
-    "file": "2026-03-01-marching-cubes-isosurface-extraction.md",
-    "title": "Marching Cubes — Isosurface Extraction from Scalar Fields",
-    "date": "2026-03-01",
-    "timestamp": "2026-04-14T00:41:37.545Z",
-    "order": 14,
-    "description": "Extract meshes from scalar fields using marching cubes, with lookup tables, normal estimation, and an interactive metaball demo.",
-    "tags": [
-      "graphics",
-      "marching-cubes",
-      "isosurface",
-      "mesh-generation",
-      "threejs"
-    ],
-    "body": "\n## SDF → triangles\n\nThe previous SDF post showed how to describe geometry as math. But physics engines, vertex shaders, and exporters want triangles.\n\nMarching cubes is the bridge. Take a scalar field. Choose a threshold. Get a triangle mesh.\n\nIt's been the workhorse since Lorensen and Cline (1987). When you need to polygonize an implicit surface, this is still the default.\n\n> [!note]\n> Not the only method. Marching tetrahedra, surface nets, dual contouring all trade differently around sharp fe"
-  },
-  {
     "slug": "2026-03-01-attention-visualization-transformers",
     "file": "2026-03-01-attention-visualization-transformers.md",
     "title": "Attention Visualization in Transformers",
@@ -260,21 +243,5 @@
       "rtx3060"
     ],
     "body": "\n## What this is\n\nCompanion to the Gaussian splatting notes. One question, one path:\n\n**Phone photos → working splat, locally, on a 3060.**\n\n> [!note]\n> Target machine: **RTX 3060 12GB VRAM + 32GB system RAM**.\n\n## Hardware\n\n| Component | Minimum | Recommended |\n|---|---|---|\n| GPU | 8GB VRAM | RTX 3060 12GB |\n| System RAM | 16GB | 32GB |\n| Storage | 15GB free | 25GB free |\n| OS | Linux/WSL2 | Ubuntu 22.04+ |\n\n## Capture rules\n\n- 80–200 photos\n- Heavy overlap between adjacent shots\n- Move slow\n-"
-  },
-  {
-    "slug": "2026-02-14-gaussian-splatting-real-time-notes",
-    "file": "2026-02-14-gaussian-splatting-real-time-notes.md",
-    "title": "Gaussian Splatting for Real-Time Radiance Fields - Practical Notes",
-    "date": "2026-02-14",
-    "timestamp": "2026-04-14T00:31:46.455Z",
-    "order": 2,
-    "description": "Understand Gaussian splatting end to end: representation, projection, sorting, blending, and real-time performance trade-offs.",
-    "tags": [
-      "graphics",
-      "gaussian-splatting",
-      "radiance-fields",
-      "realtime-rendering"
-    ],
-    "body": "\n## Why splats won\n\nSplats sit on the right edge of a tradeoff: they keep the optimization story of neural scene capture, but the runtime is a renderer, not an integrator.\n\nYou train like a neural method. You render like a graphics pipeline. That's the whole pitch.\n\n> [!note]\n> This is implementation intuition. What to store. What to project. What to optimize first.\n\n## The model\n\nA 3D Gaussian has three things you optimize:\n\n- mean `mu` — where it lives\n- covariance `Sigma` — its shape and orie"
   }
 ]
