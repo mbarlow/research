@@ -181,6 +181,7 @@ async function showPost({ slug }) {
 
   try {
     const res = await fetch(bust(`posts/${post.file}`));
+    if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${post.file}`);
     const md = await res.text();
     const { meta, body } = parseFrontmatter(md);
     const html = renderMarkdown(body);
