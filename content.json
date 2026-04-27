@@ -1,5 +1,25 @@
 [
   {
+    "slug": "2026-04-26-thinair-handshakes-through-air",
+    "file": "2026-04-26-thinair-handshakes-through-air.md",
+    "title": "ThinAir — Handshakes Through the Air, Files Through WebRTC",
+    "date": "2026-04-26",
+    "timestamp": "2026-04-27T02:59:36.686Z",
+    "order": 50,
+    "description": "A static, browser-only file transfer app. WebRTC moves the bytes. QR codes and audio chirps move the handshake. No backend, no storage, no account. WIP — QR works, audio is cool but error-prone.",
+    "tags": [
+      "webrtc",
+      "qr-codes",
+      "audio",
+      "fsk",
+      "signaling",
+      "peer-to-peer",
+      "javascript",
+      "wip"
+    ],
+    "body": "\n## The pitch\n\n```\nThe file moves over WebRTC.\nThe handshake moves through QR codes, text, and audio chirps.\nNo storage backend.\nNo uploaded files on a server.\nNo account.\nNo paid service.\n```\n\nLive: <https://mbarlow.github.io/thinair/>\n\nTwo devices. One file. Pair them. Transfer. Close the tab.\n\n## Why bother\n\nEvery \"send a file\" service in 2026 wants an account, an upload, a TURN server, or a subscription. WebRTC has been in browsers for over a decade. It can move a file directly between two p"
+  },
+  {
     "slug": "2026-04-14-session-persistence-bsm-csm-vt",
     "file": "2026-04-14-session-persistence-bsm-csm-vt.md",
     "title": "Save the Session — bsm, csm, vt for LLM Work Across Projects",
