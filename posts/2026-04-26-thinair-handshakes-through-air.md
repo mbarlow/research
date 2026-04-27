@@ -1,72 +1,72 @@
 ---
-title: ThinAir — Handshakes Through the Air, Files Through WebRTC
+title: ThinAir — handshakes through the air, files through WebRTC
 date: 2026-04-26
 order: 50
-description: A static, browser-only file transfer app. WebRTC moves the bytes. QR codes and audio chirps move the handshake. No backend, no storage, no account. WIP — QR works, audio is cool but error-prone.
+description: Static, browser-only file transfer. WebRTC moves the bytes. QR codes and audio chirps move the handshake. WIP — QR works, audio mostly doesn't.
 tags: [webrtc, qr-codes, audio, fsk, signaling, peer-to-peer, javascript, wip]
 ---
 
-## The pitch
+## Shape
 
 ```
-The file moves over WebRTC.
-The handshake moves through QR codes, text, and audio chirps.
-No storage backend.
-No uploaded files on a server.
-No account.
-No paid service.
+File over WebRTC.
+Handshake over QR, text, or audio.
+No backend. No storage. No account.
 ```
 
-Live: <https://mbarlow.github.io/thinair/>
+Static page. <https://mbarlow.github.io/thinair/>
 
-Two devices. One file. Pair them. Transfer. Close the tab.
+## Why I'm building this
 
-## Why bother
+WebRTC has been in browsers for a decade. Two phones can move a file directly. The only hard part is the handshake — getting an SDP offer and answer between them without a server in the middle.
 
-Every "send a file" service in 2026 wants an account, an upload, a TURN server, or a subscription. WebRTC has been in browsers for over a decade. It can move a file directly between two phones. The only hard part is the handshake — exchanging an SDP offer and answer without a server in between.
+Every commercial "send a file" tool solves this with an account, an upload, or a relay. None of those are necessary. The handshake is small. It can ride a channel you already own.
 
-ThinAir's whole bet is that the handshake can travel through *physical channels* you already have:
+Three channels:
 
-- **A camera staring at a QR code.**
-- **A microphone listening to a chirp.**
-- **Copy/paste, when both fail.**
+```
+Camera + QR
+Microphone + chirp
+Copy/paste
+```
 
-After the handshake lands, WebRTC takes over. Bytes flow peer-to-peer. The static page on GitHub Pages was the introducer. It does not see the file.
+Once the handshake lands, WebRTC takes over. The static page is the introducer. It never sees the file.
 
-## What's in the repo
+## Layout
 
 ```
 index.html
 src/
-  app.js, router.js
   webrtc/   peer.js, file-transfer.js, signaling.js, sdp-pack.js
   qr/       qr-generate.js, qr-scan.js
   audio/    profiles.js, framing.js, chirp-encode.js, chirp-decode.js
   codec/    base.js, checksum.js, compress.js
-  ui/       send-view, receive-view, manual-view, diagnostics-view, ...
+  ui/       send-view, receive-view, manual-view, diagnostics-view
 ```
 
-No build step. Vanilla ES modules. Three CDN libs: `qrcode-generator`, `jsQR`, `pako`. Total surface area is small enough to read in an afternoon.
+No build step. ES modules. Three CDN libs: `qrcode-generator`, `jsQR`, `pako`.
 
-## The SDP packing trick
+## SDP packing
 
-A Chrome WebRTC offer is around 720 bytes of SDP. That is too much for a single QR code at any usable density, and *way* too much for an audio chirp. So `sdp-pack.js` strips the offer down to the dynamic fields and rebuilds the rest from a fixed template at the receiver:
+Chrome's WebRTC offer is ~720 bytes of SDP. Too big for a usable QR code. Way too big for an audio burst.
+
+`sdp-pack.js` keeps only the dynamic fields and rebuilds the rest from a fixed template at the receiver:
 
 - ufrag, pwd, fingerprint, setup, mid
-- ICE candidates (foundation, component, transport, priority, addr, port, type)
+- ICE candidates
 - session id
 
-That packs ~720 bytes down to ~180 bytes. Combined with base64url for QR or raw bytes for audio, you get a 3–4× shrink. Enough that a single QR code carries the whole offer, and an audio burst becomes plausible.
+~720 bytes → ~180 bytes. 3–4× shrink. A whole offer fits in one QR code. An audio burst becomes plausible.
 
-## What works: QR pairing
+## What works: QR
 
-Phone-to-phone is solid. Sender shows offer QR. Receiver scans, generates answer QR. Sender scans answer. Channel opens. File flies.
+Phone-to-phone is solid. Sender shows offer QR. Receiver scans, generates answer QR. Sender scans answer. Channel opens.
 
-The flow feels like magic the first time. Two phones, no network configuration, no app install — just a webpage and two cameras.
+No app install. No network setup. Two cameras and a webpage.
 
-## What's beautiful but error-prone: the audio chirp
+## What doesn't: audio chirp
 
-The audio path uses 4-FSK in 4 parallel sub-bands, 1500–4500 Hz, 60 ms symbols with 12 ms gaps and a sustained-tone preamble for sample-accurate sync. One byte per symbol slot. Three repeats for redundancy. CRC-16 on every frame.
+4-FSK across 4 parallel sub-bands, 1500–4500 Hz, 60 ms symbols, sustained-tone preamble for sample-accurate sync. CRC-16 per frame. Three repeats.
 
 ```js
 // audio/profiles.js — birdsong-v1
@@ -82,43 +82,37 @@ bands: [
 ],
 ```
 
-When it works, two laptops sitting on a table sing at each other for a few seconds and a file appears on one of them. It sounds like a 1990s modem reincarnated as a small bird. People in the room laugh. It is genuinely delightful.
+When it works, two laptops sing at each other and a file appears. Modem-reincarnated-as-bird. Delightful.
 
-When it does not work — and it often does not — the failure mode is silent and frustrating. Things that break it:
+It often doesn't work. Things that break it:
 
-- Room reverb smearing symbols into each other.
-- Laptop fans inside the same band as the lower sub-band.
-- Speaker EQ rolling off above 4 kHz.
-- A microphone that's already gain-staged for voice and clips on the preamble sweep.
-- Any second human in the room who decides this is the moment to talk.
+```
+Room reverb smearing symbols
+Laptop fans inside the lower sub-band
+Speaker EQ rolling off above 4 kHz
+Voice-tuned mic clipping the preamble sweep
+Anyone in the room talking
+```
 
-There are knobs to fix all of this — symbol timing, band placement, repeat count, FEC, narrower bands. But every choice trades robustness against bitrate, and the SDP envelope is already at the edge of what fits in an audio burst short enough that a person will tolerate it.
-
-So the audio path stays as a "wow" demo and a fallback when neither device has a camera. QR is the production path.
+Every fix trades robustness for bitrate. The SDP envelope is already at the edge of what fits in a burst short enough for a human to tolerate. So audio stays as the no-camera fallback. QR is the path that ships.
 
 ## Constraints (v1)
 
-- Both devices online during transfer. No relay, no storage.
-- Audio carries small payloads only — full WebRTC offers usually need QR or text.
-- No TURN. Restrictive networks will fail.
-- Google STUN as the only external helper.
-
-## What's next
-
-- Tighter audio framing with explicit FEC instead of brute-force repetition.
-- Automatic profile negotiation — start with the short fast one, fall back to the slow robust one if CRC fails.
-- A "manual paste" view for the case where someone is on a corporate network that blocks STUN.
-- A diagnostics view that just plays the preamble and tells you what your room is doing to it.
-
-## The shape of the idea
-
-The interesting part of ThinAir is not the code. It is the principle:
-
 ```
-Move the bulk over the network you have.
-Move the handshake over the channel you can see, hear, or touch.
+Both devices online during transfer
+No TURN — restrictive networks fail
+Google STUN is the only external helper
+Audio carries small payloads only
 ```
 
-Cameras and microphones are universal. They were not designed as data links, but they are *good enough* to bootstrap a real one. ThinAir is the smallest version of that idea I could ship as a static page.
+## Next
 
-WIP. Repo: <https://github.com/mbarlow/thinair>.
+- Explicit FEC instead of brute-force repetition.
+- Profile negotiation — fast first, slow on CRC fail.
+- Diagnostics view that plays the preamble and reports what the room did to it.
+
+## What I'm actually exploring
+
+Cameras and microphones weren't designed as data links. They're good enough to bootstrap one. The static page is just the introducer. Everything load-bearing happens off-server, through the air.
+
+WIP. <https://github.com/mbarlow/thinair>.

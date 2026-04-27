@@ -4,13 +4,13 @@
   <link href="https://mbarlow.github.io/research" rel="alternate"/>
   <link href="https://mbarlow.github.io/research/feed.xml" rel="self"/>
   <id>https://mbarlow.github.io/research/</id>
-  <updated>2026-04-27T02:59:36.827Z</updated>
+  <updated>2026-04-27T03:06:46.759Z</updated>
   <entry>
-    <title>ThinAir — Handshakes Through the Air, Files Through WebRTC</title>
+    <title>ThinAir — handshakes through the air, files through WebRTC</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-04-26-thinair-handshakes-through-air" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-04-26-thinair-handshakes-through-air</id>
-    <updated>2026-04-27T02:59:36.686Z</updated>
-    <summary>A static, browser-only file transfer app. WebRTC moves the bytes. QR codes and audio chirps move the handshake. No backend, no storage, no account. WIP — QR works, audio is cool but error-prone.</summary>
+    <updated>2026-04-27T02:59:42.000Z</updated>
+    <summary>Static, browser-only file transfer. WebRTC moves the bytes. QR codes and audio chirps move the handshake. WIP — QR works, audio mostly doesn't.</summary>
   </entry>
   <entry>
     <title>Save the Session — bsm, csm, vt for LLM Work Across Projects</title>

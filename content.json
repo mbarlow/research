@@ -2,11 +2,11 @@
   {
     "slug": "2026-04-26-thinair-handshakes-through-air",
     "file": "2026-04-26-thinair-handshakes-through-air.md",
-    "title": "ThinAir — Handshakes Through the Air, Files Through WebRTC",
+    "title": "ThinAir — handshakes through the air, files through WebRTC",
     "date": "2026-04-26",
-    "timestamp": "2026-04-27T02:59:36.686Z",
+    "timestamp": "2026-04-27T02:59:42.000Z",
     "order": 50,
-    "description": "A static, browser-only file transfer app. WebRTC moves the bytes. QR codes and audio chirps move the handshake. No backend, no storage, no account. WIP — QR works, audio is cool but error-prone.",
+    "description": "Static, browser-only file transfer. WebRTC moves the bytes. QR codes and audio chirps move the handshake. WIP — QR works, audio mostly doesn't.",
     "tags": [
       "webrtc",
       "qr-codes",
@@ -17,7 +17,7 @@
       "javascript",
       "wip"
     ],
-    "body": "\n## The pitch\n\n```\nThe file moves over WebRTC.\nThe handshake moves through QR codes, text, and audio chirps.\nNo storage backend.\nNo uploaded files on a server.\nNo account.\nNo paid service.\n```\n\nLive: <https://mbarlow.github.io/thinair/>\n\nTwo devices. One file. Pair them. Transfer. Close the tab.\n\n## Why bother\n\nEvery \"send a file\" service in 2026 wants an account, an upload, a TURN server, or a subscription. WebRTC has been in browsers for over a decade. It can move a file directly between two p"
+    "body": "\n## Shape\n\n```\nFile over WebRTC.\nHandshake over QR, text, or audio.\nNo backend. No storage. No account.\n```\n\nStatic page. <https://mbarlow.github.io/thinair/>\n\n## Why I'm building this\n\nWebRTC has been in browsers for a decade. Two phones can move a file directly. The only hard part is the handshake — getting an SDP offer and answer between them without a server in the middle.\n\nEvery commercial \"send a file\" tool solves this with an account, an upload, or a relay. None of those are necessary. Th"
   },
   {
     "slug": "2026-04-14-session-persistence-bsm-csm-vt",
