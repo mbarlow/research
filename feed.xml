@@ -4,103 +4,103 @@
   <link href="https://mbarlow.github.io/research" rel="alternate"/>
   <link href="https://mbarlow.github.io/research/feed.xml" rel="self"/>
   <id>https://mbarlow.github.io/research/</id>
-  <updated>2026-04-14T22:42:37.143Z</updated>
+  <updated>2026-04-27T02:59:18.687Z</updated>
   <entry>
     <title>Save the Session — bsm, csm, vt for LLM Work Across Projects</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-04-14-session-persistence-bsm-csm-vt" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-04-14-session-persistence-bsm-csm-vt</id>
-    <updated>2026-04-14T22:40:35.429Z</updated>
+    <updated>2026-04-14T22:40:22.000Z</updated>
     <summary>Three small skills for persisting work session state when you juggle multiple LLM-assisted projects — byobu layouts, Chrome debug tabs, and graceful VT escapes when the compositor dies.</summary>
-  </entry>
-  <entry>
-    <title>microGPT from Scratch - Building a Transformer from First Principles</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-karpathys-microgpt-from-scratch" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-02-14-karpathys-microgpt-from-scratch</id>
-    <updated>2026-04-14T22:40:35.429Z</updated>
-    <summary>Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.</summary>
   </entry>
   <entry>
     <title>Own Your Tools — Three Chrome Extensions, No Store Required</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-04-14-chrome-extensions-own-your-tools" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-04-14-chrome-extensions-own-your-tools</id>
-    <updated>2026-04-14T04:36:32.659Z</updated>
+    <updated>2026-04-14T04:36:41.000Z</updated>
     <summary>Three small MIT-licensed Chrome extensions — pretty-json, recorder, snapshot — built to be installed as unpacked Developer Mode extensions. No store. No telemetry. Your data stays local.</summary>
   </entry>
   <entry>
     <title>Saengsation — The Keyboard as System Status</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-04-14-saengsation-keyboard-as-status" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-04-14-saengsation-keyboard-as-status</id>
-    <updated>2026-04-14T04:17:59.107Z</updated>
+    <updated>2026-04-14T04:06:16.000Z</updated>
     <summary>A Go-only RGB LED controller for the Keychron V7 that mirrors what Claude Code is doing — waiting, acknowledged, working, idle — via keyboard lighting.</summary>
   </entry>
   <entry>
     <title>Wave Function Collapse — Constraint Propagation Visualized</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-03-04-wave-function-collapse-visualized" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-03-04-wave-function-collapse-visualized</id>
-    <updated>2026-04-14T01:26:23.193Z</updated>
+    <updated>2026-03-06T00:31:33.000Z</updated>
     <summary>Visualize the Wave Function Collapse algorithm step by step, watching entropy collapse and constraints propagate to generate coherent tile patterns from local rules.</summary>
   </entry>
   <entry>
     <title>Mandelbulb — 3D Fractals via Ray Marching</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-03-02-mandelbulb-3d-fractals" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-03-02-mandelbulb-3d-fractals</id>
-    <updated>2026-04-14T01:12:15.364Z</updated>
+    <updated>2026-03-02T05:55:10.000Z</updated>
     <summary>Render the Mandelbulb fractal in real time using ray marching, triplex algebra, and distance estimation, with an interactive GLSL viewer.</summary>
   </entry>
   <entry>
     <title>L-Systems — Procedural Plants from String Rewriting</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-03-02-l-systems-procedural-plants" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-03-02-l-systems-procedural-plants</id>
-    <updated>2026-04-14T01:11:22.801Z</updated>
+    <updated>2026-03-02T05:55:10.000Z</updated>
     <summary>Generate procedural trees and plants using Lindenmayer systems, turtle interpretation, and 3D branching rules with interactive Three.js rendering.</summary>
   </entry>
   <entry>
     <title>Cellular Automata — Emergent Complexity from Simple Rules</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-03-02-cellular-automata-emergent-complexity" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-03-02-cellular-automata-emergent-complexity</id>
-    <updated>2026-04-14T01:09:48.841Z</updated>
+    <updated>2026-03-02T05:55:10.000Z</updated>
     <summary>Explore cellular automata from Conway's Game of Life to 3D visualization, showing how simple local rules produce complex emergent behavior.</summary>
-  </entry>
-  <entry>
-    <title>Real-Time Point Cloud Processing</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-realtime-point-cloud-processing" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-03-01-realtime-point-cloud-processing</id>
-    <updated>2026-04-14T01:06:28.515Z</updated>
-    <summary>Clean, align, and downsample point clouds using Open3D with spatial indexing, outlier removal, ICP registration, and voxel filtering.</summary>
   </entry>
   <entry>
     <title>PBR Materials — Physics-Based Shading in Three.js</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-03-01-pbr-physics-based-shading" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-03-01-pbr-physics-based-shading</id>
-    <updated>2026-04-14T01:04:33.194Z</updated>
+    <updated>2026-03-01T23:52:52.000Z</updated>
     <summary>Understand Cook-Torrance BRDF, metalness-roughness workflows, and environment lighting with an interactive material parameter grid.</summary>
   </entry>
   <entry>
     <title>Attention Visualization in Transformers</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-03-01-attention-visualization-transformers" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-03-01-attention-visualization-transformers</id>
-    <updated>2026-04-14T00:37:08.777Z</updated>
+    <updated>2026-03-01T23:52:52.000Z</updated>
     <summary>Extract and visualize self-attention patterns from transformer models, showing what different heads learn with interactive heatmaps.</summary>
+  </entry>
+  <entry>
+    <title>Real-Time Point Cloud Processing</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-03-01-realtime-point-cloud-processing" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-03-01-realtime-point-cloud-processing</id>
+    <updated>2026-03-01T23:40:59.000Z</updated>
+    <summary>Clean, align, and downsample point clouds using Open3D with spatial indexing, outlier removal, ICP registration, and voxel filtering.</summary>
   </entry>
   <entry>
     <title>Photogrammetry from Video — Reconstructing 3D Geometry from 2D Images</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-02-14-photogrammetry-from-video" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-02-14-photogrammetry-from-video</id>
-    <updated>2026-04-14T00:34:56.659Z</updated>
+    <updated>2026-02-15T01:04:14.000Z</updated>
     <summary>End-to-end photogrammetry pipeline: video frames to textured 3D meshes using Meshroom, with interactive model viewer and practical debugging tips.</summary>
-  </entry>
-  <entry>
-    <title>Hello World — A Tour of Every Feature</title>
-    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-hello-world" rel="alternate"/>
-    <id>https://mbarlow.github.io/research/#/post/2026-02-14-hello-world</id>
-    <updated>2026-04-14T00:32:55.828Z</updated>
-    <summary>End-to-end showcase of every blog feature: code highlighting, Mermaid, callouts, chat blocks, steps, and Three.js embeds.</summary>
   </entry>
   <entry>
     <title>Companion - Gaussian Splatting from Smartphone Photos (Local RTX 3060 Workflow)</title>
     <link href="https://mbarlow.github.io/research/#/post/2026-02-14-gaussian-splatting-smartphone-companion" rel="alternate"/>
     <id>https://mbarlow.github.io/research/#/post/2026-02-14-gaussian-splatting-smartphone-companion</id>
-    <updated>2026-04-14T00:32:19.538Z</updated>
+    <updated>2026-02-14T21:51:22.000Z</updated>
     <summary>Companion guide: capture photos on a phone, reconstruct/train locally, and load your splat in the blog viewer on RTX 3060 12GB.</summary>
+  </entry>
+  <entry>
+    <title>microGPT from Scratch - Building a Transformer from First Principles</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-karpathys-microgpt-from-scratch" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-karpathys-microgpt-from-scratch</id>
+    <updated>2026-02-14T20:09:43.000Z</updated>
+    <summary>Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.</summary>
+  </entry>
+  <entry>
+    <title>Hello World — A Tour of Every Feature</title>
+    <link href="https://mbarlow.github.io/research/#/post/2026-02-14-hello-world" rel="alternate"/>
+    <id>https://mbarlow.github.io/research/#/post/2026-02-14-hello-world</id>
+    <updated>2026-02-14T19:09:39.000Z</updated>
+    <summary>End-to-end showcase of every blog feature: code highlighting, Mermaid, callouts, chat blocks, steps, and Three.js embeds.</summary>
   </entry>
 </feed>

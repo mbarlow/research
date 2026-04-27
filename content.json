@@ -4,7 +4,7 @@
     "file": "2026-04-14-session-persistence-bsm-csm-vt.md",
     "title": "Save the Session — bsm, csm, vt for LLM Work Across Projects",
     "date": "2026-04-14",
-    "timestamp": "2026-04-14T22:40:35.429Z",
+    "timestamp": "2026-04-14T22:40:22.000Z",
     "order": 42,
     "description": "Three small skills for persisting work session state when you juggle multiple LLM-assisted projects — byobu layouts, Chrome debug tabs, and graceful VT escapes when the compositor dies.",
     "tags": [
@@ -20,27 +20,11 @@
     "body": "\n## The problem\n\nWorking with LLMs across several projects multiplies context.\n\nEach project wants its own terminal layout, its own running dev servers, its own open browser tabs, its own Claude Code session. A laptop reboot, a compositor crash, or a screenlock freeze shouldn't burn twenty minutes of re-assembly.\n\nThe state is recoverable. The trick is writing it down before you lose it.\n\n```\nCurrent windows     → JSON\nCurrent tabs        → JSON\nCurrent TTY         → one command away\n```\n\nThree "
   },
   {
-    "slug": "2026-02-14-karpathys-microgpt-from-scratch",
-    "file": "2026-02-14-karpathys-microgpt-from-scratch.md",
-    "title": "microGPT from Scratch - Building a Transformer from First Principles",
-    "date": "2026-02-14",
-    "timestamp": "2026-04-14T22:40:35.429Z",
-    "order": 1,
-    "description": "Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.",
-    "tags": [
-      "llm",
-      "transformers",
-      "microgpt",
-      "pytorch"
-    ],
-    "body": "\n## Why build it small\n\nKarpathy's microGPT teaches by implementation. You don't read about a transformer. You build one end to end.\n\nA 6B parameter model is a black box. A 4-layer, 4-head, 256-dim model fits in your head. That's the point.\n\nReference: [karpathy.ai/microgpt.html](https://karpathy.ai/microgpt.html)\n\n> [!note]\n> Build notebook, not benchmark report. The goal is understanding.\n\n## The four layers\n\nA tiny GPT stack:\n\n1. Data — tokenize, batch\n2. Model — embeddings, attention, MLP, r"
-  },
-  {
     "slug": "2026-04-14-chrome-extensions-own-your-tools",
     "file": "2026-04-14-chrome-extensions-own-your-tools.md",
     "title": "Own Your Tools — Three Chrome Extensions, No Store Required",
     "date": "2026-04-14",
-    "timestamp": "2026-04-14T04:36:32.659Z",
+    "timestamp": "2026-04-14T04:36:41.000Z",
     "order": 41,
     "description": "Three small MIT-licensed Chrome extensions — pretty-json, recorder, snapshot — built to be installed as unpacked Developer Mode extensions. No store. No telemetry. Your data stays local.",
     "tags": [
@@ -58,7 +42,7 @@
     "file": "2026-04-14-saengsation-keyboard-as-status.md",
     "title": "Saengsation — The Keyboard as System Status",
     "date": "2026-04-14",
-    "timestamp": "2026-04-14T04:17:59.107Z",
+    "timestamp": "2026-04-14T04:06:16.000Z",
     "order": 40,
     "description": "A Go-only RGB LED controller for the Keychron V7 that mirrors what Claude Code is doing — waiting, acknowledged, working, idle — via keyboard lighting.",
     "tags": [
@@ -78,7 +62,7 @@
     "file": "2026-03-04-wave-function-collapse-visualized.md",
     "title": "Wave Function Collapse — Constraint Propagation Visualized",
     "date": "2026-03-04",
-    "timestamp": "2026-04-14T01:26:23.193Z",
+    "timestamp": "2026-03-06T00:31:33.000Z",
     "order": 31,
     "description": "Visualize the Wave Function Collapse algorithm step by step, watching entropy collapse and constraints propagate to generate coherent tile patterns from local rules.",
     "tags": [
@@ -96,7 +80,7 @@
     "file": "2026-03-02-mandelbulb-3d-fractals.md",
     "title": "Mandelbulb — 3D Fractals via Ray Marching",
     "date": "2026-03-02",
-    "timestamp": "2026-04-14T01:12:15.364Z",
+    "timestamp": "2026-03-02T05:55:10.000Z",
     "order": 20,
     "description": "Render the Mandelbulb fractal in real time using ray marching, triplex algebra, and distance estimation, with an interactive GLSL viewer.",
     "tags": [
@@ -114,7 +98,7 @@
     "file": "2026-03-02-l-systems-procedural-plants.md",
     "title": "L-Systems — Procedural Plants from String Rewriting",
     "date": "2026-03-02",
-    "timestamp": "2026-04-14T01:11:22.801Z",
+    "timestamp": "2026-03-02T05:55:10.000Z",
     "order": 22,
     "description": "Generate procedural trees and plants using Lindenmayer systems, turtle interpretation, and 3D branching rules with interactive Three.js rendering.",
     "tags": [
@@ -131,7 +115,7 @@
     "file": "2026-03-02-cellular-automata-emergent-complexity.md",
     "title": "Cellular Automata — Emergent Complexity from Simple Rules",
     "date": "2026-03-02",
-    "timestamp": "2026-04-14T01:09:48.841Z",
+    "timestamp": "2026-03-02T05:55:10.000Z",
     "order": 24,
     "description": "Explore cellular automata from Conway's Game of Life to 3D visualization, showing how simple local rules produce complex emergent behavior.",
     "tags": [
@@ -145,28 +129,11 @@
     "body": "\n## Why CA\n\nA grid of cells. A finite number of states. Update rules that depend only on nearby neighbors.\n\nNo global coordination. No central plan. From this minimal setup: self-replicating patterns, gliders, Turing-complete computation, structures that look unsettlingly biological.\n\nConway's Game of Life (1970) is the famous example. The concept reaches back to von Neumann and Ulam in the 1940s, working on self-replication. Wolfram spent decades cataloguing 1D rules and arguing that simple rul"
   },
   {
-    "slug": "2026-03-01-realtime-point-cloud-processing",
-    "file": "2026-03-01-realtime-point-cloud-processing.md",
-    "title": "Real-Time Point Cloud Processing",
-    "date": "2026-03-01",
-    "timestamp": "2026-04-14T01:06:28.515Z",
-    "order": 11,
-    "description": "Clean, align, and downsample point clouds using Open3D with spatial indexing, outlier removal, ICP registration, and voxel filtering.",
-    "tags": [
-      "point-clouds",
-      "open3d",
-      "spatial-indexing",
-      "3d-reconstruction",
-      "photogrammetry"
-    ],
-    "body": "\n## The plumbing nobody writes about\n\nEvery 3D capture pipeline — photogrammetry, LiDAR, gaussian splatting — produces point clouds. Raw clouds are noisy, misaligned, and far too dense for downstream consumption.\n\nIf you can't clean and register clouds, nothing downstream works. Meshing fails. Splatting trains on garbage. Real-time viewers choke on millions of redundant points.\n\nThe goal: a repeatable pipeline. Raw input → clean, aligned, downsampled output ready for meshing or splatting.\n\n> [!n"
-  },
-  {
     "slug": "2026-03-01-pbr-physics-based-shading",
     "file": "2026-03-01-pbr-physics-based-shading.md",
     "title": "PBR Materials — Physics-Based Shading in Three.js",
     "date": "2026-03-01",
-    "timestamp": "2026-04-14T01:04:33.194Z",
+    "timestamp": "2026-03-01T23:52:52.000Z",
     "order": 16,
     "description": "Understand Cook-Torrance BRDF, metalness-roughness workflows, and environment lighting with an interactive material parameter grid.",
     "tags": [
@@ -183,7 +150,7 @@
     "file": "2026-03-01-attention-visualization-transformers.md",
     "title": "Attention Visualization in Transformers",
     "date": "2026-03-01",
-    "timestamp": "2026-04-14T00:37:08.777Z",
+    "timestamp": "2026-03-01T23:52:52.000Z",
     "order": 18,
     "description": "Extract and visualize self-attention patterns from transformer models, showing what different heads learn with interactive heatmaps.",
     "tags": [
@@ -196,11 +163,28 @@
     "body": "\n## Why bother\n\nIf you built microGPT, you already wrote the matrix multiply + softmax that produces attention weights. Those weights aren't opaque. Extract them. Plot them. Read what each head learned.\n\nThree reasons to do this:\n\n- **Sanity** — confirm the model is learning structure, not noise\n- **Debugging** — masking and positional encoding bugs are invisible in the loss curve\n- **Intuition** — heads decompose the sequence into parallel streams of position, syntax, and meaning\n\n> [!note]\n> A"
   },
   {
+    "slug": "2026-03-01-realtime-point-cloud-processing",
+    "file": "2026-03-01-realtime-point-cloud-processing.md",
+    "title": "Real-Time Point Cloud Processing",
+    "date": "2026-03-01",
+    "timestamp": "2026-03-01T23:40:59.000Z",
+    "order": 11,
+    "description": "Clean, align, and downsample point clouds using Open3D with spatial indexing, outlier removal, ICP registration, and voxel filtering.",
+    "tags": [
+      "point-clouds",
+      "open3d",
+      "spatial-indexing",
+      "3d-reconstruction",
+      "photogrammetry"
+    ],
+    "body": "\n## The plumbing nobody writes about\n\nEvery 3D capture pipeline — photogrammetry, LiDAR, gaussian splatting — produces point clouds. Raw clouds are noisy, misaligned, and far too dense for downstream consumption.\n\nIf you can't clean and register clouds, nothing downstream works. Meshing fails. Splatting trains on garbage. Real-time viewers choke on millions of redundant points.\n\nThe goal: a repeatable pipeline. Raw input → clean, aligned, downsampled output ready for meshing or splatting.\n\n> [!n"
+  },
+  {
     "slug": "2026-02-14-photogrammetry-from-video",
     "file": "2026-02-14-photogrammetry-from-video.md",
     "title": "Photogrammetry from Video — Reconstructing 3D Geometry from 2D Images",
     "date": "2026-02-14",
-    "timestamp": "2026-04-14T00:34:56.659Z",
+    "timestamp": "2026-02-15T01:04:14.000Z",
     "order": 6,
     "description": "End-to-end photogrammetry pipeline: video frames to textured 3D meshes using Meshroom, with interactive model viewer and practical debugging tips.",
     "tags": [
@@ -212,27 +196,11 @@
     "body": "\n## What it is\n\nReconstructing 3D geometry from 2D images.\n\nThe core insight: **the same physical point in two images from different angles can be triangulated.** Do that for millions of points and you have a model.\n\n> [!note]\n> Works on textured, diffuse surfaces. Fails on shiny, transparent, or uniform ones — there's nothing to match.\n\n## The pipeline\n\n```mermaid\ngraph LR\n    A[Video] --> B[Frames]\n    B --> C[Feature Extraction]\n    C --> D[Feature Matching]\n    D --> E[Structure from Motion]"
   },
   {
-    "slug": "2026-02-14-hello-world",
-    "file": "2026-02-14-hello-world.md",
-    "title": "Hello World — A Tour of Every Feature",
-    "date": "2026-02-14",
-    "timestamp": "2026-04-14T00:32:55.828Z",
-    "order": 0,
-    "description": "End-to-end showcase of every blog feature: code highlighting, Mermaid, callouts, chat blocks, steps, and Three.js embeds.",
-    "tags": [
-      "meta",
-      "demo",
-      "markdown",
-      "rendering"
-    ],
-    "body": "\n## What this is\n\nThe first post. It exists to verify every rendering feature works.\n\nThe blog is a vanilla JS SPA. No build step. No framework. Markdown rendered client-side.\n\n## Syntax highlighting\n\nPrism.js, autoloaded per language.\n\n### JavaScript\n\n```javascript\n// Transformer self-attention (simplified)\nfunction selfAttention(Q, K, V, dk) {\n  const scores = matmul(Q, transpose(K));\n  const scaled = scores.map(row => row.map(v => v / Math.sqrt(dk)));\n  const weights = softmax(scaled);\n  retu"
-  },
-  {
     "slug": "2026-02-14-gaussian-splatting-smartphone-companion",
     "file": "2026-02-14-gaussian-splatting-smartphone-companion.md",
     "title": "Companion - Gaussian Splatting from Smartphone Photos (Local RTX 3060 Workflow)",
     "date": "2026-02-14",
-    "timestamp": "2026-04-14T00:32:19.538Z",
+    "timestamp": "2026-02-14T21:51:22.000Z",
     "order": 2.5,
     "description": "Companion guide: capture photos on a phone, reconstruct/train locally, and load your splat in the blog viewer on RTX 3060 12GB.",
     "tags": [
@@ -243,5 +211,37 @@
       "rtx3060"
     ],
     "body": "\n## What this is\n\nCompanion to the Gaussian splatting notes. One question, one path:\n\n**Phone photos → working splat, locally, on a 3060.**\n\n> [!note]\n> Target machine: **RTX 3060 12GB VRAM + 32GB system RAM**.\n\n## Hardware\n\n| Component | Minimum | Recommended |\n|---|---|---|\n| GPU | 8GB VRAM | RTX 3060 12GB |\n| System RAM | 16GB | 32GB |\n| Storage | 15GB free | 25GB free |\n| OS | Linux/WSL2 | Ubuntu 22.04+ |\n\n## Capture rules\n\n- 80–200 photos\n- Heavy overlap between adjacent shots\n- Move slow\n-"
+  },
+  {
+    "slug": "2026-02-14-karpathys-microgpt-from-scratch",
+    "file": "2026-02-14-karpathys-microgpt-from-scratch.md",
+    "title": "microGPT from Scratch - Building a Transformer from First Principles",
+    "date": "2026-02-14",
+    "timestamp": "2026-02-14T20:09:43.000Z",
+    "order": 1,
+    "description": "Build a tiny GPT with PyTorch and understand attention, training loops, sampling, and practical scaling heuristics.",
+    "tags": [
+      "llm",
+      "transformers",
+      "microgpt",
+      "pytorch"
+    ],
+    "body": "\n## Why build it small\n\nKarpathy's microGPT teaches by implementation. You don't read about a transformer. You build one end to end.\n\nA 6B parameter model is a black box. A 4-layer, 4-head, 256-dim model fits in your head. That's the point.\n\nReference: [karpathy.ai/microgpt.html](https://karpathy.ai/microgpt.html)\n\n> [!note]\n> Build notebook, not benchmark report. The goal is understanding.\n\n## The four layers\n\nA tiny GPT stack:\n\n1. Data — tokenize, batch\n2. Model — embeddings, attention, MLP, r"
+  },
+  {
+    "slug": "2026-02-14-hello-world",
+    "file": "2026-02-14-hello-world.md",
+    "title": "Hello World — A Tour of Every Feature",
+    "date": "2026-02-14",
+    "timestamp": "2026-02-14T19:09:39.000Z",
+    "order": 0,
+    "description": "End-to-end showcase of every blog feature: code highlighting, Mermaid, callouts, chat blocks, steps, and Three.js embeds.",
+    "tags": [
+      "meta",
+      "demo",
+      "markdown",
+      "rendering"
+    ],
+    "body": "\n## What this is\n\nThe first post. It exists to verify every rendering feature works.\n\nThe blog is a vanilla JS SPA. No build step. No framework. Markdown rendered client-side.\n\n## Syntax highlighting\n\nPrism.js, autoloaded per language.\n\n### JavaScript\n\n```javascript\n// Transformer self-attention (simplified)\nfunction selfAttention(Q, K, V, dk) {\n  const scores = matmul(Q, transpose(K));\n  const scaled = scores.map(row => row.map(v => v / Math.sqrt(dk)));\n  const weights = softmax(scaled);\n  retu"
   }
 ]

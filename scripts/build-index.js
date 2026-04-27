@@ -56,7 +56,14 @@ function sortPosts(a, b) {
   return a.title.localeCompare(b.title);
 }
 
-function getFileTimestamp(fileStats) {
+function getFileTimestamp(fullPath, fileStats) {
+  // Prefer git's first-commit author date — filesystem birthtime is the
+  // checkout time on CI runners, which collapses every post to the build time.
+  const gitDate = gitOutput(
+    `git log --diff-filter=A --follow --format=%aI -- "${fullPath}" | tail -n 1`,
+  );
+  if (gitDate) return new Date(gitDate).toISOString();
+
   const birthMs = Number(fileStats.birthtimeMs);
   const modifiedMs = Number(fileStats.mtimeMs);
   const tsMs = Number.isFinite(birthMs) && birthMs > 0 ? birthMs : modifiedMs;
@@ -79,7 +86,7 @@ async function build() {
       file,
       title: meta.title || slug,
       date: meta.date || slug.slice(0, 10),
-      timestamp: getFileTimestamp(fileStats),
+      timestamp: getFileTimestamp(fullPath, fileStats),
       order: parseOrder(meta.order),
       description: meta.description || '',
       tags: Array.isArray(meta.tags) ? meta.tags : [],
